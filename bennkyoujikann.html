@@ -1,1 +1,2154 @@
-# studytrackplus
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, shrink-to-fit=no">
+    <title>StudyTrack+ | クラウド同期対応</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        /* ===== 基本スタイル ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            padding: 24px 32px;
+            color: #1e293b;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body.text-10px { font-size: 10px; }
+        body.text-12px { font-size: 12px; }
+        body.text-14px { font-size: 14px; }
+        body.text-16px { font-size: 16px; }
+        body.text-18px { font-size: 18px; }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f1a24 100%);
+            color: #e2e8f0;
+        }
+        body.dark-mode .card {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        body.dark-mode .card-title { color: #e2e8f0; }
+        body.dark-mode .btn-secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+        body.dark-mode .goal-card { background: #0f172a; }
+        body.dark-mode .stat-item { background: #0f172a; }
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea {
+            background: #334155;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+        body.dark-mode .timer-mode { background: #334155; }
+        body.dark-mode .concentration-toggle { background: #334155; }
+
+        /* 集中モードオーバーレイ */
+        .study-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0f1a;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 40px;
+            transition: all 0.3s ease;
+        }
+        .study-overlay.hidden { display: none; }
+        .study-overlay .study-timer {
+            font-size: 12rem;
+            font-weight: 800;
+            font-family: monospace;
+            color: #f5b042;
+            text-shadow: 0 0 20px rgba(245, 176, 66, 0.5);
+            letter-spacing: 8px;
+            background: transparent;
+        }
+        .study-overlay .study-end-btn {
+            background: #e76f51;
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+        }
+        .study-overlay .study-end-btn:hover {
+            transform: scale(1.05);
+            background: #d95b3a;
+        }
+        .study-overlay .study-label {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header h1 {
+            font-size: 2rem;
+            color: #2a9d8f;
+            margin: 0;
+        }
+        .header p {
+            font-size: 0.9rem;
+            color: #5c6b7a;
+            margin-top: 4px;
+        }
+        .header-controls {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .today-total {
+            background: #2a9d8f20;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #2a9d8f;
+        }
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .icon-btn:hover { transform: scale(1.05); }
+        body.dark-mode .icon-btn {
+            background: #334155;
+            color: #e2e8f0;
+        }
+        .stats-text-btn {
+            background: #2a9d8f20;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #2a9d8f;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .stats-text-btn:hover {
+            background: #2a9d8f40;
+            transform: scale(1.02);
+        }
+        .sync-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .sync-btn {
+            background: #2a9d8f20;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #2a9d8f;
+            font-weight: 600;
+        }
+        .sync-btn:hover {
+            background: #2a9d8f40;
+            transform: scale(1.02);
+        }
+        body.dark-mode .sync-btn {
+            background: #2a9d8f30;
+            color: #7bc4b7;
+        }
+        .sync-status {
+            font-size: 0.7rem;
+            background: #2a9d8f20;
+            padding: 4px 10px;
+            border-radius: 40px;
+            color: #2a9d8f;
+        }
+        body.dark-mode .sync-status {
+            color: #7bc4b7;
+        }
+
+        /* 3カラム */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        .middle-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-left: 4px solid #2a9d8f;
+            padding-left: 14px;
+            margin-bottom: 20px;
+            color: #1e3b4a;
+        }
+
+        /* タイマーエリア */
+        .timer-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .timer-mode {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .mode-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        .mode-btn.active {
+            background: #2a9d8f;
+            color: white;
+        }
+        .session-status {
+            background: #e8f0f5;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #2c6e6b;
+            text-align: center;
+        }
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 800;
+            font-family: monospace;
+            background: linear-gradient(135deg, #1a2a3a, #0f1a24);
+            color: #f5b042;
+            text-shadow: 0 0 12px rgba(245, 176, 66, 0.3);
+            padding: 20px 40px;
+            border-radius: 80px;
+            letter-spacing: 4px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            margin: 16px 0;
+            width: 100%;
+        }
+        .pomodoro-status {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 8px 0;
+            padding: 6px 16px;
+            border-radius: 40px;
+            background: #fef3c7;
+            color: #b45309;
+            text-align: center;
+        }
+        .cycle-count {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 4px;
+            text-align: center;
+        }
+        .preset-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 12px 0;
+        }
+        .preset-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .preset-btn:hover {
+            background: #cbd5e1;
+            transform: translateY(-1px);
+        }
+        .timer-input-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin: 12px 0;
+            justify-content: center;
+        }
+        .timer-input-group input {
+            width: 100px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 40px;
+            border: 1px solid #cbd5e1;
+        }
+        .timer-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0 16px;
+        }
+        .btn {
+            border: none;
+            padding: 10px 24px;
+            font-weight: 600;
+            border-radius: 48px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .btn-primary {
+            background: #2a9d8f;
+            color: white;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .inline-row {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            margin-top: 12px;
+            justify-content: center;
+        }
+        .inline-row select {
+            flex: 2;
+            padding: 12px 16px;
+            border-radius: 48px;
+            border: 1px solid #cbd5e1;
+            background: white;
+        }
+        .inline-row button {
+            flex: 1;
+        }
+        .concentration-toggle {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 12px 20px;
+            border-radius: 40px;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #cbd5e1;
+            border-radius: 26px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .toggle-switch.active {
+            background: #2a9d8f;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .toggle-switch.active::after {
+            left: 27px;
+        }
+
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .stat-card {
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+        }
+        body.dark-mode .stat-card {
+            background: #0f172a;
+        }
+        .stat-card .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2a9d8f;
+        }
+        .stat-card .stat-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .subject-manager {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .subject-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .subject-tag {
+            background: #e2e8f0;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subject-tag .remove-subject {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #e76f51;
+            font-size: 1rem;
+            padding: 0 4px;
+        }
+        .add-subject-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .add-subject-form input {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 40px;
+            border: 1px solid #cbd5e1;
+        }
+        .add-subject-form button {
+            padding: 8px 16px;
+            border-radius: 40px;
+            background: #2a9d8f;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .study-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        input, select, textarea {
+            padding: 10px 14px;
+            border-radius: 48px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            font-size: 0.9rem;
+        }
+        textarea {
+            border-radius: 20px;
+            resize: vertical;
+            min-height: 70px;
+        }
+        .goal-card {
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 18px;
+            margin-top: 20px;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .progress-bar {
+            background: #cbd5e1;
+            border-radius: 20px;
+            height: 8px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: #2a9d8f;
+            width: 0%;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .history-list {
+            max-height: 450px;
+            overflow-y: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            color: #e76f51;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 40px;
+        }
+        .delete-btn:hover {
+            background: #fee2e2;
+        }
+        .total-time {
+            background: #f1f5f9;
+            padding: 12px 20px;
+            border-radius: 48px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 16px;
+        }
+        .current-time {
+            font-size: 0.7rem;
+            color: #2a9d8f;
+            margin-top: 4px;
+        }
+
+        /* 日記 */
+        .diary-card {
+            height: 100%;
+        }
+        .diary-editor {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .diary-editor .diary-input-area {
+            flex: 2;
+            min-width: 200px;
+        }
+        .diary-editor .diary-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .diary-editor input,
+        .diary-editor textarea {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        .diary-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .diary-list-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2a9d8f;
+        }
+        .diary-entry {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 3px solid #2a9d8f;
+            cursor: pointer;
+        }
+        .diary-entry:hover {
+            transform: translateX(4px);
+            background: #f1f5f9;
+        }
+        body.dark-mode .diary-entry {
+            background: #0f172a;
+        }
+        .diary-entry-date {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #2a9d8f;
+            margin-bottom: 6px;
+        }
+        .diary-entry-text {
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .diary-empty {
+            text-align: center;
+            color: #94a3b8;
+            padding: 20px;
+        }
+
+        /* 参考書管理 */
+        .book-item {
+            background: #f8fafc;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        body.dark-mode .book-item {
+            background: #0f172a;
+        }
+        .book-item.daily-achieved {
+            background: #cbd5e1;
+            opacity: 0.95;
+        }
+        .book-item.fully-completed {
+            background: #64748b;
+            opacity: 0.95;
+        }
+        .book-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            cursor: pointer;
+            background: #f1f5f9;
+        }
+        body.dark-mode .book-header {
+            background: #1e293b;
+        }
+        .book-title {
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .book-header-progress {
+            flex: 1;
+            margin: 0 12px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .book-header-progress-fill {
+            height: 100%;
+            background: #2a9d8f;
+            border-radius: 3px;
+        }
+        .book-summary {
+            font-size: 0.8rem;
+            color: #2a9d8f;
+        }
+        .book-detail {
+            padding: 12px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .book-progress {
+            margin-bottom: 12px;
+        }
+        .book-progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .book-progress-fill {
+            height: 100%;
+            background: #2a9d8f;
+            border-radius: 4px;
+        }
+        .daily-target {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .calendar-control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+        }
+        .calendar-grid {
+            max-height: 250px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .calendar-day {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: #ffffff;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        body.dark-mode .calendar-day {
+            background: #1e293b;
+        }
+        .calendar-day.achieved {
+            background: #c6f6d5;
+            border-left: 3px solid #2a9d8f;
+        }
+        .calendar-day.not-achieved {
+            background: #fee2e2;
+            border-left: 3px solid #e76f51;
+        }
+        .calendar-day-date {
+            font-size: 0.8rem;
+        }
+        .calendar-day-info {
+            font-size: 0.7rem;
+            text-align: right;
+        }
+        .progress-input {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 8px;
+        }
+        .progress-input input {
+            width: 100px;
+        }
+        .book-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+        .add-book-form {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .add-book-form input {
+            flex: 1;
+            min-width: 120px;
+        }
+        .today-target-display {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            background: #eef2ff;
+            padding: 6px 10px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        /* モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 1200px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        body.dark-mode .modal-content {
+            background: #1e293b;
+        }
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: #2a9d8f;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .stats-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px;
+        }
+        body.dark-mode .stats-card {
+            background: #0f172a;
+        }
+        .stats-card-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            border-left: 3px solid #2a9d8f;
+            padding-left: 10px;
+        }
+        .subject-stats-numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .subject-stat-number {
+            background: #e2e8f0;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        .chart-container-small {
+            height: 220px;
+            position: relative;
+        }
+        .book-select {
+            margin-bottom: 12px;
+            width: 100%;
+            padding: 8px;
+            border-radius: 40px;
+        }
+        .date-picker-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .progress-bars-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .period-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .period-nav .period-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .period-nav .nav-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .nav-btn {
+            background: #e2e8f0;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 32px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .period-range {
+            font-size: 0.8rem;
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 40px;
+            white-space: nowrap;
+        }
+        .settings-group {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .settings-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .danger-btn {
+            background: #e76f51;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .danger-btn:hover {
+            background: #d95b3a;
+        }
+        .modal-detail {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 10002;
+            max-width: 300px;
+            width: 90%;
+            text-align: center;
+        }
+        .modal-detail.hidden {
+            display: none;
+        }
+        .period-btn.small,
+        .stats-period-btn.small {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            margin-right: 6px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .period-btn.small.active,
+        .stats-period-btn.small.active {
+            background: #2a9d8f;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 0.7rem;
+            color: #6c7a8a;
+        }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 48px;
+            font-size: 0.8rem;
+            z-index: 10002;
+            animation: fadeInOut 2s ease;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+        .readonly-textarea {
+            background: #f1f5f9;
+            color: #64748b;
+            cursor: default;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            body { padding: 12px 12px; }
+            .header { flex-direction: column; gap: 8px; margin-bottom: 20px; }
+            .header h1 { font-size: 1.6rem; margin-top: 40px; }
+            .header-controls { position: static; justify-content: center; margin-top: 8px; width: 100%; flex-wrap: wrap; }
+            .main-grid, .middle-grid { grid-template-columns: 1fr !important; gap: 16px; }
+            .card { padding: 18px; }
+            .timer-display { font-size: 2.8rem !important; padding: 12px 20px !important; }
+            .study-overlay .study-timer { font-size: 4rem !important; }
+            .stats-dashboard { grid-template-columns: repeat(3, 1fr) !important; gap: 6px; }
+            .stats-grid { grid-template-columns: 1fr !important; gap: 16px; }
+            .chart-container-small { height: 180px; }
+        }
+        @media (max-width: 480px) {
+            .timer-display { font-size: 2.2rem !important; }
+            .header h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 集中モードオーバーレイ -->
+    <div id="studyOverlay" class="study-overlay hidden">
+        <div class="study-label">勉強中</div>
+        <div class="study-timer" id="studyTimerDisplay">00:00:00</div>
+        <button class="study-end-btn" id="studyEndBtn">勉強終了</button>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>StudyTrack+</h1>
+            <div class="header-controls">
+                <div class="today-total" id="todayTotalHeader">今日: 0分</div>
+                <div class="sync-buttons">
+                    <button class="sync-btn" id="syncToCloudBtn">☁️ アップロード</button>
+                    <button class="sync-btn" id="syncFromCloudBtn">📥 ダウンロード</button>
+                </div>
+                <div class="stats-text-btn" id="statsBtn">統計</div>
+                <button class="icon-btn" id="hamburgerBtn">☰</button>
+                <button class="icon-btn" id="darkModeToggle">🌙</button>
+            </div>
+        </div>
+
+        <!-- 設定モーダル -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <h3>設定</h3>
+                <div class="settings-group">
+                    <label>文字サイズ</label>
+                    <select id="textSizeSelect">
+                        <option value="10px">10px</option>
+                        <option value="12px">12px</option>
+                        <option value="14px" selected>14px</option>
+                        <option value="16px">16px</option>
+                        <option value="18px">18px</option>
+                    </select>
+                </div>
+                <div class="settings-group">
+                    <label>ダークモード</label>
+                    <input type="checkbox" id="darkModeCheckbox">
+                </div>
+                <div class="settings-group">
+                    <label>通知音</label>
+                    <input type="checkbox" id="alarmSoundCheckbox" checked>
+                </div>
+                <div class="settings-group">
+                    <label>データバックアップ</label>
+                    <button id="exportDataBtn" class="btn btn-secondary">データ書き出し</button>
+                    <button id="importDataBtn" class="btn btn-secondary" style="margin-top:8px;">データ読み込み</button>
+                    <input type="file" id="fileInput" accept=".json" style="display:none;">
+                </div>
+                <div class="settings-group">
+                    <label>全データ削除</label>
+                    <button id="clearAllDataBtn" class="danger-btn">全ての学習記録・参考書・日記を削除</button>
+                </div>
+                <div class="settings-group">
+                    <label>設定リセット</label>
+                    <button id="resetSettingsBtn" class="btn btn-secondary">すべての設定を初期値に戻す</button>
+                </div>
+                <button id="closeSettingsBtn" class="btn btn-primary" style="margin-top: 16px;">閉じる</button>
+            </div>
+        </div>
+
+        <!-- 統計モーダル -->
+        <div id="statsModal" class="modal">
+            <div class="modal-content">
+                <h3>統計ダッシュボード</h3>
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <div class="stats-card-title">日別勉強時間推移</div>
+                        <div class="period-nav">
+                            <div class="period-buttons">
+                                <button class="period-btn small active" data-stats-period="week">週間</button>
+                                <button class="period-btn small" data-stats-period="month">月間</button>
+                            </div>
+                            <div class="nav-controls">
+                                <button class="nav-btn" id="statsPrevPeriodBtn">◀</button>
+                                <span class="period-range" id="statsPeriodRange">読み込み中</span>
+                                <button class="nav-btn" id="statsNextPeriodBtn">▶</button>
+                            </div>
+                        </div>
+                        <div class="chart-container-small"><canvas id="statsDailyChart"></canvas></div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-title">科目別学習割合</div>
+                        <div class="stats-period-buttons" style="margin-bottom: 12px;">
+                            <button class="stats-period-btn small active" data-stats-sub-period="week">週間</button>
+                            <button class="stats-period-btn small" data-stats-sub-period="month">月間</button>
+                            <button class="stats-period-btn small" data-stats-sub-period="all">全期間</button>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+                            <div class="chart-container-small" style="flex: 1; min-width: 200px;">
+                                <canvas id="statsSubjectChart"></canvas>
+                            </div>
+                            <div id="subjectStatsNumbers" class="subject-stats-numbers" style="flex: 1; min-width: 150px;"></div>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-title">参考書の日別進捗</div>
+                        <select id="bookProgressSelect" class="book-select"></select>
+                        <div class="chart-container-small"><canvas id="bookProgressChart"></canvas></div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-title">参考書 総進捗率</div>
+                        <div id="bookOverallProgressList" class="progress-bars-list"></div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-title">一日の教科別勉強時間</div>
+                        <div class="date-picker-row">
+                            <input type="date" id="dailySubjectDate" value="">
+                            <button class="btn btn-secondary" id="refreshDailySubjectBtn">表示</button>
+                        </div>
+                        <div class="chart-container-small"><canvas id="dailySubjectChart"></canvas></div>
+                    </div>
+                </div>
+                <button id="closeStatsBtn" class="btn btn-primary" style="margin-top: 20px;">閉じる</button>
+            </div>
+        </div>
+
+        <!-- 参考書の過去データ編集用モーダル -->
+        <div id="editPastDataModal" class="modal">
+            <div class="modal-content">
+                <h3 id="editModalTitle">過去のデータを編集</h3>
+                <div class="edit-field">
+                    <label>日付</label>
+                    <input type="date" id="editDate" readonly disabled>
+                </div>
+                <div class="edit-field">
+                    <label>累計ページ数</label>
+                    <input type="number" id="editCumulative" min="0" step="1">
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" id="cancelEditBtn">キャンセル</button>
+                    <button class="btn btn-primary" id="saveEditBtn">保存</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3カラム -->
+        <div class="main-grid">
+            <!-- 手動記録 -->
+            <div class="card">
+                <div class="card-title">手動記録</div>
+                <div class="study-form">
+                    <div class="form-group"><label>科目</label><select id="manualSubject"></select></div>
+                    <div class="form-group"><label>勉強時間 (分)</label><input type="number" id="manualMinutes" value="30" min="1"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>日付</label><input type="date" id="manualDate"></div>
+                        <div class="form-group"><label>開始時刻</label><input type="time" id="manualStartTime"><div class="current-time" id="currentTimeDisplay"></div></div>
+                    </div>
+                    <button class="btn btn-primary" id="addManualRecordBtn">記録を追加</button>
+                </div>
+                <div class="goal-card">
+                    <div class="flex-between"><span><strong>今日の目標</strong></span><span><input type="number" id="dailyGoalInput" style="width:90px;" value="120"> 分</span></div>
+                    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                    <div class="flex-between"><span>今日: <span id="todayTotalMin">0</span> 分</span><span>目標まで <span id="remainTarget">0</span> 分</span></div>
+                </div>
+                <div class="stats-dashboard">
+                    <div class="stat-card"><div class="stat-value" id="weeklyAvgTime">0分</div><div class="stat-label">今週の平均</div></div>
+                    <div class="stat-card"><div class="stat-value" id="weeklyTotal">0時間</div><div class="stat-label">今週の合計</div></div>
+                    <div class="stat-card"><div class="stat-value" id="streakDays">0日</div><div class="stat-label">連続学習日数</div></div>
+                </div>
+            </div>
+
+            <!-- タイマー -->
+            <div class="card">
+                <div class="card-title">タイマー</div>
+                <div class="timer-area">
+                    <div class="timer-mode">
+                        <button class="mode-btn active" data-mode="countdown">カウントダウン</button>
+                        <button class="mode-btn" data-mode="stopwatch">ストップウォッチ</button>
+                        <button class="mode-btn" data-mode="pomodoro">ポモドーロ</button>
+                    </div>
+                    <div class="session-status" id="sessionStatusText">勉強時間を設定してスタート</div>
+                    <div class="timer-display" id="timerDisplay">25:00</div>
+                    <div id="normalTimerSettings">
+                        <div class="preset-buttons">
+                            <button class="preset-btn" data-minutes="15">15分</button>
+                            <button class="preset-btn" data-minutes="25">25分</button>
+                            <button class="preset-btn" data-minutes="30">30分</button>
+                            <button class="preset-btn" data-minutes="45">45分</button>
+                            <button class="preset-btn" data-minutes="60">60分</button>
+                            <button class="preset-btn" data-minutes="90">90分</button>
+                        </div>
+                        <div class="timer-input-group">
+                            <input type="number" id="customMinutes" placeholder="分" min="1" value="25">
+                            <span>分</span>
+                            <button class="btn btn-secondary" id="setCustomTimeBtn">設定</button>
+                        </div>
+                    </div>
+                    <div id="pomodoroSettings" style="display: none;">
+                        <div class="preset-buttons">
+                            <button class="preset-btn" data-pomodoro-focus="25" data-pomodoro-break="5">25分集中 / 5分休憩</button>
+                            <button class="preset-btn" data-pomodoro-focus="50" data-pomodoro-break="10">50分集中 / 10分休憩</button>
+                            <button class="preset-btn" data-pomodoro-focus="45" data-pomodoro-break="15">45分集中 / 15分休憩</button>
+                        </div>
+                        <div class="timer-input-group">
+                            <input type="number" id="customFocusMinutes" placeholder="集中" min="1" value="25" style="width:80px;">
+                            <span>分集中 /</span>
+                            <input type="number" id="customBreakMinutes" placeholder="休憩" min="1" value="5" style="width:80px;">
+                            <span>分休憩</span>
+                            <button class="btn btn-secondary" id="setPomodoroTimeBtn">設定</button>
+                        </div>
+                        <div class="pomodoro-status" id="pomodoroStatus">集中タイム</div>
+                        <div class="cycle-count" id="cycleCount">サイクル: 0回完了</div>
+                    </div>
+                    <div class="timer-buttons">
+                        <button class="btn btn-primary" id="startTimerBtn">スタート</button>
+                        <button class="btn btn-secondary" id="pauseTimerBtn">ポーズ</button>
+                        <button class="btn btn-secondary" id="resetTimerBtn">リセット</button>
+                    </div>
+                    <div class="inline-row">
+                        <select id="timerSubjectSelect"></select>
+                        <button class="btn btn-primary" id="logTimerBtn">記録</button>
+                    </div>
+                    <div class="concentration-toggle">
+                        <span>集中モード</span>
+                        <div class="toggle-switch active" id="concentrationToggle"></div>
+                    </div>
+                </div>
+                <div class="subject-manager">
+                    <div style="font-weight:600; margin-bottom:12px;">教科を管理</div>
+                    <div class="subject-list" id="subjectList"></div>
+                    <div class="add-subject-form">
+                        <input type="text" id="newSubjectName" placeholder="新しい教科名" maxlength="20">
+                        <button id="addSubjectBtn">+ 追加</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 参考書管理 -->
+            <div class="card">
+                <div class="card-title">参考書管理</div>
+                <div id="bookList" style="flex:1; overflow-y:auto; max-height:60vh;"></div>
+                <div class="add-book-form">
+                    <input type="text" id="newBookName" placeholder="参考書名" maxlength="30">
+                    <input type="number" id="newBookTotal" placeholder="総ページ数" min="1" value="200">
+                    <button class="btn btn-primary" id="addBookBtn">追加</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="middle-grid">
+            <div class="diary-card card">
+                <div class="card-title">日記帳</div>
+                <div class="diary-editor">
+                    <div class="diary-input-area"><input type="date" id="diaryDate"><textarea id="diaryNote" rows="3"></textarea></div>
+                    <div class="diary-buttons"><button class="btn btn-primary" id="saveDiaryBtn">保存</button><button class="btn btn-secondary" id="deleteDiaryBtn">削除</button></div>
+                </div>
+                <div class="diary-list"><div class="diary-list-title">過去の日記</div><div id="diaryEntriesList"></div></div>
+            </div>
+            <div class="card">
+                <div class="flex-between"><div class="card-title">学習履歴</div><button id="clearAllHistoryBtn" class="btn btn-secondary">全削除</button></div>
+                <div class="history-list"><table id="historyTable"><thead><tr><th>日付</th><th>開始時刻</th><th>科目</th><th>勉強時間</th><th></th></tr></thead><tbody id="historyTbody"></tbody></table></div>
+                <div class="total-time">総勉強時間: <span id="totalAllMinutes">0</span> 分 → <span id="totalAllTime">0時間0分</span></div>
+            </div>
+        </div>
+
+        <div id="detailModal" class="modal-detail hidden"><div id="modalContent"></div><button class="btn btn-secondary" id="closeModalBtn">閉じる</button></div>
+        <footer>参考書のカレンダーで日付をクリックすると過去の累計ページ数を編集できます。☁️アイコンでクラウド同期が可能です。</footer>
+    </div>
+
+    <script type="module">
+        // ==================== Firebase設定 ====================
+        // 【重要】ここにあなたのFirebase設定を貼り付けてください！
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        
+        let isAuthenticated = false;
+        let userId = localStorage.getItem('syncUserId');
+        let unsubscribe = null;
+        
+        // 匿名認証
+        signInAnonymously(auth).catch(error => {
+            console.error('認証エラー:', error);
+            showToast('⚠️ クラウド同期には認証が必要です');
+        });
+        
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                isAuthenticated = true;
+                userId = user.uid;
+                localStorage.setItem('syncUserId', userId);
+                console.log('✅ 認証成功:', userId);
+                startRealtimeSync();
+                
+                // 初期データ読み込み後、クラウドと同期
+                setTimeout(async () => {
+                    const hasCloudData = await syncFromCloud();
+                    if (!hasCloudData && window.refreshAllUI) {
+                        await syncToCloud();
+                    }
+                }, 2000);
+            }
+        });
+        
+        // リアルタイム同期
+        function startRealtimeSync() {
+            if (unsubscribe) unsubscribe();
+            const userDocRef = doc(db, 'studyData', userId);
+            unsubscribe = onSnapshot(userDocRef, (docSnap) => {
+                if (docSnap.exists() && !window.isLocalUpdating) {
+                    const cloudData = docSnap.data();
+                    const lastSync = localStorage.getItem('lastCloudSync');
+                    if (cloudData.lastSync && (!lastSync || new Date(cloudData.lastSync) > new Date(lastSync))) {
+                        showToast('🔄 他のデバイスからの更新を検出しました');
+                        syncFromCloud().then(() => {
+                            if (window.refreshAllUI) window.refreshAllUI();
+                        });
+                    }
+                }
+            });
+        }
+        
+        async function syncToCloud() {
+            if (!isAuthenticated) {
+                showToast('⚠️ 認証待機中... もう一度お試しください', true);
+                return false;
+            }
+            try {
+                window.isLocalUpdating = true;
+                const userDocRef = doc(db, 'studyData', userId);
+                const data = {
+                    sessions: JSON.parse(localStorage.getItem('study_sessions_v3') || '[]'),
+                    customSubjects: JSON.parse(localStorage.getItem('custom_subjects_v3') || '["数学","英語","理科","社会","国語","プログラミング","その他"]'),
+                    diaryNotes: JSON.parse(localStorage.getItem('daily_diary_v3') || '{}'),
+                    books: JSON.parse(localStorage.getItem('study_books_v3') || '[]'),
+                    cumulativeProgress: JSON.parse(localStorage.getItem('book_progress_v3') || '{}'),
+                    dailyGoal: localStorage.getItem('daily_goal_v3') || '120',
+                    lastSync: new Date().toISOString()
+                };
+                await setDoc(userDocRef, data);
+                localStorage.setItem('lastCloudSync', new Date().toISOString());
+                showToast('☁️ クラウドに同期しました');
+                return true;
+            } catch (error) {
+                console.error('同期エラー:', error);
+                showToast('⚠️ 同期に失敗しました', true);
+                return false;
+            } finally {
+                window.isLocalUpdating = false;
+            }
+        }
+        
+        async function syncFromCloud() {
+            if (!isAuthenticated) {
+                showToast('⚠️ 認証待機中...', true);
+                return false;
+            }
+            try {
+                const userDocRef = doc(db, 'studyData', userId);
+                const docSnap = await getDoc(userDocRef);
+                if (docSnap.exists()) {
+                    window.isLocalUpdating = true;
+                    const data = docSnap.data();
+                    localStorage.setItem('study_sessions_v3', JSON.stringify(data.sessions || []));
+                    localStorage.setItem('custom_subjects_v3', JSON.stringify(data.customSubjects || ["数学","英語","理科","社会","国語","プログラミング","その他"]));
+                    localStorage.setItem('daily_diary_v3', JSON.stringify(data.diaryNotes || {}));
+                    localStorage.setItem('study_books_v3', JSON.stringify(data.books || []));
+                    localStorage.setItem('book_progress_v3', JSON.stringify(data.cumulativeProgress || {}));
+                    if (data.dailyGoal) localStorage.setItem('daily_goal_v3', data.dailyGoal);
+                    localStorage.setItem('lastCloudSync', data.lastSync || new Date().toISOString());
+                    showToast('📥 クラウドから復元しました');
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('復元エラー:', error);
+                showToast('⚠️ 復元に失敗しました', true);
+                return false;
+            } finally {
+                window.isLocalUpdating = false;
+            }
+        }
+        
+        function showToast(msg, isErr = false) {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.textContent = msg;
+            if (isErr) t.style.background = '#e76f51';
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 2500);
+        }
+        
+        // グローバル関数を公開
+        window.syncToCloud = syncToCloud;
+        window.syncFromCloud = syncFromCloud;
+        window.showToast = showToast;
+        
+        // ==================== アプリケーション本体 ====================
+        const STORAGE_KEYS = {
+            sessions: { old: "study_sessions_v2", new: "study_sessions_v3" },
+            subjects: { old: "custom_subjects", new: "custom_subjects_v3" },
+            diary: { old: "daily_diary", new: "daily_diary_v3" },
+            books: { old: "study_books_cumulative", new: "study_books_v3" },
+            progress: { old: "book_cumulative_progress", new: "book_progress_v3" },
+            goal: { old: "daily_goal_minutes", new: "daily_goal_v3" }
+        };
+        
+        let sessions = [];
+        let customSubjects = ["数学", "英語", "理科", "社会", "国語", "プログラミング", "その他"];
+        let diaryNotes = {};
+        let books = [];
+        let cumulativeProgress = {};
+        let subjectColorMap = new Map();
+        const defaultColors = ['#2a9d8f', '#e9c46a', '#f4a261', '#e76f51', '#6c9ebf', '#9c89b8', '#6d6875',
+            '#4c9aff', '#ff6b6b', '#6bffb8', '#ffb86b', '#c084fc', '#f97316', '#14b8a6', '#a855f7', '#ec489a', '#10b981'];
+        
+        function getColorForSubject(subject) {
+            if (!subjectColorMap.has(subject)) subjectColorMap.set(subject, defaultColors[subjectColorMap.size % defaultColors.length]);
+            return subjectColorMap.get(subject);
+        }
+        
+        function getLocalDateStr(date) {
+            const y = date.getFullYear(), m = String(date.getMonth() + 1).padStart(2, '0'), d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+        
+        function getTodayLocalStr() { return getLocalDateStr(new Date()); }
+        
+        function parseLocalDate(dateStr) { const [y, m, d] = dateStr.split('-').map(Number); return new Date(y, m - 1, d); }
+        
+        function getMonday(date) { const d = new Date(date); const day = d.getDay(); const diff = (day === 0 ? 6 : day - 1); d.setDate(d.getDate() - diff); d.setHours(0, 0, 0, 0); return d; }
+        
+        function formatMinutesToHours(minutes) {
+            if (minutes === 0) return "0時間";
+            const h = Math.floor(minutes / 60), m = minutes % 60;
+            if (h === 0) return `${m}分`;
+            if (m === 0) return `${h}時間`;
+            return `${h}時間${m}分`;
+        }
+        
+        function formatMinutesToHoursShort(minutes) {
+            if (minutes < 60) return minutes + '分';
+            const h = Math.floor(minutes / 60), m = minutes % 60;
+            if (m === 0) return h + '時間';
+            return h + '時間' + m + '分';
+        }
+        
+        // 以下、元のアプリケーション関数を定義
+        function addStudyRecord(subject, minutes, dateStr, startTime) {
+            if (!subject || minutes <= 0) { alert("勉強時間は1分以上"); return false; }
+            if (!dateStr) dateStr = getTodayLocalStr();
+            if (!startTime) startTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            sessions.push({ id: Date.now() + Math.random() * 10000, dateStr, startTime, subject, minutes: Math.round(minutes) });
+            saveAllData();
+            refreshAllUI();
+            syncToCloud();
+            return true;
+        }
+        
+        function deleteSessionById(id) { sessions = sessions.filter(s => s.id !== id); saveAllData(); refreshAllUI(); syncToCloud(); }
+        
+        function clearAllHistory() { if (confirm("全ての学習履歴を削除しますか？")) { sessions = []; saveAllData(); refreshAllUI(); syncToCloud(); } }
+        
+        function renderHistoryTable() {
+            const tbody = document.getElementById('historyTbody'); if (!tbody) return;
+            if (sessions.length === 0) { tbody.innerHTML = '<tr><td colspan="5">記録がありません</td></tr>'; return; }
+            const sorted = [...sessions].sort((a, b) => new Date(b.dateStr + "T" + b.startTime) - new Date(a.dateStr + "T" + a.startTime));
+            tbody.innerHTML = "";
+            for (let s of sorted) {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = s.dateStr;
+                row.insertCell(1).textContent = s.startTime;
+                row.insertCell(2).textContent = s.subject;
+                row.insertCell(3).textContent = formatMinutesToHours(s.minutes);
+                const del = row.insertCell(4);
+                const btn = document.createElement('button');
+                btn.textContent = '🗑';
+                btn.className = 'delete-btn';
+                btn.onclick = () => deleteSessionById(s.id);
+                del.appendChild(btn);
+            }
+        }
+        
+        function updateSubjectSelects() {
+            const timerSel = document.getElementById('timerSubjectSelect');
+            const manualSel = document.getElementById('manualSubject');
+            if (timerSel) timerSel.innerHTML = customSubjects.map(s => `<option value="${s}">${s}</option>`).join('');
+            if (manualSel) manualSel.innerHTML = customSubjects.map(s => `<option value="${s}">${s}</option>`).join('');
+        }
+        
+        function renderSubjectTags() {
+            const list = document.getElementById('subjectList'); if (!list) return;
+            list.innerHTML = customSubjects.map(sub => `<div class="subject-tag"><span>${sub}</span><button class="remove-subject" data-subject="${sub}">✖</button></div>`).join('');
+            document.querySelectorAll('.remove-subject').forEach(btn => { btn.onclick = () => removeSubject(btn.dataset.subject); });
+        }
+        
+        function addSubject() {
+            const newName = document.getElementById('newSubjectName').value.trim();
+            if (!newName) { showToast("教科名を入力してください", true); return; }
+            if (customSubjects.includes(newName)) { showToast("既に存在する教科です", true); return; }
+            customSubjects.push(newName);
+            subjectColorMap.set(newName, defaultColors[(subjectColorMap.size) % defaultColors.length]);
+            saveAllData();
+            document.getElementById('newSubjectName').value = '';
+            showToast(`教科「${newName}」を追加しました`);
+            refreshAllUI();
+            syncToCloud();
+        }
+        
+        function removeSubject(subject) {
+            if (customSubjects.length <= 1) { showToast("最低1つは教科が必要です", true); return; }
+            if (confirm(`教科「${subject}」を削除しますか？\nこの教科の学習記録は「その他」に変更されます`)) {
+                sessions = sessions.map(s => s.subject === subject ? { ...s, subject: "その他" } : s);
+                customSubjects = customSubjects.filter(s => s !== subject);
+                if (!customSubjects.includes("その他")) customSubjects.push("その他");
+                subjectColorMap.delete(subject);
+                saveAllData();
+                refreshAllUI();
+                syncToCloud();
+                showToast(`教科「${subject}」を削除しました`);
+            }
+        }
+        
+        // 日記関連
+        function saveDiaryToLocal() { localStorage.setItem(STORAGE_KEYS.diary.new, JSON.stringify(diaryNotes)); }
+        
+        function saveCurrentDiary() {
+            const dateInput = document.getElementById('diaryDate');
+            const ta = document.getElementById('diaryNote');
+            if (!dateInput || !ta) return;
+            const dateStr = dateInput.value;
+            if (!dateStr) { showToast("日付を選択してください", true); return; }
+            const today = getTodayLocalStr();
+            if (dateStr !== today) { showToast("過去の日記は編集できません", true); return; }
+            diaryNotes[dateStr] = ta.value;
+            saveDiaryToLocal();
+            renderDiaryList();
+            showToast(`${dateStr} の日記を保存しました`);
+            syncToCloud();
+        }
+        
+        function deleteCurrentDiary() {
+            const dateInput = document.getElementById('diaryDate');
+            if (!dateInput) return;
+            const dateStr = dateInput.value;
+            if (!dateStr) return;
+            const today = getTodayLocalStr();
+            if (dateStr !== today) { showToast("過去の日記は削除できません", true); return; }
+            if (diaryNotes[dateStr]) {
+                delete diaryNotes[dateStr];
+                saveDiaryToLocal();
+                document.getElementById('diaryNote').value = '';
+                renderDiaryList();
+                showToast(`${dateStr} の日記を削除しました`);
+                syncToCloud();
+            } else { showToast("削除する日記がありません", true); }
+        }
+        
+        function renderDiaryList() {
+            const container = document.getElementById('diaryEntriesList');
+            if (!container) return;
+            const entries = Object.entries(diaryNotes).filter(([_, t]) => t && t.trim() !== '').sort((a, b) => b[0].localeCompare(a[0]));
+            if (entries.length === 0) { container.innerHTML = '<div class="diary-empty">日記がまだありません。</div>'; return; }
+            container.innerHTML = entries.map(([date, text]) => `<div class="diary-entry" data-date="${date}"><div class="diary-entry-date">${date}</div><div class="diary-entry-text">${escapeHtml(text)}</div></div>`).join('');
+            document.querySelectorAll('.diary-entry').forEach(el => { el.addEventListener('click', () => { const d = el.dataset.date; document.getElementById('diaryDate').value = d; loadDiaryForDate(d); }); });
+        }
+        
+        function loadDiaryForDate(dateStr) {
+            const ta = document.getElementById('diaryNote');
+            if (!ta) return;
+            ta.value = diaryNotes[dateStr] || '';
+            const today = getTodayLocalStr();
+            const isToday = (dateStr === today);
+            if (isToday) { ta.readOnly = false; ta.classList.remove('readonly-textarea'); document.getElementById('saveDiaryBtn').disabled = false; document.getElementById('deleteDiaryBtn').disabled = false; }
+            else { ta.readOnly = true; ta.classList.add('readonly-textarea'); document.getElementById('saveDiaryBtn').disabled = true; document.getElementById('deleteDiaryBtn').disabled = true; }
+        }
+        
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        
+        // 参考書関連
+        function saveBooks() { localStorage.setItem(STORAGE_KEYS.books.new, JSON.stringify(books)); }
+        function saveCumulativeProgress() { localStorage.setItem(STORAGE_KEYS.progress.new, JSON.stringify(cumulativeProgress)); }
+        
+        function getCumulative(bookId, dateStr) {
+            const prog = cumulativeProgress[bookId] || {};
+            if (prog[dateStr] !== undefined) return prog[dateStr];
+            const pastDates = Object.keys(prog).filter(d => d <= dateStr).sort();
+            if (pastDates.length === 0) return 0;
+            return prog[pastDates[pastDates.length - 1]];
+        }
+        
+        function getPreviousCumulative(bookId, dateStr) {
+            const prog = cumulativeProgress[bookId] || {};
+            const pastDates = Object.keys(prog).filter(d => d < dateStr).sort();
+            if (pastDates.length === 0) return 0;
+            return prog[pastDates[pastDates.length - 1]];
+        }
+        
+        function getYesterdayStr() { const d = new Date(); d.setDate(d.getDate() - 1); return getLocalDateStr(d); }
+        
+        function getTodayTargetPages(book) {
+            const yesterdayCum = getCumulative(book.id, getYesterdayStr());
+            const dailyTarget = book.dailyTarget || 0;
+            if (dailyTarget === 0) return 0;
+            return yesterdayCum + dailyTarget;
+        }
+        
+        function isTodayTargetAchieved(book) {
+            const todayCum = getCumulative(book.id, getTodayLocalStr());
+            const target = getTodayTargetPages(book);
+            return target > 0 && todayCum >= target;
+        }
+        
+        function ensureTodayCumulative() {
+            const today = getTodayLocalStr();
+            for (let book of books) {
+                const prog = cumulativeProgress[book.id] || {};
+                if (prog[today] === undefined) {
+                    const pastDates = Object.keys(prog).filter(d => d <= today).sort();
+                    let lastCum = 0;
+                    if (pastDates.length > 0) lastCum = prog[pastDates[pastDates.length - 1]];
+                    if (!cumulativeProgress[book.id]) cumulativeProgress[book.id] = {};
+                    cumulativeProgress[book.id][today] = lastCum;
+                }
+            }
+            saveCumulativeProgress();
+        }
+        
+        function addBook() {
+            const nameInput = document.getElementById('newBookName');
+            const totalInput = document.getElementById('newBookTotal');
+            const name = nameInput.value.trim();
+            const total = parseInt(totalInput.value);
+            if (!name) { showToast("参考書名を入力してください", true); return; }
+            if (isNaN(total) || total <= 0) { showToast("総ページ数を正しく入力してください", true); return; }
+            books.push({ id: Date.now(), name, totalPages: total, dailyTarget: 0 });
+            saveBooks();
+            ensureTodayCumulative();
+            renderBooks();
+            nameInput.value = '';
+            totalInput.value = '200';
+            showToast(`参考書「${name}」を追加しました`);
+            syncToCloud();
+        }
+        
+        function renderBooks() {
+            const container = document.getElementById('bookList'); if (!container) return;
+            if (books.length === 0) { container.innerHTML = '<div class="diary-empty">参考書が登録されていません</div>'; return; }
+            const today = getTodayLocalStr();
+            const sortedBooks = [...books].sort((a, b) => {
+                const aFull = getCumulative(a.id, today) >= a.totalPages;
+                const bFull = getCumulative(b.id, today) >= b.totalPages;
+                const getState = (book) => {
+                    if (getCumulative(book.id, today) >= book.totalPages) return 2;
+                    if (isTodayTargetAchieved(book)) return 1;
+                    return 0;
+                };
+                const stateA = getState(a);
+                const stateB = getState(b);
+                if (stateA !== stateB) return stateA - stateB;
+                return a.id - b.id;
+            });
+            container.innerHTML = sortedBooks.map(book => {
+                const total = book.totalPages;
+                const currentCum = getCumulative(book.id, today);
+                const percent = total > 0 ? (currentCum / total) * 100 : 0;
+                const dailyTarget = book.dailyTarget || 0;
+                const todayTarget = getTodayTargetPages(book);
+                const fullyCompleted = currentCum >= total;
+                const dailyAchieved = !fullyCompleted && isTodayTargetAchieved(book);
+                return `<div class="book-item ${fullyCompleted ? 'fully-completed' : (dailyAchieved ? 'daily-achieved' : '')}" data-id="${book.id}">
+                    <div class="book-header" data-id="${book.id}">
+                        <div class="book-title">${escapeHtml(book.name)}${fullyCompleted ? '<span>🎉</span>' : ''}</div>
+                        <div class="book-header-progress"><div class="book-header-progress-fill" style="width: ${percent}%;"></div></div>
+                        <div class="book-summary">${currentCum} / ${total} (${percent.toFixed(0)}%)</div>
+                    </div>
+                    <div class="book-detail" style="display: none;" data-detail="${book.id}">
+                        <div class="book-progress"><div class="book-progress-bar"><div class="book-progress-fill" style="width: ${percent}%;"></div></div></div>
+                        <div class="daily-target"><span>1日あたり目標:</span><input type="number" class="daily-target-input" data-id="${book.id}" value="${dailyTarget}" min="0" step="1" style="width:80px;"><span>ページ</span><button class="btn btn-secondary set-target-btn" data-id="${book.id}">設定</button></div>
+                        <div class="progress-input"><span>累計ページ数:</span><input type="number" class="cumulative-input" data-id="${book.id}" value="${currentCum}" min="0" step="1" style="width:100px;"><button class="btn btn-primary save-cumulative-btn" data-id="${book.id}" data-date="${today}">保存</button></div>
+                        <div class="today-target-display">📌 今日の目標: ${todayTarget > 0 ? todayTarget : '未設定'} ページ${fullyCompleted ? ' 🎉 完全達成！' : (dailyAchieved ? ' ✅ 今日の目標達成！' : '')}</div>
+                        <div class="calendar-control"><button class="prev-month-btn" data-id="${book.id}">◀</button><span class="calendar-month-label" data-id="${book.id}"></span><button class="next-month-btn" data-id="${book.id}">▶</button></div>
+                        <div class="calendar-grid" data-calendar="${book.id}"></div>
+                        <div class="book-actions"><button class="btn btn-secondary delete-book" data-id="${book.id}">削除</button></div>
+                    </div>
+                </div>`;
+            }).join('');
+            
+            // イベントリスナー設定
+            document.querySelectorAll('.book-header').forEach(header => {
+                header.addEventListener('click', (e) => { const id = parseInt(header.dataset.id); const detail = document.querySelector(`.book-detail[data-detail="${id}"]`); if (detail) { const visible = detail.style.display !== 'none'; detail.style.display = visible ? 'none' : 'block'; if (!visible) renderCalendarForBook(id); } });
+            });
+            document.querySelectorAll('.set-target-btn').forEach(btn => { btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); const book = books.find(b => b.id === id); if (!book) return; const input = document.querySelector(`.daily-target-input[data-id="${id}"]`); let val = parseInt(input.value); if (isNaN(val)) val = 0; book.dailyTarget = val; saveBooks(); showToast(`${book.name} の目標を ${val} ページに設定`); renderCalendarForBook(id); syncToCloud(); }); });
+            document.querySelectorAll('.save-cumulative-btn').forEach(btn => { btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); const dateStr = btn.dataset.date; const input = document.querySelector(`.cumulative-input[data-id="${id}"]`); let val = parseInt(input.value); if (isNaN(val)) val = 0; if (!cumulativeProgress[id]) cumulativeProgress[id] = {}; cumulativeProgress[id][dateStr] = val; saveCumulativeProgress(); showToast(`${books.find(b=>b.id===id).name} の ${dateStr} を ${val} に保存`); refreshAllUI(); syncToCloud(); }); });
+            document.querySelectorAll('.delete-book').forEach(btn => { btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); books = books.filter(b => b.id !== id); delete cumulativeProgress[id]; saveBooks(); saveCumulativeProgress(); refreshAllUI(); syncToCloud(); showToast("参考書を削除しました"); }); });
+        }
+        
+        function renderCalendarForBook(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            if (!window.bookDisplayMonths) window.bookDisplayMonths = {};
+            if (!window.bookDisplayMonths[bookId]) window.bookDisplayMonths[bookId] = { year: new Date().getFullYear(), month: new Date().getMonth() };
+            const { year, month } = window.bookDisplayMonths[bookId];
+            const days = [];
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) days.push(getLocalDateStr(d));
+            const container = document.querySelector(`.calendar-grid[data-calendar="${bookId}"]`);
+            const labelSpan = document.querySelector(`.calendar-month-label[data-id="${bookId}"]`);
+            if (labelSpan) labelSpan.textContent = `${year}年 ${month+1}月`;
+            if (!container) return;
+            container.innerHTML = days.map(dateStr => {
+                const cumulative = getCumulative(bookId, dateStr);
+                const prevCum = getPreviousCumulative(bookId, dateStr);
+                const todayProgress = cumulative - prevCum;
+                const target = book.dailyTarget || 0;
+                const isAchieved = target > 0 && todayProgress >= target;
+                const statusClass = isAchieved ? 'achieved' : (todayProgress > 0 ? 'not-achieved' : '');
+                return `<div class="calendar-day ${statusClass}" data-book="${bookId}" data-date="${dateStr}"><span class="calendar-day-date">${dateStr.slice(5)}</span><span class="calendar-day-info">累計:${cumulative} / 進:${todayProgress > 0 ? todayProgress : '-'}</span></div>`;
+            }).join('');
+            document.querySelectorAll(`.calendar-day[data-book="${bookId}"]`).forEach(day => { day.addEventListener('click', (e) => { e.stopPropagation(); openEditModal(bookId, day.dataset.date); }); });
+            
+            document.querySelectorAll(`.prev-month-btn[data-id="${bookId}"]`).forEach(btn => { btn.onclick = () => { let { year, month } = window.bookDisplayMonths[bookId]; month--; if (month < 0) { month = 11; year--; } window.bookDisplayMonths[bookId] = { year, month }; renderCalendarForBook(bookId); }; });
+            document.querySelectorAll(`.next-month-btn[data-id="${bookId}"]`).forEach(btn => { btn.onclick = () => { let { year, month } = window.bookDisplayMonths[bookId]; month++; if (month > 11) { month = 0; year++; } window.bookDisplayMonths[bookId] = { year, month }; renderCalendarForBook(bookId); }; });
+        }
+        
+        function openEditModal(bookId, dateStr) {
+            window.currentEditBookId = bookId;
+            window.currentEditDate = dateStr;
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            const currentCum = getCumulative(bookId, dateStr);
+            document.getElementById('editModalTitle').innerHTML = `${escapeHtml(book.name)} - ${dateStr} のデータ編集`;
+            document.getElementById('editDate').value = dateStr;
+            document.getElementById('editCumulative').value = currentCum;
+            document.getElementById('editPastDataModal').style.display = 'flex';
+        }
+        
+        function closeEditModal() { document.getElementById('editPastDataModal').style.display = 'none'; window.currentEditBookId = null; window.currentEditDate = null; }
+        
+        function saveEditedData() {
+            if (window.currentEditBookId === null || window.currentEditDate === null) return;
+            const newCumulative = parseInt(document.getElementById('editCumulative').value);
+            if (isNaN(newCumulative) || newCumulative < 0) { showToast("正しい数値を入力してください", true); return; }
+            if (!cumulativeProgress[window.currentEditBookId]) cumulativeProgress[window.currentEditBookId] = {};
+            cumulativeProgress[window.currentEditBookId][window.currentEditDate] = newCumulative;
+            saveCumulativeProgress();
+            closeEditModal();
+            refreshAllUI();
+            syncToCloud();
+            showToast(`${window.currentEditDate} の累計ページ数を更新しました`);
+        }
+        
+        function computeStats() {
+            const today = getTodayLocalStr();
+            let todayTotal = 0, grandTotal = 0;
+            for (let s of sessions) { grandTotal += s.minutes; if (s.dateStr === today) todayTotal += s.minutes; }
+            return { todayTotal, grandTotal };
+        }
+        
+        function updateStatsAndGoal() {
+            const { todayTotal, grandTotal } = computeStats();
+            document.getElementById('todayTotalMin').textContent = todayTotal;
+            document.getElementById('totalAllMinutes').textContent = grandTotal;
+            document.getElementById('totalAllTime').textContent = formatMinutesToHours(grandTotal);
+            document.getElementById('todayTotalHeader').textContent = `今日: ${formatMinutesToHoursShort(todayTotal)}`;
+            let goal = parseInt(document.getElementById('dailyGoalInput').value) || 0;
+            let percent = (goal > 0) ? Math.min(100, (todayTotal / goal) * 100) : (todayTotal > 0 ? 100 : 0);
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('remainTarget').textContent = Math.max(0, goal - todayTotal);
+            if (sessions.length > 0) {
+                const today = new Date();
+                const weekStart = getMonday(today);
+                let weeklyTotal = 0;
+                let weeklyDays = new Set();
+                for (let s of sessions) {
+                    const sd = parseLocalDate(s.dateStr);
+                    if (sd >= weekStart) { weeklyTotal += s.minutes; weeklyDays.add(s.dateStr); }
+                }
+                const weeklyAvg = weeklyDays.size > 0 ? Math.round(weeklyTotal / weeklyDays.size) : 0;
+                let streak = 0;
+                let checkDate = new Date(today);
+                for (let i = 0; i < 365; i++) { const ds = getLocalDateStr(checkDate); if (sessions.some(s => s.dateStr === ds)) streak++; else break; checkDate.setDate(checkDate.getDate() - 1); }
+                document.getElementById('weeklyAvgTime').textContent = formatMinutesToHoursShort(weeklyAvg);
+                document.getElementById('weeklyTotal').textContent = formatMinutesToHoursShort(weeklyTotal);
+                document.getElementById('streakDays').textContent = streak + '日';
+            }
+        }
+        
+        function refreshAllUI() {
+            renderHistoryTable();
+            updateStatsAndGoal();
+            renderDiaryList();
+            renderBooks();
+            updateSubjectSelects();
+            renderSubjectTags();
+            if (document.getElementById('statsModal').style.display === 'flex') refreshStatsModal();
+        }
+        
+        function saveAllData() {
+            localStorage.setItem(STORAGE_KEYS.sessions.new, JSON.stringify(sessions));
+            localStorage.setItem(STORAGE_KEYS.subjects.new, JSON.stringify(customSubjects));
+            localStorage.setItem(STORAGE_KEYS.diary.new, JSON.stringify(diaryNotes));
+            localStorage.setItem(STORAGE_KEYS.books.new, JSON.stringify(books));
+            localStorage.setItem(STORAGE_KEYS.progress.new, JSON.stringify(cumulativeProgress));
+            localStorage.setItem(STORAGE_KEYS.goal.new, document.getElementById('dailyGoalInput').value);
+        }
+        
+        function loadAllData() {
+            const sessionsData = localStorage.getItem(STORAGE_KEYS.sessions.new) || localStorage.getItem(STORAGE_KEYS.sessions.old);
+            if (sessionsData) { try { sessions = JSON.parse(sessionsData); if (!Array.isArray(sessions)) sessions = []; } catch(e) {} }
+            const subjectsData = localStorage.getItem(STORAGE_KEYS.subjects.new) || localStorage.getItem(STORAGE_KEYS.subjects.old);
+            if (subjectsData) { try { const loaded = JSON.parse(subjectsData); if (Array.isArray(loaded) && loaded.length) customSubjects = loaded; } catch(e) {} }
+            const diaryData = localStorage.getItem(STORAGE_KEYS.diary.new) || localStorage.getItem(STORAGE_KEYS.diary.old);
+            if (diaryData) { try { diaryNotes = JSON.parse(diaryData); } catch(e) {} }
+            const booksData = localStorage.getItem(STORAGE_KEYS.books.new) || localStorage.getItem(STORAGE_KEYS.books.old);
+            if (booksData) { try { books = JSON.parse(booksData); } catch(e) {} }
+            const progressData = localStorage.getItem(STORAGE_KEYS.progress.new) || localStorage.getItem(STORAGE_KEYS.progress.old);
+            if (progressData) { try { cumulativeProgress = JSON.parse(progressData); } catch(e) {} }
+            const goalData = localStorage.getItem(STORAGE_KEYS.goal.new) || localStorage.getItem(STORAGE_KEYS.goal.old);
+            if (goalData && !isNaN(parseInt(goalData))) document.getElementById('dailyGoalInput').value = parseInt(goalData);
+            
+            if (sessions.length === 0 && !localStorage.getItem(STORAGE_KEYS.sessions.new) && !localStorage.getItem(STORAGE_KEYS.sessions.old)) {
+                const today = getTodayLocalStr();
+                const yesterday = getLocalDateStr(new Date(Date.now() - 86400000));
+                sessions = [
+                    { id: Date.now() + 1, dateStr: today, startTime: "10:30", subject: "数学", minutes: 60 },
+                    { id: Date.now() + 2, dateStr: today, startTime: "14:15", subject: "英語", minutes: 45 },
+                    { id: Date.now() + 3, dateStr: yesterday, startTime: "13:00", subject: "プログラミング", minutes: 90 }
+                ];
+                saveAllData();
+            }
+            ensureTodayCumulative();
+            subjectColorMap.clear();
+            customSubjects.forEach((sub, idx) => subjectColorMap.set(sub, defaultColors[idx % defaultColors.length]));
+            updateSubjectSelects();
+            renderSubjectTags();
+        }
+        
+        // 統計関連
+        let statsDailyChart = null, statsSubjectChart = null, bookProgressChart = null, dailySubjectChart = null;
+        let statsPeriod = "week", statsSubjectPeriod = "week", statsPeriodOffset = 0;
+        
+        function getPeriodRange(period, offset) {
+            const today = new Date();
+            if (period === "week") {
+                const refDate = new Date(today); refDate.setDate(today.getDate() + offset * 7);
+                const monday = getMonday(refDate);
+                const startDate = new Date(monday);
+                const endDate = new Date(monday); endDate.setDate(monday.getDate() + 6); endDate.setHours(23, 59, 59, 999);
+                return { startDate, endDate };
+            } else {
+                const refMonth = new Date(today.getFullYear(), today.getMonth() + offset, 1);
+                const startDate = new Date(refMonth);
+                const endDate = new Date(refMonth.getFullYear(), refMonth.getMonth() + 1, 0); endDate.setHours(23, 59, 59, 999);
+                return { startDate, endDate };
+            }
+        }
+        
+        function formatDateRange(startDate, endDate) {
+            return `${startDate.getFullYear()}-${String(startDate.getMonth()+1).padStart(2,'0')}-${String(startDate.getDate()).padStart(2,'0')} 〜 ${endDate.getFullYear()}-${String(endDate.getMonth()+1).padStart(2,'0')}-${String(endDate.getDate()).padStart(2,'0')}`;
+        }
+        
+        function minutesToHoursDecimal(minutes) { return Math.round((minutes / 60) * 10) / 10; }
+        
+        function getStackedDailyDataForRange(startDate, endDate) {
+            const dateMap = new Map();
+            let cur = new Date(startDate);
+            while (cur <= endDate) { const ds = getLocalDateStr(cur); dateMap.set(ds, {}); cur.setDate(cur.getDate() + 1); }
+            for (let s of sessions) {
+                const sd = parseLocalDate(s.dateStr);
+                if (sd >= startDate && sd <= endDate) {
+                    const dayData = dateMap.get(s.dateStr);
+                    if (dayData) dayData[s.subject] = (dayData[s.subject] || 0) + minutesToHoursDecimal(s.minutes);
+                }
+            }
+            const sortedDates = Array.from(dateMap.keys()).sort();
+            const labels = sortedDates.map(d => d.slice(5));
+            const subjSet = new Set();
+            for (let dayData of dateMap.values()) if (dayData) Object.keys(dayData).forEach(s => subjSet.add(s));
+            const allSubjects = Array.from(subjSet).sort();
+            const datasets = allSubjects.map(sub => ({ label: sub, data: sortedDates.map(d => dateMap.get(d)[sub] || 0), backgroundColor: getColorForSubject(sub), borderColor: getColorForSubject(sub), borderWidth: 1, stack: 'stack0' }));
+            return { labels, datasets };
+        }
+        
+        function updateStatsDailyChart() {
+            const ctx = document.getElementById('statsDailyChart').getContext('2d');
+            const { startDate, endDate } = getPeriodRange(statsPeriod, statsPeriodOffset);
+            const { labels, datasets } = getStackedDailyDataForRange(startDate, endDate);
+            if (statsDailyChart) statsDailyChart.destroy();
+            statsDailyChart = new Chart(ctx, { type: 'bar', data: { labels, datasets }, options: { responsive: true, maintainAspectRatio: true, scales: { x: { stacked: true }, y: { stacked: true, title: { display: true, text: '時間' }, beginAtZero: true, max: 10 } }, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw.toFixed(1)} 時間` } }, legend: { position: 'bottom' } } } });
+            document.getElementById('statsPeriodRange').textContent = formatDateRange(startDate, endDate);
+        }
+        
+        function getSubjectStats(period) {
+            const today = new Date();
+            let startDate = null;
+            if (period === "week") startDate = getMonday(today);
+            else if (period === "month") startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            const subMap = new Map();
+            let total = 0;
+            for (let s of sessions) {
+                const sd = parseLocalDate(s.dateStr);
+                let include = period === "all" || (startDate && sd >= startDate);
+                if (include) { subMap.set(s.subject, (subMap.get(s.subject) || 0) + s.minutes); total += s.minutes; }
+            }
+            const stats = Array.from(subMap.entries()).map(([sub, min]) => ({ subject: sub, minutes: min, percent: total > 0 ? (min / total) * 100 : 0 })).sort((a, b) => b.minutes - a.minutes);
+            return { stats, totalMinutes: total };
+        }
+        
+        function updateStatsSubjectChart() {
+            const ctx = document.getElementById('statsSubjectChart').getContext('2d');
+            const { stats } = getSubjectStats(statsSubjectPeriod);
+            const labels = stats.map(s => s.subject);
+            const data = stats.map(s => minutesToHoursDecimal(s.minutes));
+            if (statsSubjectChart) statsSubjectChart.destroy();
+            if (labels.length) { statsSubjectChart = new Chart(ctx, { type: 'pie', data: { labels, datasets: [{ data, backgroundColor: labels.map(l => getColorForSubject(l)) }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'right' } } } }); }
+            updateSubjectStatsNumbers();
+        }
+        
+        function updateSubjectStatsNumbers() {
+            const { stats } = getSubjectStats(statsSubjectPeriod);
+            const container = document.getElementById('subjectStatsNumbers');
+            if (!container) return;
+            if (stats.length === 0) { container.innerHTML = '<div style="text-align:center;">データなし</div>'; return; }
+            container.innerHTML = stats.map(stat => `<div class="subject-stat-number">${stat.subject}: ${formatMinutesToHoursShort(stat.minutes)}</div>`).join('');
+        }
+        
+        function updateBookProgressChart() {
+            const select = document.getElementById('bookProgressSelect');
+            const bookId = parseInt(select.value);
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            const today = new Date();
+            const days = [], values = [];
+            for (let i = 29; i >= 0; i--) { const d = new Date(today); d.setDate(today.getDate() - i); const dateStr = getLocalDateStr(d); days.push(dateStr.slice(5)); const cumulative = getCumulative(book.id, dateStr); const prev = getPreviousCumulative(book.id, dateStr); values.push(cumulative - prev); }
+            const ctx = document.getElementById('bookProgressChart').getContext('2d');
+            if (bookProgressChart) bookProgressChart.destroy();
+            bookProgressChart = new Chart(ctx, { type: 'line', data: { labels: days, datasets: [{ label: `${book.name} 進捗 (ページ)`, data: values, borderColor: '#2a9d8f', fill: false }] }, options: { responsive: true, maintainAspectRatio: true } });
+        }
+        
+        function updateBookOverallList() {
+            const container = document.getElementById('bookOverallProgressList');
+            if (!container) return;
+            const today = getTodayLocalStr();
+            container.innerHTML = books.map(book => { const total = book.totalPages; const current = getCumulative(book.id, today); const percent = total > 0 ? (current / total) * 100 : 0; return `<div><div class="flex-between" style="font-size:0.8rem;"><span>${escapeHtml(book.name)}</span><span>${current} / ${total} (${percent.toFixed(1)}%)</span></div><div class="progress-bar"><div class="progress-fill" style="width: ${percent}%;"></div></div></div>`; }).join('');
+        }
+        
+        function updateDailySubjectChart() {
+            const dateStr = document.getElementById('dailySubjectDate').value;
+            if (!dateStr) return;
+            const dayData = {};
+            for (let s of sessions) { if (s.dateStr === dateStr) { dayData[s.subject] = (dayData[s.subject] || 0) + s.minutes; } }
+            const labels = Object.keys(dayData);
+            const data = labels.map(l => minutesToHoursDecimal(dayData[l]));
+            const ctx = document.getElementById('dailySubjectChart').getContext('2d');
+            if (dailySubjectChart) dailySubjectChart.destroy();
+            if (labels.length) { dailySubjectChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間 (時間)', data, backgroundColor: labels.map(l => getColorForSubject(l)) }] }, options: { responsive: true, maintainAspectRatio: true, indexAxis: 'y' } }); }
+            else { dailySubjectChart = new Chart(ctx, { type: 'bar', data: { labels: ['データなし'], datasets: [{ label: '勉強時間', data: [0], backgroundColor: '#94a3b8' }] }, options: { responsive: true } }); }
+        }
+        
+        function refreshStatsModal() { updateStatsDailyChart(); updateStatsSubjectChart(); updateBookProgressChart(); updateBookOverallList(); updateDailySubjectChart(); }
+        
+        // タイマー関連
+        let timerStartTime = null, timerPausedTime = null, timerInterval = null, isTimerRunning = false;
+        let timerMode = "countdown", targetSeconds = 25 * 60, autoLogTriggered = false, alarmEnabled = true;
+        let audioContext = null, shortAlarmTimeout = null, pomodoroFocusSeconds = 25 * 60, pomodoroBreakSeconds = 5 * 60;
+        let isPomodoroFocus = true, pomodoroCycleCount = 0, isStudyModeActive = false, waitingForBreakStart = false;
+        let concentrationMode = true;
+        const studyOverlay = document.getElementById('studyOverlay'), studyTimerDisplay = document.getElementById('studyTimerDisplay'), studyEndBtn = document.getElementById('studyEndBtn');
+        
+        function playShortAlarm(count = 3, interval = 400) { if (!alarmEnabled) return; let times = 0; function beep() { if (times >= count) return; try { if (!audioContext) audioContext = new(window.AudioContext || window.webkitAudioContext)(); const osc = audioContext.createOscillator(); const gain = audioContext.createGain(); osc.connect(gain); gain.connect(audioContext.destination); osc.type = 'sine'; osc.frequency.value = 880; gain.gain.value = 0.3; osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.3); osc.stop(audioContext.currentTime + 0.3); } catch(e) {} times++; if (times < count) setTimeout(beep, interval); } beep(); }
+        
+        function getCurrentRemainingSeconds() { if (!isTimerRunning) return (timerMode === "countdown" || timerMode === "pomodoro") ? (timerPausedTime !== null ? timerPausedTime : targetSeconds) : (timerPausedTime !== null ? timerPausedTime : 0); const now = new Date(); const elapsed = Math.floor((now - timerStartTime) / 1000); if (timerMode === "countdown" || timerMode === "pomodoro") return Math.max(0, targetSeconds - elapsed); else return elapsed; }
+        
+        function updateTimerDisplay() { const display = document.getElementById('timerDisplay'); if (!display) return; const sec = getCurrentRemainingSeconds(); if (timerMode === "pomodoro" || (timerMode === "countdown" && targetSeconds <= 3600)) display.textContent = `${Math.floor(sec/60).toString().padStart(2,'0')}:${(sec%60).toString().padStart(2,'0')}`; else display.textContent = `${Math.floor(sec/3600).toString().padStart(2,'0')}:${Math.floor((sec%3600)/60).toString().padStart(2,'0')}:${(sec%60).toString().padStart(2,'0')}`; if (isStudyModeActive && studyOverlay && !studyOverlay.classList.contains('hidden')) studyTimerDisplay.textContent = display.textContent; }
+        
+        function showStudyOverlay() { if (studyOverlay && concentrationMode && !waitingForBreakStart) { studyOverlay.classList.remove('hidden'); isStudyModeActive = true; updateTimerDisplay(); } }
+        function hideStudyOverlay() { if (studyOverlay) studyOverlay.classList.add('hidden'); isStudyModeActive = false; }
+        
+        function startTimer() { if (isTimerRunning) return; const cur = getCurrentRemainingSeconds(); if ((timerMode === "countdown" || timerMode === "pomodoro") && cur <= 0) { showToast("時間を設定してください", true); return; } timerStartTime = new Date(); if (timerMode === "countdown" || timerMode === "pomodoro") targetSeconds = cur; timerPausedTime = null; isTimerRunning = true; autoLogTriggered = false; if (!waitingForBreakStart) document.getElementById('sessionStatusText').textContent = timerMode === "pomodoro" ? (isPomodoroFocus ? "集中タイム" : "休憩タイム") : (timerMode === "countdown" ? "勉強中..." : "計測中"); if (concentrationMode && (timerMode !== "pomodoro" || isPomodoroFocus)) showStudyOverlay(); if (timerInterval) clearInterval(timerInterval); timerInterval = setInterval(() => { const rem = getCurrentRemainingSeconds(); updateTimerDisplay(); if ((timerMode === "countdown" || timerMode === "pomodoro") && rem <= 0 && !autoLogTriggered) { autoLogTriggered = true; pauseTimer(); onTimerComplete(); } }, 100); }
+        
+        function pauseTimer() { if (!isTimerRunning) return; const cur = getCurrentRemainingSeconds(); timerPausedTime = cur; if (timerMode === "countdown" || timerMode === "pomodoro") targetSeconds = cur; isTimerRunning = false; if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } if (!waitingForBreakStart) document.getElementById('sessionStatusText').textContent = timerMode === "pomodoro" ? (isPomodoroFocus ? "集中タイム一時停止" : "休憩タイム一時停止") : "一時停止中"; hideStudyOverlay(); }
+        
+        function resetTimer() { pauseTimer(); if (timerMode === "countdown") { targetSeconds = 25 * 60; timerPausedTime = targetSeconds; } else if (timerMode === "pomodoro") { isPomodoroFocus = true; pomodoroCycleCount = 0; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; document.getElementById('pomodoroStatus').innerHTML = '集中タイム'; document.getElementById('cycleCount').innerHTML = `サイクル: 0回完了`; document.getElementById('sessionStatusText').innerHTML = 'ポモドーロ準備完了'; waitingForBreakStart = false; } else { timerPausedTime = 0; targetSeconds = 0; } updateTimerDisplay(); autoLogTriggered = false; if (shortAlarmTimeout) clearTimeout(shortAlarmTimeout); hideStudyOverlay(); }
+        
+        function onTimerComplete() { if (timerMode === "pomodoro") { if (isPomodoroFocus) { const studiedMinutes = pomodoroFocusSeconds / 60; const now = new Date(); const subj = document.getElementById('timerSubjectSelect').value; addStudyRecord(subj, studiedMinutes, getLocalDateStr(now), now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })); showToast(`${studiedMinutes}分の集中完了！記録しました。`); playShortAlarm(3, 400); waitingForBreakStart = false; isPomodoroFocus = false; targetSeconds = pomodoroBreakSeconds; timerPausedTime = targetSeconds; updateTimerDisplay(); hideStudyOverlay(); document.getElementById('sessionStatusText').innerHTML = '休憩中...'; document.getElementById('pomodoroStatus').innerHTML = '休憩タイム'; autoLogTriggered = false; startTimer(); } else { pomodoroCycleCount++; document.getElementById('cycleCount').innerHTML = `サイクル: ${pomodoroCycleCount}回完了`; showToast(`休憩終了！次の集中タイムです`); isPomodoroFocus = true; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; updateTimerDisplay(); document.getElementById('pomodoroStatus').innerHTML = '集中タイム'; document.getElementById('sessionStatusText').innerHTML = '集中タイム！'; autoLogTriggered = false; showStudyOverlay(); startTimer(); } } else { let studiedMinutes = timerMode === "stopwatch" ? getCurrentRemainingSeconds() / 60 : targetSeconds / 60; if (studiedMinutes < 0.5) { showToast("勉強時間が短すぎます", true); resetTimer(); return; } const now = new Date(); const subj = document.getElementById('timerSubjectSelect').value; addStudyRecord(subj, studiedMinutes, getLocalDateStr(now), now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })); showToast(`${studiedMinutes.toFixed(1)}分の勉強完了！`); document.getElementById('sessionStatusText').innerHTML = "勉強完了！"; resetTimer(); } hideStudyOverlay(); }
+        
+        function manualStudyEnd() { if (!isTimerRunning) return; const elapsedSec = (timerMode === "countdown" || timerMode === "pomodoro") ? (targetSeconds - getCurrentRemainingSeconds()) : getCurrentRemainingSeconds(); if (elapsedSec <= 0) { showToast("勉強時間が0分です", true); return; } const studiedMinutes = elapsedSec / 60; const now = new Date(); const subj = document.getElementById('timerSubjectSelect').value; addStudyRecord(subj, studiedMinutes, getLocalDateStr(now), now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })); showToast(`${studiedMinutes.toFixed(1)}分の勉強を記録しました`); resetTimer(); hideStudyOverlay(); if (shortAlarmTimeout) clearTimeout(shortAlarmTimeout); }
+        
+        function setCountdownTarget(minutes) { if (timerMode === "countdown") { targetSeconds = minutes * 60; timerPausedTime = targetSeconds; updateTimerDisplay(); autoLogTriggered = false; document.getElementById('sessionStatusText').textContent = `${minutes}分の勉強を設定しました`; } }
+        
+        function setPomodoroTimes(focus, brk) { pomodoroFocusSeconds = focus * 60; pomodoroBreakSeconds = brk * 60; if (timerMode === "pomodoro") { isPomodoroFocus = true; pomodoroCycleCount = 0; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; updateTimerDisplay(); document.getElementById('pomodoroStatus').innerHTML = '集中タイム'; document.getElementById('cycleCount').innerHTML = 'サイクル: 0回完了'; autoLogTriggered = false; waitingForBreakStart = false; } }
+        
+        function switchMode(mode) { pauseTimer(); timerMode = mode; const normal = document.getElementById('normalTimerSettings'); const pomo = document.getElementById('pomodoroSettings'); if (mode === "pomodoro") { normal.style.display = 'none'; pomo.style.display = 'block'; isPomodoroFocus = true; pomodoroCycleCount = 0; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; updateTimerDisplay(); document.getElementById('pomodoroStatus').innerHTML = '集中タイム'; document.getElementById('sessionStatusText').innerHTML = 'ポモドーロ準備完了'; waitingForBreakStart = false; } else { normal.style.display = 'block'; pomo.style.display = 'none'; if (mode === "countdown") { if (targetSeconds === 0) targetSeconds = 25 * 60; timerPausedTime = targetSeconds; } else { timerPausedTime = 0; targetSeconds = 0; } updateTimerDisplay(); document.getElementById('sessionStatusText').textContent = mode === "countdown" ? "カウントダウン待機中" : "ストップウォッチ待機中"; } autoLogTriggered = false; if (shortAlarmTimeout) clearTimeout(shortAlarmTimeout); hideStudyOverlay(); document.querySelectorAll('.mode-btn').forEach(btn => { if (btn.dataset.mode === mode) btn.classList.add('active'); else btn.classList.remove('active'); }); }
+        
+        function logCurrentTimer() { if (timerMode === "pomodoro") { showToast("ポモドーロタイマーは自動記録されます", true); return; } let mins = 0; if (timerMode === "countdown") { const elapsed = targetSeconds - getCurrentRemainingSeconds(); mins = Math.max(1, Math.round(elapsed / 60)); if (elapsed <= 0) { showToast("勉強時間が0分です", true); return; } } else { const elapsed = getCurrentRemainingSeconds(); mins = Math.max(1, Math.round(elapsed / 60)); if (elapsed <= 0) { showToast("タイマーをスタートしてください", true); return; } } const now = new Date(); const subj = document.getElementById('timerSubjectSelect').value; addStudyRecord(subj, mins, getLocalDateStr(now), now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })); resetTimer(); showToast("記録しました"); }
+        
+        function handleManualAdd() { let mins = parseInt(document.getElementById('manualMinutes').value); if (isNaN(mins) || mins <= 0) { alert("1分以上を入力してください"); return; } const subj = document.getElementById('manualSubject').value; const date = document.getElementById('manualDate').value; const stime = document.getElementById('manualStartTime').value; addStudyRecord(subj, mins, date, stime); document.getElementById('manualMinutes').value = "30"; }
+        
+        // 設定関連
+        let settings = { textSize: '14px', darkMode: false, alarmSound: true, concentrationMode: true };
+        function loadSettings() { const stored = localStorage.getItem('app_settings'); if (stored) { try { settings = JSON.parse(stored); } catch(e) {} } applySettings(); }
+        function saveSettings() { localStorage.setItem('app_settings', JSON.stringify(settings)); }
+        function applySettings() { document.body.classList.remove('text-10px', 'text-12px', 'text-14px', 'text-16px', 'text-18px'); document.body.classList.add(`text-${settings.textSize}`); document.getElementById('textSizeSelect').value = settings.textSize; if (settings.darkMode) document.body.classList.add('dark-mode'); else document.body.classList.remove('dark-mode'); document.getElementById('darkModeCheckbox').checked = settings.darkMode; document.getElementById('darkModeToggle').textContent = settings.darkMode ? '☀️' : '🌙'; alarmEnabled = settings.alarmSound; document.getElementById('alarmSoundCheckbox').checked = settings.alarmSound; concentrationMode = settings.concentrationMode; updateConcentrationToggleUI(); }
+        function setTextSize(size) { settings.textSize = size; saveSettings(); applySettings(); }
+        function setDarkMode(enabled) { settings.darkMode = enabled; saveSettings(); applySettings(); }
+        function setAlarmSound(enabled) { settings.alarmSound = enabled; saveSettings(); applySettings(); }
+        function setConcentrationMode(enabled) { settings.concentrationMode = enabled; concentrationMode = enabled; saveSettings(); updateConcentrationToggleUI(); if (!enabled) hideStudyOverlay(); }
+        function updateConcentrationToggleUI() { const toggle = document.getElementById('concentrationToggle'); if (toggle) { if (concentrationMode) toggle.classList.add('active'); else toggle.classList.remove('active'); } }
+        function resetSettings() { settings = { textSize: '14px', darkMode: false, alarmSound: true, concentrationMode: true }; concentrationMode = true; saveSettings(); applySettings(); showToast("設定を初期値に戻しました"); }
+        
+        function clearAllData() { if (confirm("全ての学習記録・参考書・日記・設定を削除します。この操作は元に戻せません。よろしいですか？")) { sessions = []; customSubjects = ["数学", "英語", "理科", "社会", "国語", "プログラミング", "その他"]; diaryNotes = {}; books = []; cumulativeProgress = {}; for (const key of Object.values(STORAGE_KEYS).flatMap(obj => [obj.new, obj.old])) { localStorage.removeItem(key); } localStorage.removeItem('app_settings'); localStorage.removeItem('syncUserId'); subjectColorMap.clear(); customSubjects.forEach((sub, idx) => subjectColorMap.set(sub, defaultColors[idx % defaultColors.length])); saveAllData(); refreshAllUI(); showToast("すべてのデータを削除しました"); syncToCloud(); } }
+        
+        function exportData() { const data = { version: "3.0", exportDate: new Date().toISOString(), sessions, customSubjects, diaryNotes, books, cumulativeProgress, goal: document.getElementById('dailyGoalInput').value }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `studytrack_backup_${new Date().toISOString().slice(0,19)}.json`; a.click(); URL.revokeObjectURL(url); showToast("データを書き出しました"); }
+        
+        function importData(file) { const reader = new FileReader(); reader.onload = (e) => { try { const data = JSON.parse(e.target.result); if (data.sessions) sessions = data.sessions; if (data.customSubjects) customSubjects = data.customSubjects; if (data.diaryNotes) diaryNotes = data.diaryNotes; if (data.books) books = data.books; if (data.cumulativeProgress) cumulativeProgress = data.cumulativeProgress; if (data.goal) document.getElementById('dailyGoalInput').value = data.goal; saveAllData(); ensureTodayCumulative(); refreshAllUI(); syncToCloud(); showToast("データを読み込みました"); } catch(err) { alert("ファイルの読み込みに失敗しました"); } }; reader.readAsText(file); }
+        
+        function updateDateTime() { const now = new Date(); const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }); const dateStr = getLocalDateStr(now); document.getElementById('currentTimeDisplay').textContent = `現在時刻: ${timeStr}`; const stInput = document.getElementById('manualStartTime'); if (stInput && !stInput._userChanged) stInput.value = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`; const mdInput = document.getElementById('manualDate'); if (mdInput && !mdInput._userChanged) mdInput.value = dateStr; }
+        
+        function init() {
+            loadSettings();
+            loadAllData();
+            refreshAllUI();
+            const todayStr = getTodayLocalStr();
+            const diaryDate = document.getElementById('diaryDate'); if (diaryDate) { diaryDate.value = todayStr; diaryDate.addEventListener('change', () => loadDiaryForDate(diaryDate.value)); loadDiaryForDate(todayStr); }
+            const manualDate = document.getElementById('manualDate'); if (manualDate) { manualDate._userChanged = false; manualDate.addEventListener('change', () => { manualDate._userChanged = true; }); }
+            const startTime = document.getElementById('manualStartTime'); if (startTime) { startTime._userChanged = false; startTime.addEventListener('change', () => { startTime._userChanged = true; }); }
+            updateDateTime(); setInterval(updateDateTime, 1000);
+            targetSeconds = 25 * 60; timerPausedTime = targetSeconds; updateTimerDisplay();
+            
+            document.getElementById('startTimerBtn').onclick = startTimer;
+            document.getElementById('pauseTimerBtn').onclick = pauseTimer;
+            document.getElementById('resetTimerBtn').onclick = resetTimer;
+            document.getElementById('logTimerBtn').onclick = logCurrentTimer;
+            document.getElementById('addManualRecordBtn').onclick = handleManualAdd;
+            document.getElementById('clearAllHistoryBtn').onclick = clearAllHistory;
+            document.getElementById('dailyGoalInput').addEventListener("change", () => { saveAllData(); updateStatsAndGoal(); syncToCloud(); });
+            document.querySelectorAll('.preset-btn').forEach(btn => { btn.onclick = () => { if (btn.dataset.minutes) setCountdownTarget(parseInt(btn.dataset.minutes)); else if (btn.dataset.pomodoroFocus) setPomodoroTimes(parseInt(btn.dataset.pomodoroFocus), parseInt(btn.dataset.pomodoroBreak)); }; });
+            document.getElementById('setCustomTimeBtn').onclick = () => { const mins = parseInt(document.getElementById('customMinutes').value); if (mins > 0 && mins <= 600) setCountdownTarget(mins); else showToast("1〜600分", true); };
+            document.getElementById('setPomodoroTimeBtn').onclick = () => { const f = parseInt(document.getElementById('customFocusMinutes').value); const b = parseInt(document.getElementById('customBreakMinutes').value); if (f > 0 && b > 0 && f <= 600 && b <= 600) setPomodoroTimes(f, b); else showToast("1〜600分", true); };
+            document.querySelectorAll('.mode-btn').forEach(btn => { btn.onclick = () => switchMode(btn.dataset.mode); });
+            document.getElementById('darkModeToggle').onclick = () => setDarkMode(!settings.darkMode);
+            document.getElementById('addSubjectBtn').onclick = addSubject;
+            document.getElementById('newSubjectName').addEventListener("keypress", (e) => { if (e.key === "Enter") addSubject(); });
+            document.getElementById('saveDiaryBtn').onclick = saveCurrentDiary;
+            document.getElementById('deleteDiaryBtn').onclick = deleteCurrentDiary;
+            document.getElementById('addBookBtn').onclick = addBook;
+            studyEndBtn.onclick = manualStudyEnd;
+            document.getElementById('closeModalBtn').onclick = () => document.getElementById('detailModal').classList.add('hidden');
+            document.getElementById('cancelEditBtn').onclick = closeEditModal;
+            document.getElementById('saveEditBtn').onclick = saveEditedData;
+            window.onclick = (e) => { if (e.target === document.getElementById('editPastDataModal')) closeEditModal(); };
+            document.getElementById('concentrationToggle').addEventListener('click', () => { setConcentrationMode(!concentrationMode); });
+            
+            const hamburger = document.getElementById('hamburgerBtn');
+            const settingsModal = document.getElementById('settingsModal');
+            const closeSettings = document.getElementById('closeSettingsBtn');
+            hamburger.onclick = () => settingsModal.style.display = 'flex';
+            closeSettings.onclick = () => settingsModal.style.display = 'none';
+            window.onclick = (e) => { if (e.target === settingsModal) settingsModal.style.display = 'none'; };
+            document.getElementById('textSizeSelect').onchange = (e) => setTextSize(e.target.value);
+            document.getElementById('darkModeCheckbox').onchange = (e) => setDarkMode(e.target.checked);
+            document.getElementById('alarmSoundCheckbox').onchange = (e) => setAlarmSound(e.target.checked);
+            document.getElementById('resetSettingsBtn').onclick = resetSettings;
+            document.getElementById('clearAllDataBtn').onclick = clearAllData;
+            document.getElementById('exportDataBtn').onclick = exportData;
+            document.getElementById('importDataBtn').onclick = () => document.getElementById('fileInput').click();
+            document.getElementById('fileInput').onchange = (e) => { if (e.target.files.length) importData(e.target.files[0]); e.target.value = ''; };
+            
+            const statsBtn = document.getElementById('statsBtn');
+            const statsModal = document.getElementById('statsModal');
+            const closeStatsBtn = document.getElementById('closeStatsBtn');
+            statsBtn.onclick = () => { statsModal.style.display = 'flex'; refreshStatsModal(); };
+            closeStatsBtn.onclick = () => statsModal.style.display = 'none';
+            window.onclick = (e) => { if (e.target === statsModal) statsModal.style.display = 'none'; };
+            document.querySelectorAll('[data-stats-period]').forEach(btn => { btn.onclick = () => { document.querySelectorAll('[data-stats-period]').forEach(b => b.classList.remove('active')); btn.classList.add('active'); statsPeriod = btn.dataset.statsPeriod; statsPeriodOffset = 0; updateStatsDailyChart(); }; });
+            document.getElementById('statsPrevPeriodBtn').onclick = () => { statsPeriodOffset--; updateStatsDailyChart(); };
+            document.getElementById('statsNextPeriodBtn').onclick = () => { statsPeriodOffset++; updateStatsDailyChart(); };
+            document.querySelectorAll('[data-stats-sub-period]').forEach(btn => { btn.onclick = () => { document.querySelectorAll('[data-stats-sub-period]').forEach(b => b.classList.remove('active')); btn.classList.add('active'); statsSubjectPeriod = btn.dataset.statsSubPeriod; updateStatsSubjectChart(); }; });
+            document.getElementById('refreshDailySubjectBtn').onclick = () => updateDailySubjectChart();
+            
+            const bookSelect = document.getElementById('bookProgressSelect');
+            if (bookSelect) { bookSelect.innerHTML = books.map(b => `<option value="${b.id}">${escapeHtml(b.name)}</option>`).join(''); bookSelect.onchange = () => updateBookProgressChart(); }
+            document.getElementById('dailySubjectDate').value = getTodayLocalStr();
+            
+            document.getElementById('syncToCloudBtn').onclick = () => syncToCloud();
+            document.getElementById('syncFromCloudBtn').onclick = () => syncFromCloud().then(() => refreshAllUI());
+            
+            switchMode("countdown");
+        }
+        
+        window.refreshAllUI = refreshAllUI;
+        init();
+    </script>
+</body>
+</html>
