@@ -188,9 +188,27 @@
         .total-time { background: #f1f5f9; padding: 10px 16px; border-radius: 40px; text-align: center; font-weight: 600; margin-top: 16px; font-size: 0.85rem; }
         .current-time { font-size: 0.65rem; color: #2a9d8f; margin-top: 4px; }
         
-        .diary-editor { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
-        .diary-editor .diary-input-area { flex: 2; min-width: 180px; }
-        .diary-editor .diary-buttons { display: flex; gap: 10px; }
+.diary-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.diary-editor .diary-input-area {
+    width: 100%;
+}
+.diary-editor .diary-input-area input,
+.diary-editor .diary-input-area textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+.diary-editor .diary-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+.diary-editor .diary-buttons button {
+    min-width: 80px;
+}
         .diary-list { margin-top: 16px; max-height: 280px; overflow-y: auto; }
         .diary-list-title { font-weight: 600; margin-bottom: 10px; color: #2a9d8f; font-size: 0.85rem; }
         .diary-entry {
