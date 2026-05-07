@@ -1,4 +1,4 @@
-<!DOCTYPE html;
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -17,10 +17,10 @@
             transition: all 0.3s ease;
         }
         body.text-10px { font-size: 10px; }
-        body.text-15px { font-size: 15px; }
-        body.text-20px { font-size: 20px; }
-        body.text-25px { font-size: 25px; }
-        body.text-30px { font-size: 30px; }
+        body.text-12px { font-size: 12px; }
+        body.text-14px { font-size: 14px; }
+        body.text-16px { font-size: 16px; }
+        body.text-18px { font-size: 18px; }
         body.dark-mode {
             background: linear-gradient(135deg, #1a2a3a 0%, #0f1a24 100%);
             color: #e2e8f0;
@@ -188,37 +188,39 @@
         .total-time { background: #f1f5f9; padding: 10px 16px; border-radius: 40px; text-align: center; font-weight: 600; margin-top: 16px; font-size: 0.85rem; }
         .current-time { font-size: 0.65rem; color: #2a9d8f; margin-top: 4px; }
         
-.diary-editor {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.diary-editor .diary-input-area {
-    width: 100%;
-}
-.diary-editor .diary-input-area input,
-.diary-editor .diary-input-area textarea {
-    width: 100%;
-    box-sizing: border-box;
-}
-.diary-editor .diary-buttons {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-}
-.diary-editor .diary-buttons button {
-    min-width: 80px;
-}
+        /* 日記帳のレイアウト */
+        .diary-editor {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .diary-editor .diary-input-area {
+            width: 100%;
+        }
+        .diary-editor .diary-input-area input,
+        .diary-editor .diary-input-area textarea {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .diary-editor .diary-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .diary-editor .diary-buttons button {
+            min-width: 80px;
+        }
         .diary-list { margin-top: 16px; max-height: 280px; overflow-y: auto; }
         .diary-list-title { font-weight: 600; margin-bottom: 10px; color: #2a9d8f; font-size: 0.85rem; }
         .diary-entry {
             background: #f8fafc; border-radius: 14px; padding: 10px; margin-bottom: 10px;
             border-left: 3px solid #2a9d8f; cursor: pointer;
         }
-        .diary-entry-date { font-weight: 600; font-size: 1rem; color: #2a9d8f; margin-bottom: 4px; }
-        .diary-entry-text { font-size: 1rem; line-height: 1.4; white-space: pre-wrap; }
-        .diary-empty { text-align: center; color: #94a3b8; padding: 16px; font-size: 1rem; }
+        .diary-entry-date { font-weight: 600; font-size: 0.75rem; color: #2a9d8f; margin-bottom: 4px; }
+        .diary-entry-text { font-size: 0.8rem; line-height: 1.4; white-space: pre-wrap; }
+        .diary-empty { text-align: center; color: #94a3b8; padding: 16px; font-size: 0.8rem; }
         
+        /* 参考書管理 */
         .book-item {
             background: #f8fafc; border-radius: 14px; margin-bottom: 12px; overflow: hidden;
             transition: all 0.2s;
@@ -236,51 +238,45 @@
         body.dark-mode .book-item.fully-completed {
             background: #1e293b;
         }
+        /* 閉じている状態のヘッダーにも色を表示 */
+        .book-item.fully-completed .book-header {
+            background: #cbd5e1;
+            border-left: 4px solid #64748b;
+        }
+        .book-item.daily-achieved .book-header {
+            background: #d1fae5;
+            border-left: 4px solid #2a9d8f;
+        }
+        body.dark-mode .book-item.fully-completed .book-header {
+            background: #334155;
+            border-left: 4px solid #64748b;
+        }
+        body.dark-mode .book-item.daily-achieved .book-header {
+            background: #064e3b;
+            border-left: 4px solid #2a9d8f;
+        }
+        .book-item.fully-completed .book-header:hover {
+            background: #b9c3d0;
+        }
+        .book-item.daily-achieved .book-header:hover {
+            background: #c4e5d4;
+        }
+        body.dark-mode .book-item.fully-completed .book-header:hover {
+            background: #2d3a4a;
+        }
+        body.dark-mode .book-item.daily-achieved .book-header:hover {
+            background: #0a5c47;
+        }
         .book-header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 12px; cursor: pointer; background: #f1f5f9;
         }
-        /* 閉じている状態の参考書ヘッダーにも色を表示 */
-.book-item.fully-completed .book-header {
-    background: #cbd5e1;
-    border-left: 4px solid #64748b;
-}
-.book-item.daily-achieved .book-header {
-    background: #d1fae5;
-    border-left: 4px solid #2a9d8f;
-}
-
-/* ダークモード対応 */
-body.dark-mode .book-item.fully-completed .book-header {
-    background: #334155;
-    border-left: 4px solid #64748b;
-}
-body.dark-mode .book-item.daily-achieved .book-header {
-    background: #064e3b;
-    border-left: 4px solid #2a9d8f;
-}
-
-/* ホバー時も色を維持 */
-.book-item.fully-completed .book-header:hover {
-    background: #b9c3d0;
-}
-.book-item.daily-achieved .book-header:hover {
-    background: #c4e5d4;
-}
-body.dark-mode .book-item.fully-completed .book-header:hover {
-    background: #2d3a4a;
-}
-body.dark-mode .book-item.daily-achieved .book-header:hover {
-    background: #0a5c47;
-}
         body.dark-mode .book-header { background: #1e293b; }
         .book-title { font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
         .book-header-progress { flex: 1; margin: 0 10px; height: 5px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
         .book-header-progress-fill { height: 100%; background: #2a9d8f; border-radius: 3px; }
         .book-summary { font-size: 0.75rem; color: #2a9d8f; }
         .book-detail { padding: 12px; border-top: 1px solid #e2e8f0; }
-        .book-progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin: 8px 0; }
-        .book-progress-fill { height: 100%; background: #2a9d8f; }
         .daily-target { display: flex; align-items: center; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
         .daily-target input { width: 70px; padding: 6px; border-radius: 40px; }
         .progress-input { display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
@@ -293,6 +289,73 @@ body.dark-mode .book-item.daily-achieved .book-header:hover {
             border-radius: 16px; text-align: center;
         }
         
+        /* カレンダー関連 */
+        .calendar-control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0 8px 0;
+        }
+        .calendar-month-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2a9d8f;
+        }
+        .calendar-grid {
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        .calendar-day {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            background: #ffffff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+        .calendar-day:hover {
+            background: #e2e8f0;
+            transform: translateX(2px);
+        }
+        .calendar-day.achieved {
+            background: #d1fae5;
+            border-left: 3px solid #2a9d8f;
+        }
+        .calendar-day.not-achieved {
+            background: #fee2e2;
+            border-left: 3px solid #e76f51;
+        }
+        .calendar-day-date {
+            font-weight: 500;
+        }
+        .calendar-day-info {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+        body.dark-mode .calendar-day {
+            background: #1e293b;
+        }
+        body.dark-mode .calendar-day:hover {
+            background: #334155;
+        }
+        body.dark-mode .calendar-day.achieved {
+            background: #064e3b;
+        }
+        body.dark-mode .calendar-day.not-achieved {
+            background: #7f1a1a;
+        }
+        body.dark-mode .calendar-day-info {
+            color: #94a3b8;
+        }
+        
+        /* モーダル */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 10001; justify-content: center; align-items: center;
@@ -315,6 +378,30 @@ body.dark-mode .book-item.daily-achieved .book-header:hover {
         .period-btn.small { padding: 4px 10px; font-size: 0.7rem; background: #e2e8f0; border: none; border-radius: 20px; cursor: pointer; }
         .period-btn.small.active { background: #2a9d8f; color: white; }
         .nav-btn { background: #e2e8f0; border: none; width: 28px; height: 28px; border-radius: 28px; cursor: pointer; }
+        
+        /* 編集モーダル */
+        .edit-field {
+            margin-bottom: 16px;
+        }
+        .edit-field label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .edit-field input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 40px;
+            border: 1px solid #cbd5e1;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
         footer { text-align: center; margin-top: 28px; font-size: 0.65rem; color: #6c7a8a; }
         .toast {
             position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -336,6 +423,7 @@ body.dark-mode .book-item.daily-achieved .book-header:hover {
             .stats-grid { grid-template-columns: 1fr !important; gap: 12px; }
             .stats-dashboard { grid-template-columns: repeat(3,1fr) !important; gap: 6px; }
             .stat-card .stat-value { font-size: 0.9rem; }
+            .diary-editor .diary-buttons button { min-width: auto; }
         }
     </style>
 </head>
@@ -386,6 +474,24 @@ body.dark-mode .book-item.daily-achieved .book-header:hover {
                     <div class="stats-card"><div class="stats-card-title">一日の教科別勉強時間</div><input type="date" id="dailySubjectDate"><button class="btn btn-secondary" id="refreshDailySubjectBtn">表示</button><div class="chart-container-small"><canvas id="dailySubjectChart"></canvas></div></div>
                 </div>
                 <button id="closeStatsBtn" class="btn btn-primary">閉じる</button>
+            </div>
+        </div>
+
+        <div id="editPastDataModal" class="modal">
+            <div class="modal-content">
+                <h3 id="editModalTitle">過去のデータを編集</h3>
+                <div class="edit-field">
+                    <label>日付</label>
+                    <input type="date" id="editDate" readonly disabled>
+                </div>
+                <div class="edit-field">
+                    <label>累計ページ数</label>
+                    <input type="number" id="editCumulative" min="0" step="1">
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" id="cancelEditBtn">キャンセル</button>
+                    <button class="btn btn-primary" id="saveEditBtn">保存</button>
+                </div>
             </div>
         </div>
 
@@ -457,21 +563,21 @@ body.dark-mode .book-item.daily-achieved .book-header:hover {
             </div>
         </div>
 
-        <footer>参考書のカレンダーで日付をクリックすると過去の累計ページ数を編集できます。</footer>
+        <footer>参考書の詳細を開き、カレンダーの日付をクリックすると過去の累計ページ数を編集できます。</footer>
     </div>
 
     <script type="module">
-        // Firebase設定
-const firebaseConfig = {
-  apiKey: "AIzaSyC_NUKXsLJFdj5X6W2YbXWbwOkheuUhevA",
-  authDomain: "studytrackplus.firebaseapp.com",
-  databaseURL: "https://studytrackplus-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "studytrackplus",
-  storageBucket: "studytrackplus.firebasestorage.app",
-  messagingSenderId: "954493374254",
-  appId: "1:954493374254:web:00d4eba0371e58cb82f4bf",
-  measurementId: "G-MS57LRBR8Y"
-};
+        // ==================== Firebase設定 ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_NUKXsLJFdj5X6W2YbXWbwOkheuUhevA",
+            authDomain: "studytrackplus.firebaseapp.com",
+            databaseURL: "https://studytrackplus-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "studytrackplus",
+            storageBucket: "studytrackplus.firebasestorage.app",
+            messagingSenderId: "954493374254",
+            appId: "1:954493374254:web:00d4eba0371e58cb82f4bf",
+            measurementId: "G-MS57LRBR8Y"
+        };
         
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
         import { getFirestore, doc, setDoc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
@@ -517,6 +623,10 @@ const firebaseConfig = {
         let statsDailyChart, statsSubjectChart, bookProgressChart, dailySubjectChart;
         let statsPeriod = "week", statsSubjectPeriod = "week", statsPeriodOffset = 0;
         
+        // カレンダー関連
+        let currentEditBookId = null;
+        let currentEditDate = null;
+        
         // ユーティリティ関数
         function getLocalDateStr(date) { return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
         function getTodayLocalStr() { return getLocalDateStr(new Date()); }
@@ -534,6 +644,126 @@ const firebaseConfig = {
             if(isErr) t.style.background = '#e76f51';
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 2500);
+        }
+        
+        // 参考書ヘルパー関数
+        function getCumulative(bookId, dateStr) {
+            const prog = cumulativeProgress[bookId] || {};
+            if(prog[dateStr] !== undefined) return prog[dateStr];
+            const pastDates = Object.keys(prog).filter(d => d <= dateStr).sort();
+            return pastDates.length ? prog[pastDates[pastDates.length-1]] : 0;
+        }
+        function getPreviousCumulative(bookId, dateStr) {
+            const prog = cumulativeProgress[bookId] || {};
+            const pastDates = Object.keys(prog).filter(d => d < dateStr).sort();
+            return pastDates.length ? prog[pastDates[pastDates.length-1]] : 0;
+        }
+        function getYesterdayStr() { const d = new Date(); d.setDate(d.getDate()-1); return getLocalDateStr(d); }
+        function getTodayTargetPages(book) {
+            const yesterdayCum = getCumulative(book.id, getYesterdayStr());
+            const dailyTarget = book.dailyTarget || 0;
+            if(dailyTarget === 0) return 0;
+            return yesterdayCum + dailyTarget;
+        }
+        function isTodayTargetAchieved(book) {
+            const todayCum = getCumulative(book.id, getTodayLocalStr());
+            const target = getTodayTargetPages(book);
+            return target > 0 && todayCum >= target;
+        }
+        function saveBooks() { localStorage.setItem(STORAGE_KEYS.books, JSON.stringify(books)); }
+        function saveCumulativeProgress() { localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(cumulativeProgress)); }
+        function ensureTodayCumulative() {
+            const today = getTodayLocalStr();
+            for(let book of books) {
+                const prog = cumulativeProgress[book.id] || {};
+                if(prog[today] === undefined) {
+                    const pastDates = Object.keys(prog).filter(d => d <= today).sort();
+                    let lastCum = pastDates.length ? prog[pastDates[pastDates.length-1]] : 0;
+                    if(!cumulativeProgress[book.id]) cumulativeProgress[book.id] = {};
+                    cumulativeProgress[book.id][today] = lastCum;
+                }
+            }
+            saveCumulativeProgress();
+        }
+        
+        // カレンダー描画関数
+        function renderCalendarForBook(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if(!book) return;
+            
+            if(!window.bookDisplayMonths) window.bookDisplayMonths = {};
+            if(!window.bookDisplayMonths[bookId]) {
+                window.bookDisplayMonths[bookId] = { year: new Date().getFullYear(), month: new Date().getMonth() };
+            }
+            
+            const { year, month } = window.bookDisplayMonths[bookId];
+            const days = [];
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            for(let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
+                days.push(getLocalDateStr(d));
+            }
+            
+            const container = document.querySelector(`.calendar-grid[data-calendar="${bookId}"]`);
+            const labelSpan = document.querySelector(`.calendar-month-label[data-id="${bookId}"]`);
+            if(labelSpan) labelSpan.textContent = `${year}年 ${month+1}月`;
+            if(!container) return;
+            
+            container.innerHTML = days.map(dateStr => {
+                const cumulative = getCumulative(bookId, dateStr);
+                const prevCum = getPreviousCumulative(bookId, dateStr);
+                const todayProgress = cumulative - prevCum;
+                const target = book.dailyTarget || 0;
+                const isAchieved = target > 0 && todayProgress >= target;
+                const statusClass = isAchieved ? 'achieved' : (todayProgress > 0 ? 'not-achieved' : '');
+                const progressText = todayProgress > 0 ? `${todayProgress}` : '-';
+                return `<div class="calendar-day ${statusClass}" data-book="${bookId}" data-date="${dateStr}">
+                    <span class="calendar-day-date">${dateStr.slice(5)}</span>
+                    <span class="calendar-day-info">累計:${cumulative} / ${progressText}</span>
+                </div>`;
+            }).join('');
+            
+            document.querySelectorAll(`.calendar-day[data-book="${bookId}"]`).forEach(day => {
+                day.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const dateStr = day.dataset.date;
+                    openEditModal(bookId, dateStr);
+                });
+            });
+        }
+        
+        function openEditModal(bookId, dateStr) {
+            currentEditBookId = bookId;
+            currentEditDate = dateStr;
+            const book = books.find(b => b.id === bookId);
+            if(!book) return;
+            const currentCum = getCumulative(bookId, dateStr);
+            document.getElementById('editModalTitle').innerHTML = `${escapeHtml(book.name)} - ${dateStr} のデータ編集`;
+            document.getElementById('editDate').value = dateStr;
+            document.getElementById('editCumulative').value = currentCum;
+            document.getElementById('editPastDataModal').style.display = 'flex';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editPastDataModal').style.display = 'none';
+            currentEditBookId = null;
+            currentEditDate = null;
+        }
+        
+        function saveEditedData() {
+            if(currentEditBookId === null || currentEditDate === null) return;
+            const newCumulative = parseInt(document.getElementById('editCumulative').value);
+            if(isNaN(newCumulative) || newCumulative < 0) {
+                showToast("正しい数値を入力してください", true);
+                return;
+            }
+            if(!cumulativeProgress[currentEditBookId]) cumulativeProgress[currentEditBookId] = {};
+            cumulativeProgress[currentEditBookId][currentEditDate] = newCumulative;
+            saveCumulativeProgress();
+            closeEditModal();
+            renderBooks();
+            syncToCloud();
+            showToast(`${currentEditDate} の累計ページ数を更新しました`);
         }
         
         // データ操作
@@ -644,33 +874,7 @@ const firebaseConfig = {
             document.getElementById('deleteDiaryBtn').disabled = !isToday;
         }
         
-        // 参考書関連
-        function getCumulative(bookId, dateStr) {
-            const prog = cumulativeProgress[bookId] || {};
-            if(prog[dateStr] !== undefined) return prog[dateStr];
-            const pastDates = Object.keys(prog).filter(d => d <= dateStr).sort();
-            return pastDates.length ? prog[pastDates[pastDates.length-1]] : 0;
-        }
-        function getPreviousCumulative(bookId, dateStr) {
-            const prog = cumulativeProgress[bookId] || {};
-            const pastDates = Object.keys(prog).filter(d => d < dateStr).sort();
-            return pastDates.length ? prog[pastDates[pastDates.length-1]] : 0;
-        }
-        function getYesterdayStr() { const d = new Date(); d.setDate(d.getDate()-1); return getLocalDateStr(d); }
-        function getTodayTargetPages(book) {
-            const yesterdayCum = getCumulative(book.id, getYesterdayStr());
-            const dailyTarget = book.dailyTarget || 0;
-            if(dailyTarget === 0) return 0;
-            return yesterdayCum + dailyTarget;
-        }
-        function isTodayTargetAchieved(book) {
-            const todayCum = getCumulative(book.id, getTodayLocalStr());
-            const target = getTodayTargetPages(book);
-            return target > 0 && todayCum >= target;
-        }
-        function saveBooks() { localStorage.setItem(STORAGE_KEYS.books, JSON.stringify(books)); }
-        function saveCumulativeProgress() { localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(cumulativeProgress)); }
-        
+        // 参考書管理
         function addBook() {
             const name = document.getElementById('newBookName').value.trim();
             const total = parseInt(document.getElementById('newBookTotal').value);
@@ -686,26 +890,12 @@ const firebaseConfig = {
             syncToCloud();
         }
         
-        function ensureTodayCumulative() {
-            const today = getTodayLocalStr();
-            for(let book of books) {
-                const prog = cumulativeProgress[book.id] || {};
-                if(prog[today] === undefined) {
-                    const pastDates = Object.keys(prog).filter(d => d <= today).sort();
-                    let lastCum = pastDates.length ? prog[pastDates[pastDates.length-1]] : 0;
-                    if(!cumulativeProgress[book.id]) cumulativeProgress[book.id] = {};
-                    cumulativeProgress[book.id][today] = lastCum;
-                }
-            }
-            saveCumulativeProgress();
-        }
-        
         function renderBooks() {
             const container = document.getElementById('bookList'); if(!container) return;
             if(books.length === 0) { container.innerHTML = '<div class="diary-empty">参考書が登録されていません</div>'; return; }
             const today = getTodayLocalStr();
             
-            // ソート: 未達成 → 今日の目標達成(薄グレー) → 完全達成(濃グレー)
+            // ソート: 未達成 → 今日の目標達成 → 完全達成
             const sortedBooks = [...books].sort((a, b) => {
                 const aCompleted = getCumulative(a.id, today) >= a.totalPages;
                 const bCompleted = getCumulative(b.id, today) >= b.totalPages;
@@ -743,6 +933,14 @@ const firebaseConfig = {
                         <div class="today-target-display">${targetText}</div>
                         <div class="daily-target"><span>1日あたり目標:</span><input type="number" class="daily-target-input" data-id="${book.id}" value="${dailyTarget}" style="width:70px;"><span>ページ</span><button class="btn btn-secondary set-target-btn" data-id="${book.id}">設定</button></div>
                         <div class="progress-input"><span>累計ページ数:</span><input type="number" class="cumulative-input" data-id="${book.id}" value="${current}" style="width:80px;"><button class="btn btn-primary save-cumulative-btn" data-id="${book.id}" data-date="${today}">保存</button></div>
+                        
+                        <div class="calendar-control">
+                            <button class="prev-month-btn" data-id="${book.id}">◀</button>
+                            <span class="calendar-month-label" data-id="${book.id}"></span>
+                            <button class="next-month-btn" data-id="${book.id}">▶</button>
+                        </div>
+                        <div class="calendar-grid" data-calendar="${book.id}"></div>
+                        
                         <div class="book-actions"><button class="btn btn-secondary delete-book" data-id="${book.id}">削除</button></div>
                     </div>
                 </div>`;
@@ -753,9 +951,14 @@ const firebaseConfig = {
                 header.addEventListener('click', () => {
                     const id = parseInt(header.dataset.id);
                     const detail = document.querySelector(`.book-detail[data-detail="${id}"]`);
-                    if(detail) detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+                    if(detail) {
+                        const isVisible = detail.style.display !== 'none';
+                        detail.style.display = isVisible ? 'none' : 'block';
+                        if(!isVisible) renderCalendarForBook(id);
+                    }
                 });
             });
+            
             document.querySelectorAll('.set-target-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = parseInt(btn.dataset.id);
@@ -769,6 +972,7 @@ const firebaseConfig = {
                     }
                 });
             });
+            
             document.querySelectorAll('.save-cumulative-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = parseInt(btn.dataset.id);
@@ -782,18 +986,49 @@ const firebaseConfig = {
                     syncToCloud();
                 });
             });
+            
             document.querySelectorAll('.delete-book').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const id = parseInt(btn.dataset.id);
                     if(confirm(`「${books.find(b=>b.id===id)?.name}」を削除しますか？`)) {
                         books = books.filter(b => b.id !== id);
                         delete cumulativeProgress[id];
-                        saveBooks();
-                        saveCumulativeProgress();
-                        renderBooks();
-                        syncToCloud();
+                        saveBooks(); saveCumulativeProgress(); renderBooks(); syncToCloud();
                         showToast("参考書を削除しました");
                     }
+                });
+            });
+            
+            // 月表示用のグローバル変数
+            if(!window.bookDisplayMonths) window.bookDisplayMonths = {};
+            books.forEach(book => {
+                if(!window.bookDisplayMonths[book.id]) {
+                    window.bookDisplayMonths[book.id] = { year: new Date().getFullYear(), month: new Date().getMonth() };
+                }
+            });
+            
+            // カレンダーの月移動ボタン
+            document.querySelectorAll('.prev-month-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    let { year, month } = window.bookDisplayMonths[id];
+                    month--;
+                    if(month < 0) { month = 11; year--; }
+                    window.bookDisplayMonths[id] = { year, month };
+                    renderCalendarForBook(id);
+                });
+            });
+            
+            document.querySelectorAll('.next-month-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    let { year, month } = window.bookDisplayMonths[id];
+                    month++;
+                    if(month > 11) { month = 0; year++; }
+                    window.bookDisplayMonths[id] = { year, month };
+                    renderCalendarForBook(id);
                 });
             });
         }
@@ -1271,6 +1506,9 @@ const firebaseConfig = {
             document.getElementById('syncToCloudBtn').onclick = syncToCloud;
             document.getElementById('syncFromCloudBtn').onclick = syncFromCloud;
             
+            document.getElementById('cancelEditBtn').onclick = closeEditModal;
+            document.getElementById('saveEditBtn').onclick = saveEditedData;
+            
             document.querySelectorAll('[data-stats-period]').forEach(btn => {
                 btn.onclick = () => { document.querySelectorAll('[data-stats-period]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); statsPeriod = btn.dataset.statsPeriod; statsPeriodOffset = 0; updateStatsDailyChart(); };
             });
@@ -1284,6 +1522,7 @@ const firebaseConfig = {
             window.onclick = (e) => {
                 if(e.target === document.getElementById('settingsModal')) document.getElementById('settingsModal').style.display = 'none';
                 if(e.target === document.getElementById('statsModal')) document.getElementById('statsModal').style.display = 'none';
+                if(e.target === document.getElementById('editPastDataModal')) closeEditModal();
             };
             switchMode("countdown");
         }
