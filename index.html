@@ -222,6 +222,39 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 12px; cursor: pointer; background: #f1f5f9;
         }
+        /* 閉じている状態の参考書ヘッダーにも色を表示 */
+.book-item.fully-completed .book-header {
+    background: #cbd5e1;
+    border-left: 4px solid #64748b;
+}
+.book-item.daily-achieved .book-header {
+    background: #d1fae5;
+    border-left: 4px solid #2a9d8f;
+}
+
+/* ダークモード対応 */
+body.dark-mode .book-item.fully-completed .book-header {
+    background: #334155;
+    border-left: 4px solid #64748b;
+}
+body.dark-mode .book-item.daily-achieved .book-header {
+    background: #064e3b;
+    border-left: 4px solid #2a9d8f;
+}
+
+/* ホバー時も色を維持 */
+.book-item.fully-completed .book-header:hover {
+    background: #b9c3d0;
+}
+.book-item.daily-achieved .book-header:hover {
+    background: #c4e5d4;
+}
+body.dark-mode .book-item.fully-completed .book-header:hover {
+    background: #2d3a4a;
+}
+body.dark-mode .book-item.daily-achieved .book-header:hover {
+    background: #0a5c47;
+}
         body.dark-mode .book-header { background: #1e293b; }
         .book-title { font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
         .book-header-progress { flex: 1; margin: 0 10px; height: 5px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
