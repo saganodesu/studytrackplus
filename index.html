@@ -127,9 +127,21 @@
         body.pc-mode .bottom-nav { display: none; }
         body.pc-mode .mobile-only { display: none; }
         
+        /* グラフサイズPC用 */
+        body.pc-mode .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        body.pc-mode .stats-grid canvas {
+            max-height: 160px !important;
+            height: 160px !important;
+        }
+        
         /* ==================== スマホモード ==================== */
-        body.mobile-mode .app-container { display: block; }
+        body.mobile-mode .app-container { display: none; }
         body.mobile-mode .sidebar { display: none; }
+        body.mobile-mode .pc-only { display: none; }
         body.mobile-mode .main-content {
             padding: 12px 12px 80px 12px;
             max-width: 600px;
@@ -182,7 +194,13 @@
         body.mobile-mode .tab-content.active { display: block; }
         body.mobile-mode .header-icons { display: flex; gap: 8px; }
         
-        /* 共通スタイル（PC/スマホ共通） */
+        /* グラフサイズスマホ用 */
+        body.mobile-mode .stats-grid canvas {
+            max-height: 140px !important;
+            height: 140px !important;
+        }
+        
+        /* 共通スタイル */
         .card {
             background: white;
             border-radius: 20px;
@@ -213,7 +231,7 @@
             color: #64748b;
         }
         .timer-display {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 800;
             font-family: monospace;
             background: linear-gradient(135deg, #1a2a3a, #0f1a24);
@@ -509,9 +527,11 @@
         .danger-btn { background: #e76f51; color: white; border: none; padding: 12px; border-radius: 60px; width: 100%; cursor: pointer; }
         .settings-group { margin-bottom: 18px; }
         .settings-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; }
-        .stats-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .period-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
         .period-btn { padding: 6px 12px; font-size: 0.7rem; background: #e2e8f0; border: none; border-radius: 40px; cursor: pointer; }
         .period-btn.active { background: #2a9d8f; color: white; }
+        .nav-btn { background: #e2e8f0; border: none; width: 28px; height: 28px; border-radius: 28px; cursor: pointer; }
         .nav-icon { font-size: 1.2rem; }
         .remove-subject { background: none; border: none; cursor: pointer; color: #e76f51; font-size: 1rem; }
         
@@ -529,8 +549,7 @@
     </div>
 
     <!-- PCモード用コンテナ -->
-    <div class="app-container">
-        <!-- PC用サイドバー -->
+    <div class="app-container pc-only">
         <div class="sidebar">
             <div class="logo-area">
                 <h1>StudyTrack+</h1>
@@ -563,7 +582,6 @@
             </div>
         </div>
 
-        <!-- PC用メインエリア -->
         <div class="main-area">
             <div class="header">
                 <div></div>
@@ -582,7 +600,6 @@
                 <div class="stat-card-small"><div class="stat-value" id="totalAllMinutes">0</div><div class="stat-label">総勉強時間</div></div>
             </div>
 
-            <!-- PC用タブコンテンツ -->
             <div id="timer-tab-pc" class="pc-tab-content" style="display:block;">
                 <div class="three-column-grid">
                     <div class="card"><div class="card-title">手動記録</div>
@@ -617,8 +634,24 @@
                 </div>
             </div>
             <div id="diary-tab-pc" class="pc-tab-content" style="display:none;"><div class="card"><div class="card-title">日記帳</div><div class="diary-editor"><input type="date" id="diaryDate"><textarea id="diaryNote" rows="3" placeholder="今日の振り返りを書こう..."></textarea><div class="diary-buttons"><button class="btn btn-primary" id="saveDiaryBtn">保存</button><button class="btn btn-secondary" id="deleteDiaryBtn">削除</button></div></div><div class="diary-list"><div style="font-weight:600; font-size:0.8rem; margin-bottom:10px;">過去の日記</div><div id="diaryEntriesList"></div></div></div></div>
-            <div id="stats-tab-pc" class="pc-tab-content" style="display:none;"><div class="card"><div class="card-title">統計ダッシュボード</div><div class="stats-grid"><div><div style="display:flex; gap:8px; margin-bottom:10px;"><button class="period-btn active" data-stats-period="week">週間</button><button class="period-btn" data-stats-period="month">月間</button></div><canvas id="statsDailyChart" style="height:200px;"></canvas></div><div><div style="font-weight:600; margin-bottom:8px;">科目別学習割合</div><canvas id="statsSubjectChart" style="height:180px;"></canvas><div id="subjectStatsNumbers" style="font-size:0.7rem; margin-top:8px;"></div></div><div><div style="font-weight:600; margin-bottom:8px;">参考書の進捗推移</div><select id="bookProgressSelect" style="margin-bottom:8px;"></select><canvas id="bookProgressChart" style="height:180px;"></canvas></div><div><div style="font-weight:600; margin-bottom:8px;">参考書 総進捗率</div><div id="bookOverallProgressList"></div></div></div></div></div>
-            <div id="history-tab-pc" class="pc-tab-content" style="display:none;"><div class="card"><div class="flex-between"><div class="card-title">学習履歴</div><button id="clearAllHistoryBtn" class="btn btn-secondary" style="width:auto; padding:6px 14px;">全削除</button></div><div class="history-list"><table style="width:100%;"><thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th></tr></thead><tbody id="historyTbody"></tbody></table></div><div class="total-time" style="margin-top:12px; text-align:center; font-size:0.75rem;">総勉強時間: <span id="totalAllMinutes2">0</span> 分 → <span id="totalAllTime">0時間0分</span></div></div></div>
+            <div id="stats-tab-pc" class="pc-tab-content" style="display:none;">
+                <div class="card">
+                    <div class="card-title">統計ダッシュボード</div>
+                    <div class="stats-grid">
+                        <div>
+                            <div class="period-nav">
+                                <div><button class="period-btn active" data-stats-period="week">週間</button><button class="period-btn" data-stats-period="month">月間</button></div>
+                                <div><button id="statsPrevPeriodBtn" class="nav-btn">◀</button><span id="statsPeriodRange"></span><button id="statsNextPeriodBtn" class="nav-btn">▶</button></div>
+                            </div>
+                            <canvas id="statsDailyChart" style="height:160px;"></canvas>
+                        </div>
+                        <div><div style="font-weight:600; margin-bottom:8px;">科目別学習割合</div><canvas id="statsSubjectChart" style="height:160px;"></canvas><div id="subjectStatsNumbers" style="font-size:0.7rem; margin-top:8px;"></div></div>
+                        <div><div style="font-weight:600; margin-bottom:8px;">参考書の進捗推移</div><select id="bookProgressSelect" style="margin-bottom:8px;"></select><canvas id="bookProgressChart" style="height:160px;"></canvas></div>
+                        <div><div style="font-weight:600; margin-bottom:8px;">参考書 総進捗率</div><div id="bookOverallProgressList"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div id="history-tab-pc" class="pc-tab-content" style="display:none;"><div class="card"><div class="flex-between"><div class="card-title">学習履歴</div><button id="clearAllHistoryBtn" class="btn btn-secondary" style="width:auto; padding:6px 14px;">全削除</button></div><div class="history-list"><table style="width:100%;"><thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th>}</thead><tbody id="historyTbody"></tbody>}</table></div><div class="total-time" style="margin-top:12px; text-align:center; font-size:0.75rem;">総勉強時間: <span id="totalAllMinutes2">0</span> 分 → <span id="totalAllTime">0時間0分</span></div></div></div>
         </div>
     </div>
 
@@ -676,8 +709,18 @@
             </div>
         </div>
         <div id="diary-tab-mobile" class="tab-content"><div class="card"><div class="card-title">日記帳</div><div class="diary-editor"><input type="date" id="diaryDateMobile"><textarea id="diaryNoteMobile" rows="3" placeholder="今日の振り返りを書こう..."></textarea><div class="diary-buttons"><button class="btn btn-primary" id="saveDiaryBtnMobile">保存</button><button class="btn btn-secondary" id="deleteDiaryBtnMobile">削除</button></div></div><div class="diary-list"><div style="font-weight:600; font-size:0.8rem; margin-bottom:10px;">過去の日記</div><div id="diaryEntriesListMobile"></div></div></div></div>
-        <div id="stats-tab-mobile" class="tab-content"><div class="card"><div class="card-title">統計ダッシュボード</div><div class="stats-grid"><div><div style="display:flex; gap:8px; margin-bottom:10px;"><button class="period-btn active" data-stats-period="week">週間</button><button class="period-btn" data-stats-period="month">月間</button></div><canvas id="statsDailyChartMobile" style="height:200px;"></canvas></div><div><div style="font-weight:600; margin-bottom:8px;">科目別学習割合</div><canvas id="statsSubjectChartMobile" style="height:180px;"></canvas><div id="subjectStatsNumbersMobile" style="font-size:0.7rem; margin-top:8px;"></div></div><div><div style="font-weight:600; margin-bottom:8px;">参考書の進捗推移</div><select id="bookProgressSelectMobile" style="margin-bottom:8px;"></select><canvas id="bookProgressChartMobile" style="height:180px;"></canvas></div><div><div style="font-weight:600; margin-bottom:8px;">参考書 総進捗率</div><div id="bookOverallProgressListMobile"></div></div></div></div></div>
-        <div id="history-tab-mobile" class="tab-content"><div class="card"><div class="flex-between"><div class="card-title">学習履歴</div><button id="clearAllHistoryBtnMobile" class="btn btn-secondary" style="width:auto; padding:6px 14px;">全削除</button></div><div class="history-list"><table style="width:100%;"><thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th></thead><tbody id="historyTbodyMobile"></tbody>}</table></div><div class="total-time" style="margin-top:12px; text-align:center; font-size:0.75rem;">総勉強時間: <span id="totalAllMinutes2Mobile">0</span> 分 → <span id="totalAllTimeMobile">0時間0分</span></div></div></div>
+        <div id="stats-tab-mobile" class="tab-content">
+            <div class="card">
+                <div class="card-title">統計ダッシュボード</div>
+                <div class="stats-grid">
+                    <div><div style="font-weight:600; margin-bottom:8px;">日別勉強時間</div><canvas id="statsDailyChartMobile" style="height:140px;"></canvas></div>
+                    <div><div style="font-weight:600; margin-bottom:8px;">科目別学習割合</div><canvas id="statsSubjectChartMobile" style="height:140px;"></canvas><div id="subjectStatsNumbersMobile" style="font-size:0.7rem; margin-top:8px;"></div></div>
+                    <div><div style="font-weight:600; margin-bottom:8px;">参考書の進捗推移</div><select id="bookProgressSelectMobile" style="margin-bottom:8px;"></select><canvas id="bookProgressChartMobile" style="height:140px;"></canvas></div>
+                    <div><div style="font-weight:600; margin-bottom:8px;">参考書 総進捗率</div><div id="bookOverallProgressListMobile"></div></div>
+                </div>
+            </div>
+        </div>
+        <div id="history-tab-mobile" class="tab-content"><div class="card"><div class="flex-between"><div class="card-title">学習履歴</div><button id="clearAllHistoryBtnMobile" class="btn btn-secondary" style="width:auto; padding:6px 14px;">全削除</button></div><div class="history-list"><table style="width:100%;"><thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th></thead><tbody id="historyTbodyMobile"></tbody>}.</table></div><div class="total-time" style="margin-top:12px; text-align:center; font-size:0.75rem;">総勉強時間: <span id="totalAllMinutes2Mobile">0</span> 分 → <span id="totalAllTimeMobile">0時間0分</span></div></div></div>
     </div>
 
     <!-- 下部ナビゲーション（スマホ用） -->
@@ -719,7 +762,6 @@
             if (isMobileDevice()) {
                 document.body.classList.add('mobile-mode');
                 document.body.classList.remove('pc-mode');
-                // スマホ用の初期化は後で
             } else {
                 document.body.classList.add('pc-mode');
                 document.body.classList.remove('mobile-mode');
@@ -816,7 +858,7 @@
         function saveBooks() { localStorage.setItem(STORAGE_KEYS.books, JSON.stringify(books)); }
         function saveCumulativeProgress() { localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(cumulativeProgress)); }
         
-        function addStudyRecord(subject, minutes, dateStr, startTime, isMobile = false) {
+        function addStudyRecord(subject, minutes, dateStr, startTime) {
             if(!subject || minutes <= 0) { alert("勉強時間は1分以上"); return false; }
             if(!dateStr) dateStr = getTodayLocalStr();
             if(!startTime) startTime = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
@@ -855,7 +897,7 @@
             // スマホ用
             const tbodyMobile = document.getElementById('historyTbodyMobile');
             if(tbodyMobile) {
-                if(sessions.length === 0) { tbodyMobile.innerHTML = '<tr><td colspan="5">記録がありません</td></td>'; }
+                if(sessions.length === 0) { tbodyMobile.innerHTML = '<tr><td colspan="5">記録がありません</td></tr>'; }
                 else {
                     const sorted = [...sessions].sort((a,b) => new Date(b.dateStr + "T" + b.startTime) - new Date(a.dateStr + "T" + a.startTime));
                     tbodyMobile.innerHTML = "";
@@ -897,7 +939,7 @@
         }
         
         function addSubject() {
-            const newName = document.getElementById('newSubjectName').value.trim() || document.getElementById('newSubjectNameMobile')?.value.trim();
+            const newName = document.getElementById('newSubjectName')?.value.trim() || document.getElementById('newSubjectNameMobile')?.value.trim();
             if(!newName) { showToast("教科名を入力してください", true); return; }
             if(customSubjects.includes(newName)) { showToast("既に存在する教科です", true); return; }
             customSubjects.push(newName);
@@ -1257,13 +1299,14 @@
             const ctx = document.getElementById('statsDailyChart')?.getContext('2d');
             if(ctx) {
                 if(statsDailyChart) statsDailyChart.destroy();
-                statsDailyChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間(時間)', data, backgroundColor: '#2a9d8f' }] }, options: { scales: { y: { max: 10, beginAtZero: true, title: { display: true, text: '時間' } } } } });
+                statsDailyChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間(時間)', data, backgroundColor: '#2a9d8f' }] }, options: { responsive: true, maintainAspectRatio: true, scales: { y: { max: 10, beginAtZero: true, title: { display: true, text: '時間' } } } } });
+                document.getElementById('statsPeriodRange').textContent = `${startDate.toLocaleDateString()} 〜 ${endDate.toLocaleDateString()}`;
             }
             // スマホ用
             const ctxMobile = document.getElementById('statsDailyChartMobile')?.getContext('2d');
             if(ctxMobile) {
                 if(statsDailyChartMobile) statsDailyChartMobile.destroy();
-                statsDailyChartMobile = new Chart(ctxMobile, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間(時間)', data, backgroundColor: '#2a9d8f' }] }, options: { scales: { y: { max: 10, beginAtZero: true } } } });
+                statsDailyChartMobile = new Chart(ctxMobile, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間(時間)', data, backgroundColor: '#2a9d8f' }] }, options: { responsive: true, maintainAspectRatio: true, scales: { y: { max: 10, beginAtZero: true } } } });
             }
         }
         
@@ -1274,14 +1317,14 @@
             const ctx = document.getElementById('statsSubjectChart')?.getContext('2d');
             if(ctx && subjectMap.size) {
                 if(statsSubjectChart) statsSubjectChart.destroy();
-                statsSubjectChart = new Chart(ctx, { type: 'pie', data: { labels: Array.from(subjectMap.keys()), datasets: [{ data: Array.from(subjectMap.values()), backgroundColor: Array.from(subjectMap.keys()).map(s=>getColorForSubject(s)) }] } });
+                statsSubjectChart = new Chart(ctx, { type: 'pie', data: { labels: Array.from(subjectMap.keys()), datasets: [{ data: Array.from(subjectMap.values()), backgroundColor: Array.from(subjectMap.keys()).map(s=>getColorForSubject(s)) }] }, options: { responsive: true, maintainAspectRatio: true } });
                 document.getElementById('subjectStatsNumbers').innerHTML = Array.from(subjectMap.entries()).map(([k,v]) => `<div>${k}: ${v.toFixed(1)}時間</div>`).join('');
             }
             // スマホ用
             const ctxMobile = document.getElementById('statsSubjectChartMobile')?.getContext('2d');
             if(ctxMobile && subjectMap.size) {
                 if(statsSubjectChartMobile) statsSubjectChartMobile.destroy();
-                statsSubjectChartMobile = new Chart(ctxMobile, { type: 'pie', data: { labels: Array.from(subjectMap.keys()), datasets: [{ data: Array.from(subjectMap.values()), backgroundColor: Array.from(subjectMap.keys()).map(s=>getColorForSubject(s)) }] } });
+                statsSubjectChartMobile = new Chart(ctxMobile, { type: 'pie', data: { labels: Array.from(subjectMap.keys()), datasets: [{ data: Array.from(subjectMap.values()), backgroundColor: Array.from(subjectMap.keys()).map(s=>getColorForSubject(s)) }] }, options: { responsive: true, maintainAspectRatio: true } });
                 document.getElementById('subjectStatsNumbersMobile').innerHTML = Array.from(subjectMap.entries()).map(([k,v]) => `<div>${k}: ${v.toFixed(1)}時間</div>`).join('');
             }
         }
@@ -1295,7 +1338,7 @@
                 const ctx = document.getElementById('bookProgressChart')?.getContext('2d');
                 if(ctx) {
                     if(bookProgressChart) bookProgressChart.destroy();
-                    bookProgressChart = new Chart(ctx, { type: 'line', data: { labels, datasets: [{ label: `${book.name} 進捗(ページ)`, data, borderColor: '#2a9d8f' }] } });
+                    bookProgressChart = new Chart(ctx, { type: 'line', data: { labels, datasets: [{ label: `${book.name} 進捗(ページ)`, data, borderColor: '#2a9d8f' }] }, options: { responsive: true, maintainAspectRatio: true } });
                 }
             }
             // スマホ用
@@ -1307,7 +1350,7 @@
                 const ctxMobile = document.getElementById('bookProgressChartMobile')?.getContext('2d');
                 if(ctxMobile) {
                     if(bookProgressChartMobile) bookProgressChartMobile.destroy();
-                    bookProgressChartMobile = new Chart(ctxMobile, { type: 'line', data: { labels, datasets: [{ label: `${bookMobile.name} 進捗(ページ)`, data, borderColor: '#2a9d8f' }] } });
+                    bookProgressChartMobile = new Chart(ctxMobile, { type: 'line', data: { labels, datasets: [{ label: `${bookMobile.name} 進捗(ページ)`, data, borderColor: '#2a9d8f' }] }, options: { responsive: true, maintainAspectRatio: true } });
                 }
             }
         }
@@ -1359,7 +1402,6 @@
             customSubjects.forEach((sub, idx) => subjectColorMap.set(sub, defaultColors[idx % defaultColors.length]));
         }
         
-        // タイマー関連（簡略化 - 主要機能のみ）
         function playShortAlarm() { if(!alarmEnabled) return; try { if(!audioContext) audioContext = new AudioContext(); const osc = audioContext.createOscillator(); const gain = audioContext.createGain(); osc.connect(gain); gain.connect(audioContext.destination); osc.frequency.value = 880; gain.gain.value = 0.3; osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.3); osc.stop(audioContext.currentTime + 0.3); } catch(e){} }
         function getRemainingSeconds() {
             if(!isTimerRunning) return (timerMode === "countdown" || timerMode === "pomodoro") ? (timerPausedTime ?? targetSeconds) : (timerPausedTime ?? 0);
@@ -1481,7 +1523,6 @@
             if(document.getElementById('manualMinutesMobile')) document.getElementById('manualMinutesMobile').value = "30";
         }
         
-        // 設定関連
         let settings = { textSize: '14px', darkMode: false, alarmSound: true, concentrationMode: true };
         function loadSettings() { const stored = localStorage.getItem('app_settings'); if(stored) { try { settings = JSON.parse(stored); } catch(e){} } applySettings(); }
         function saveSettings() { localStorage.setItem('app_settings', JSON.stringify(settings)); }
@@ -1544,7 +1585,6 @@
             showToast("設定をリセットしました");
         }
         
-        // Firebase同期（簡略化）
         async function syncToCloud() {
             if(!currentUser) { showToast("認証待機中...", true); return; }
             try {
@@ -1683,7 +1723,6 @@
             initPCTabs();
             initMobileTabs();
             
-            // イベントリスナー（PC用）
             if(document.getElementById('startTimerBtn')) document.getElementById('startTimerBtn').onclick = startTimer;
             if(document.getElementById('pauseTimerBtn')) document.getElementById('pauseTimerBtn').onclick = pauseTimer;
             if(document.getElementById('resetTimerBtn')) document.getElementById('resetTimerBtn').onclick = resetTimer;
@@ -1694,7 +1733,6 @@
             if(document.getElementById('setCustomTimeBtn')) document.getElementById('setCustomTimeBtn').onclick = () => { const m = parseInt(document.getElementById('customMinutes')?.value); if(m>0) setCountdownTarget(m); };
             if(document.getElementById('setPomodoroTimeBtn')) document.getElementById('setPomodoroTimeBtn').onclick = () => { const f=parseInt(document.getElementById('customFocusMinutes')?.value), b=parseInt(document.getElementById('customBreakMinutes')?.value); if(f>0&&b>0) setPomodoroTimes(f,b); };
             
-            // イベントリスナー（スマホ用）
             if(document.getElementById('startTimerBtnMobile')) document.getElementById('startTimerBtnMobile').onclick = startTimer;
             if(document.getElementById('pauseTimerBtnMobile')) document.getElementById('pauseTimerBtnMobile').onclick = pauseTimer;
             if(document.getElementById('resetTimerBtnMobile')) document.getElementById('resetTimerBtnMobile').onclick = resetTimer;
