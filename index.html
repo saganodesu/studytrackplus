@@ -2,12 +2,14 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, shrink-to-fit=no, viewport-fit=cover">
     <title>StudyTrack+</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* ベーススタイル */
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
             min-height: 100vh;
@@ -21,6 +23,8 @@
         body.text-14px { font-size: 14px; }
         body.text-16px { font-size: 16px; }
         body.text-18px { font-size: 18px; }
+        
+        /* ダークモード */
         body.dark-mode {
             background: linear-gradient(135deg, #1a2a3a 0%, #0f1a24 100%);
             color: #e2e8f0;
@@ -38,18 +42,22 @@
         body.dark-mode .sidebar-nav-item:hover { background: #334155; }
         body.dark-mode .book-item { background: #0f172a; }
         body.dark-mode .stat-card-small { background: #1e293b; }
+        body.dark-mode .stat-card { background: #1e293b; }
         body.dark-mode .diary-entry { background: #0f172a; }
         body.dark-mode .calendar-day { background: #1e293b; }
         body.dark-mode .calendar-day:hover { background: #334155; }
+        body.dark-mode .bottom-nav { background: #1e293b; border-top-color: #334155; }
+        body.dark-mode .nav-item.active { color: #2a9d8f; }
+        body.dark-mode .icon-btn { background: #334155; color: #e2e8f0; }
         
-        .app-container {
+        /* ==================== PCモード ==================== */
+        body.pc-mode .app-container {
             display: flex;
             min-height: 100vh;
             max-width: 1800px;
             margin: 0 auto;
         }
-        
-        .sidebar {
+        body.pc-mode .sidebar {
             width: 280px;
             background: white;
             border-radius: 28px;
@@ -62,31 +70,22 @@
             gap: 28px;
             flex-shrink: 0;
         }
-        
-        .logo-area {
+        body.pc-mode .logo-area {
             text-align: center;
             padding-bottom: 20px;
             border-bottom: 1px solid #e2e8f0;
         }
-        .logo-area h1 {
+        body.pc-mode .logo-area h1 {
             font-size: 1.6rem;
             color: #2a9d8f;
             margin-bottom: 12px;
         }
-        .logo-area .today-total {
-            background: #2a9d8f20;
-            padding: 8px 16px;
-            border-radius: 60px;
-            font-size: 0.9rem;
-            display: inline-block;
-        }
-        
-        .sidebar-nav {
+        body.pc-mode .sidebar-nav {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-        .sidebar-nav-item {
+        body.pc-mode .sidebar-nav-item {
             display: flex;
             align-items: center;
             gap: 14px;
@@ -98,134 +97,123 @@
             font-weight: 500;
             font-size: 1rem;
         }
-        .sidebar-nav-item:hover {
-            background: #f1f5f9;
-        }
-        .sidebar-nav-item.active {
+        body.pc-mode .sidebar-nav-item:hover { background: #f1f5f9; }
+        body.pc-mode .sidebar-nav-item.active {
             background: #2a9d8f20;
             color: #2a9d8f;
         }
-        
-        .sidebar-section {
+        body.pc-mode .sidebar-section {
             margin-top: auto;
             padding-top: 20px;
             border-top: 1px solid #e2e8f0;
         }
-        .sidebar-section-title {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        
-        .main-area {
+        body.pc-mode .main-area {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
         }
-        
-        .main-header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 28px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .sync-group {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        .sync-btn {
-            background: #2a9d8f20;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 60px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            color: #2a9d8f;
-            font-weight: 600;
-        }
-        .google-btn {
-            background: #4285f4;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 60px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #2a9d8f20;
-            padding: 8px 16px;
-            border-radius: 60px;
-            font-size: 0.85rem;
-        }
-        .icon-btn {
-            background: rgba(255,255,255,0.9);
-            border: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .stats-dashboard-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 28px;
-        }
-        .stat-card-small {
-            background: white;
-            border-radius: 20px;
-            padding: 18px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .stat-card-small .stat-value {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #2a9d8f;
-        }
-        .stat-card-small .stat-label {
-            font-size: 0.8rem;
-            color: #64748b;
-        }
-        
-        .three-column-grid {
+        body.pc-mode .three-column-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
             margin-bottom: 24px;
         }
+        body.pc-mode .stats-dashboard-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        body.pc-mode .bottom-nav { display: none; }
+        body.pc-mode .mobile-only { display: none; }
         
+        /* ==================== スマホモード ==================== */
+        body.mobile-mode .app-container { display: block; }
+        body.mobile-mode .sidebar { display: none; }
+        body.mobile-mode .main-content {
+            padding: 12px 12px 80px 12px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        body.mobile-mode .three-column-grid {
+            display: block;
+        }
+        body.mobile-mode .three-column-grid .card {
+            margin-bottom: 16px;
+        }
+        body.mobile-mode .stats-dashboard-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        body.mobile-mode .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 16px 20px;
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+        body.mobile-mode .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 40px;
+        }
+        body.mobile-mode .nav-item.active {
+            color: #2a9d8f;
+            background: #2a9d8f20;
+        }
+        body.mobile-mode .nav-icon { font-size: 1.3rem; }
+        body.mobile-mode .tab-content { display: none; }
+        body.mobile-mode .tab-content.active { display: block; }
+        body.mobile-mode .header-icons { display: flex; gap: 8px; }
+        
+        /* 共通スタイル（PC/スマホ共通） */
         .card {
             background: white;
-            border-radius: 24px;
-            padding: 22px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             border-left: 4px solid #2a9d8f;
-            padding-left: 14px;
-            margin-bottom: 18px;
-            color: #1e3b4a;
+            padding-left: 12px;
+            margin-bottom: 14px;
         }
-        
+        .stat-card-small, .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2a9d8f;
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
         .timer-display {
-            font-size: 3.2rem;
+            font-size: 3rem;
             font-weight: 800;
             font-family: monospace;
             background: linear-gradient(135deg, #1a2a3a, #0f1a24);
@@ -237,10 +225,10 @@
         }
         .timer-mode {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             margin-bottom: 16px;
             background: #f1f5f9;
-            padding: 6px;
+            padding: 5px;
             border-radius: 60px;
         }
         .mode-btn {
@@ -251,36 +239,32 @@
             cursor: pointer;
             background: transparent;
             color: #64748b;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             flex: 1;
         }
         .mode-btn.active { background: #2a9d8f; color: white; }
         .timer-buttons {
             display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin: 18px 0;
+            gap: 10px;
+            margin: 16px 0;
         }
         .btn {
             border: none;
-            padding: 10px 20px;
+            padding: 10px 18px;
             font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .btn-primary { background: #2a9d8f; color: white; }
         .btn-secondary { background: #e2e8f0; color: #334155; }
-        
-        .form-group {
-            margin-bottom: 14px;
-        }
+        .form-group { margin-bottom: 12px; }
         .form-group label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: #64748b;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         input, select, textarea {
             padding: 10px 14px;
@@ -290,66 +274,53 @@
             font-size: 0.9rem;
             width: 100%;
         }
-        .form-row {
-            display: flex;
-            gap: 14px;
+        .form-row { display: flex; gap: 12px; }
+        .form-row .form-group { flex: 1; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+        .progress-bar {
+            background: #cbd5e1;
+            border-radius: 20px;
+            height: 6px;
+            margin: 10px 0;
         }
-        .form-row .form-group {
-            flex: 1;
+        .progress-fill {
+            background: #2a9d8f;
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
         }
+        .goal-card {
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 12px;
+            margin-top: 14px;
+        }
+        body.dark-mode .goal-card { background: #0f172a; }
         
-        .book-list {
-            max-height: 350px;
-            overflow-y: auto;
-        }
-        /* 参考書の状態による色分け */
+        /* 参考書アイテム */
         .book-item {
             background: #f8fafc;
-            border-radius: 16px;
+            border-radius: 14px;
             margin-bottom: 10px;
             overflow: hidden;
-            transition: all 0.2s;
         }
-        /* 完全達成（100%）- グレー */
-        .book-item.fully-completed {
-            background: #cbd5e1;
-            opacity: 0.85;
-        }
-        body.dark-mode .book-item.fully-completed {
-            background: #334155;
-        }
-        /* 今日の目標達成 - グリーン */
-        .book-item.daily-achieved {
-            background: #d1fae5;
-        }
-        body.dark-mode .book-item.daily-achieved {
-            background: #064e3b;
-        }
-        /* 閉じていてもわかるようにヘッダーも色付け */
-        .book-item.fully-completed .book-header {
-            background: #cbd5e1;
-        }
-        .book-item.daily-achieved .book-header {
-            background: #d1fae5;
-        }
-        body.dark-mode .book-item.fully-completed .book-header {
-            background: #334155;
-        }
-        body.dark-mode .book-item.daily-achieved .book-header {
-            background: #064e3b;
-        }
+        body.dark-mode .book-item { background: #0f172a; }
+        .book-item.fully-completed { background: #cbd5e1; }
+        .book-item.daily-achieved { background: #d1fae5; }
+        body.dark-mode .book-item.fully-completed { background: #334155; }
+        body.dark-mode .book-item.daily-achieved { background: #064e3b; }
         .book-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
             padding: 12px;
+            cursor: pointer;
         }
-        .book-title { font-weight: 600; font-size: 0.9rem; }
+        .book-title { font-weight: 600; font-size: 0.85rem; }
         .book-progress-bar {
             flex: 1;
-            margin: 0 12px;
-            height: 6px;
+            margin: 0 10px;
+            height: 5px;
             background: #e2e8f0;
             border-radius: 3px;
             overflow: hidden;
@@ -359,132 +330,91 @@
             background: #2a9d8f;
             border-radius: 3px;
         }
-        .book-summary { font-size: 0.8rem; color: #2a9d8f; }
-        .book-detail {
-            margin-top: 8px;
-            padding: 12px;
-            border-top: 1px solid #e2e8f0;
-        }
-        .add-book-form {
-            display: flex;
-            gap: 10px;
-            margin-top: 14px;
-        }
-        .add-book-form input { flex: 1; font-size: 0.85rem; padding: 10px 14px; }
-        .add-book-form button { padding: 10px 16px; }
+        .book-summary { font-size: 0.7rem; color: #2a9d8f; }
+        .book-detail { padding: 12px; border-top: 1px solid #e2e8f0; }
+        .add-book-form { display: flex; gap: 8px; margin-top: 12px; }
+        .add-book-form button { width: auto; padding: 10px 16px; }
         
         /* カレンダー */
         .calendar-control {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 12px 0 10px 0;
+            margin: 12px 0 8px;
         }
-        .calendar-month-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #2a9d8f;
-        }
-        .calendar-grid {
-            max-height: 200px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-bottom: 8px;
-        }
+        .calendar-grid { max-height: 200px; overflow-y: auto; }
         .calendar-day {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 8px 10px;
-            background: #ffffff;
+            padding: 8px;
+            background: white;
             border-radius: 10px;
+            margin-bottom: 4px;
             cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s;
         }
-        .calendar-day:hover {
-            background: #e2e8f0;
-            transform: translateX(2px);
+        body.dark-mode .calendar-day { background: #1e293b; }
+        .calendar-day.achieved { background: #d1fae5; }
+        body.dark-mode .calendar-day.achieved { background: #064e3b; }
+        
+        /* 日記 */
+        .diary-editor textarea {
+            border-radius: 16px;
+            min-height: 100px;
         }
-        .calendar-day.achieved {
-            background: #d1fae5;
+        .diary-buttons { display: flex; gap: 10px; margin-top: 12px; }
+        .diary-list { max-height: 300px; overflow-y: auto; margin-top: 16px; }
+        .diary-entry {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 10px;
+            margin-bottom: 8px;
             border-left: 3px solid #2a9d8f;
         }
-        .calendar-day-date {
-            font-weight: 500;
-        }
-        .calendar-day-info {
-            font-size: 0.7rem;
-            color: #64748b;
-        }
         
-        .goal-card {
-            background: #f1f5f9;
-            border-radius: 18px;
-            padding: 14px;
-            margin-top: 18px;
-        }
-        .progress-bar { background: #cbd5e1; border-radius: 20px; height: 8px; margin: 12px 0; overflow: hidden; }
-        .progress-fill { background: #2a9d8f; width: 0%; height: 100%; transition: width 0.3s ease; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        /* 履歴テーブル */
+        .history-list { max-height: 350px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        th, td { text-align: left; padding: 10px 4px; border-bottom: 1px solid #e2e8f0; }
+        .delete-btn { background: none; border: none; font-size: 1rem; color: #e76f51; cursor: pointer; }
         
-        .subject-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 14px 0;
-        }
+        /* 教科タグ */
+        .subject-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
         .subject-tag {
             background: #e2e8f0;
             padding: 5px 10px;
             border-radius: 60px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-        .add-subject-form {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .add-subject-form input { flex: 1; font-size: 0.8rem; padding: 8px 12px; }
-        
-        .preset-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin: 12px 0;
-        }
+        .add-subject-form { display: flex; gap: 8px; }
+        .preset-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
         .preset-btn {
             background: #e2e8f0;
             border: none;
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 60px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
         }
-        .timer-input-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 12px 0;
-        }
-        .timer-input-group input { width: 70px; padding: 8px; }
+        .timer-input-group { display: flex; gap: 8px; justify-content: center; margin: 12px 0; }
+        .timer-input-group input { width: 70px; padding: 8px; text-align: center; }
+        .inline-row { display: flex; gap: 10px; margin: 16px 0; }
+        .inline-row select { flex: 2; }
+        .inline-row button { flex: 1; width: auto; }
         .concentration-toggle {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-top: 16px;
-            padding-top: 16px;
+            align-items: center;
+            margin-top: 14px;
+            padding-top: 14px;
             border-top: 1px solid #e2e8f0;
             font-size: 0.85rem;
         }
         .toggle-switch {
             position: relative;
-            width: 50px;
+            width: 48px;
             height: 24px;
             background: #cbd5e1;
             border-radius: 24px;
@@ -502,93 +432,73 @@
             border-radius: 50%;
             transition: all 0.3s ease;
         }
-        .toggle-switch.active::after { left: 28px; }
+        .toggle-switch.active::after { left: 26px; }
+        .session-status { font-size: 0.75rem; text-align: center; color: #2a9d8f; margin: 8px 0; }
         
-        .inline-row {
+        /* ヘッダー */
+        .header {
             display: flex;
-            gap: 12px;
-            margin: 16px 0;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .inline-row select { flex: 2; }
-        .inline-row button { flex: 1; }
-        
-        .session-status {
-            font-size: 0.8rem;
-            text-align: center;
-            margin: 10px 0;
-            color: #2a9d8f;
+        .header h1 { font-size: 1.4rem; color: #2a9d8f; }
+        .today-total {
+            background: #2a9d8f20;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
         }
-        
-        .diary-editor textarea {
-            width: 100%;
-            border-radius: 20px;
-            resize: vertical;
-            min-height: 100px;
-            font-size: 0.9rem;
-        }
-        .diary-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 14px;
-        }
-        .diary-list {
-            max-height: 320px;
-            overflow-y: auto;
-            margin-top: 18px;
-        }
-        .diary-entry {
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 12px;
-            margin-bottom: 10px;
+        .sync-buttons { display: flex; gap: 6px; }
+        .sync-btn {
+            background: #2a9d8f20;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
             cursor: pointer;
-            border-left: 4px solid #2a9d8f;
-        }
-        .diary-entry-date {
-            font-weight: 600;
-            font-size: 0.8rem;
             color: #2a9d8f;
-            margin-bottom: 6px;
         }
-        .diary-entry-text {
-            font-size: 0.85rem;
+        .icon-btn {
+            background: #e2e8f0;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
         }
         
-        .history-list {
-            max-height: 380px;
-            overflow-y: auto;
-        }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th, td { text-align: left; padding: 10px 6px; border-bottom: 1px solid #e2e8f0; }
-        .delete-btn { background: none; border: none; font-size: 1rem; color: #e76f51; cursor: pointer; }
-        
+        /* モーダルなど */
         .study-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0a0f1a; z-index: 10000; display: flex;
-            justify-content: center; align-items: center; flex-direction: column; gap: 50px;
+            justify-content: center; align-items: center; flex-direction: column; gap: 40px;
         }
         .study-overlay.hidden { display: none; }
         .study-overlay .study-timer {
-            font-size: 5rem; font-weight: 800; font-family: monospace;
+            font-size: 3.5rem; font-weight: 800; font-family: monospace;
             color: #f5b042;
         }
         .study-end-btn {
             background: #e76f51; color: white; border: none;
-            padding: 14px 36px; border-radius: 60px; font-size: 1.2rem; cursor: pointer;
+            padding: 14px 36px; border-radius: 60px; font-size: 1.1rem; cursor: pointer;
         }
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 10001; justify-content: center; align-items: center;
         }
         .modal-content {
-            background: white; border-radius: 28px; max-width: 750px; width: 90%;
-            max-height: 85vh; overflow-y: auto; padding: 28px;
+            background: white; border-radius: 24px; width: 90%; max-width: 500px;
+            max-height: 85vh; overflow-y: auto; padding: 20px;
         }
         body.dark-mode .modal-content { background: #1e293b; }
         .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #1e293b; color: white; padding: 12px 24px; border-radius: 60px;
-            font-size: 0.85rem; z-index: 10002; animation: fadeInOut 2s ease;
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+            background: #1e293b; color: white; padding: 10px 20px; border-radius: 40px;
+            font-size: 0.8rem; z-index: 10002; animation: fadeInOut 2s ease;
         }
         @keyframes fadeInOut {
             0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
@@ -596,67 +506,54 @@
             85% { opacity: 1; transform: translateX(-50%) translateY(0); }
             100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
         }
-        
-        @media (max-width: 1100px) {
-            .three-column-grid { grid-template-columns: 1fr; gap: 20px; }
-            .stats-dashboard-row { grid-template-columns: repeat(2, 1fr); }
-            .app-container { flex-direction: column; }
-            .sidebar { width: auto; margin: 16px; }
-            .main-header { flex-wrap: wrap; justify-content: center; }
-        }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        @media (max-width: 800px) { .stats-grid { grid-template-columns: 1fr; } }
-        .period-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-        .period-btn { padding: 6px 14px; font-size: 0.75rem; background: #e2e8f0; border: none; border-radius: 40px; cursor: pointer; }
+        .danger-btn { background: #e76f51; color: white; border: none; padding: 12px; border-radius: 60px; width: 100%; cursor: pointer; }
+        .settings-group { margin-bottom: 18px; }
+        .settings-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; }
+        .stats-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .period-btn { padding: 6px 12px; font-size: 0.7rem; background: #e2e8f0; border: none; border-radius: 40px; cursor: pointer; }
         .period-btn.active { background: #2a9d8f; color: white; }
-        .nav-btn { background: #e2e8f0; border: none; width: 30px; height: 30px; border-radius: 30px; cursor: pointer; }
-        
-        .danger-btn { background: #e76f51; color: white; border: none; padding: 12px; border-radius: 60px; width: 100%; cursor: pointer; font-size: 0.9rem; }
-        .settings-group { margin-bottom: 20px; }
-        .settings-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
-        
-        .edit-field { margin-bottom: 20px; }
-        .edit-field label { font-size: 0.85rem; margin-bottom: 6px; display: block; }
-        .modal-buttons { display: flex; gap: 16px; justify-content: flex-end; margin-top: 24px; }
-        
         .nav-icon { font-size: 1.2rem; }
         .remove-subject { background: none; border: none; cursor: pointer; color: #e76f51; font-size: 1rem; }
+        
+        @media (max-width: 768px) {
+            body.pc-mode .three-column-grid { gap: 16px; }
+            body.pc-mode .stats-dashboard-row { gap: 12px; }
+        }
     </style>
 </head>
 <body>
     <div id="studyOverlay" class="study-overlay hidden">
-        <div class="study-label" style="font-size:1.3rem;">勉強中</div>
+        <div class="study-label" style="font-size:1.2rem;">勉強中</div>
         <div class="study-timer" id="studyTimerDisplay">00:00:00</div>
         <button class="study-end-btn" id="studyEndBtn">勉強終了</button>
     </div>
 
+    <!-- PCモード用コンテナ -->
     <div class="app-container">
+        <!-- PC用サイドバー -->
         <div class="sidebar">
             <div class="logo-area">
                 <h1>StudyTrack+</h1>
-                <div class="today-total" id="todayTotalHeader">今日: 0分</div>
+                <div class="today-total" id="todayTotalHeaderPC">今日: 0分</div>
             </div>
-            
             <div class="sidebar-nav">
-                <div class="sidebar-nav-item active" data-tab="timer-tab">
+                <div class="sidebar-nav-item active" data-tab-pc="timer-tab-pc">
                     <span class="nav-icon">⏱️</span>
                     <span>タイマー</span>
                 </div>
-                <div class="sidebar-nav-item" data-tab="diary-tab">
+                <div class="sidebar-nav-item" data-tab-pc="diary-tab-pc">
                     <span class="nav-icon">📓</span>
                     <span>日記帳</span>
                 </div>
-                <div class="sidebar-nav-item" data-tab="stats-tab">
+                <div class="sidebar-nav-item" data-tab-pc="stats-tab-pc">
                     <span class="nav-icon">📊</span>
                     <span>統計</span>
                 </div>
-                <div class="sidebar-nav-item" data-tab="history-tab">
+                <div class="sidebar-nav-item" data-tab-pc="history-tab-pc">
                     <span class="nav-icon">📜</span>
                     <span>学習履歴</span>
                 </div>
             </div>
-            
             <div class="sidebar-section">
                 <div class="sidebar-section-title">設定</div>
                 <div style="display:flex; gap:12px; justify-content:center;">
@@ -666,13 +563,15 @@
             </div>
         </div>
 
+        <!-- PC用メインエリア -->
         <div class="main-area">
-            <div class="main-header">
-                <div class="sync-group">
-                    <div id="userInfoArea" class="user-info" style="display: none;"></div>
+            <div class="header">
+                <div></div>
+                <div class="sync-buttons">
+                    <div id="userInfoAreaPC" class="user-info" style="display: none; background:#2a9d8f20; padding:4px 12px; border-radius:40px; font-size:0.7rem;"></div>
                     <button class="sync-btn" id="syncToCloudBtn">アップロード</button>
                     <button class="sync-btn" id="syncFromCloudBtn">ダウンロード</button>
-                    <button class="google-btn" id="googleLoginBtn" style="display:none;">Googleで同期</button>
+                    <button class="sync-btn google-btn" id="googleLoginBtnPC" style="display:none;">Google同期</button>
                 </div>
             </div>
 
@@ -680,191 +579,154 @@
                 <div class="stat-card-small"><div class="stat-value" id="weeklyAvgTime">0分</div><div class="stat-label">今週の平均</div></div>
                 <div class="stat-card-small"><div class="stat-value" id="weeklyTotal">0時間</div><div class="stat-label">今週の合計</div></div>
                 <div class="stat-card-small"><div class="stat-value" id="streakDays">0日</div><div class="stat-label">連続学習日数</div></div>
-                <div class="stat-card-small"><div class="stat-value" id="totalAllMinutes">0</div><div class="stat-label">総勉強時間(分)</div></div>
+                <div class="stat-card-small"><div class="stat-value" id="totalAllMinutes">0</div><div class="stat-label">総勉強時間</div></div>
             </div>
 
-            <div id="timer-tab" class="tab-content" style="display: block;">
+            <!-- PC用タブコンテンツ -->
+            <div id="timer-tab-pc" class="pc-tab-content" style="display:block;">
                 <div class="three-column-grid">
-                    <div class="card">
-                        <div class="card-title">手動記録</div>
-                        <div class="form-group">
-                            <label>科目</label>
-                            <select id="manualSubject"></select>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group"><label>時間(分)</label><input type="number" id="manualMinutes" value="30" min="1"></div>
-                            <div class="form-group"><label>日付</label><input type="date" id="manualDate"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>開始時刻</label>
-                            <input type="time" id="manualStartTime">
-                        </div>
+                    <div class="card"><div class="card-title">手動記録</div>
+                        <div class="form-group"><label>科目</label><select id="manualSubject"></select></div>
+                        <div class="form-row"><div class="form-group"><label>時間(分)</label><input type="number" id="manualMinutes" value="30" min="1"></div><div class="form-group"><label>日付</label><input type="date" id="manualDate"></div></div>
+                        <div class="form-group"><label>開始時刻</label><input type="time" id="manualStartTime"></div>
                         <button class="btn btn-primary" id="addManualRecordBtn" style="width:100%;">記録を追加</button>
-                        
-                        <div class="goal-card">
-                            <div class="flex-between"><span><strong>今日の目標</strong></span><span><input type="number" id="dailyGoalInput" style="width:80px;" value="120"> 分</span></div>
-                            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-                            <div class="flex-between"><span>今日: <span id="todayTotalMin">0</span> 分</span><span>目標まで <span id="remainTarget">0</span> 分</span></div>
-                        </div>
-                        
-                        <div style="margin-top: 16px;">
-                            <div style="font-weight:600; font-size:0.85rem; margin-bottom:10px;">教科を管理</div>
-                            <div class="subject-list" id="subjectList"></div>
-                            <div class="add-subject-form">
-                                <input type="text" id="newSubjectName" placeholder="新しい教科名" maxlength="20">
-                                <button class="btn btn-secondary" id="addSubjectBtn">追加</button>
-                            </div>
-                        </div>
+                        <div class="goal-card"><div class="flex-between"><span><strong>今日の目標</strong></span><span><input type="number" id="dailyGoalInput" style="width:70px;" value="120"> 分</span></div>
+                        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                        <div class="flex-between"><span>今日: <span id="todayTotalMin">0</span> 分</span><span>目標まで <span id="remainTarget">0</span> 分</span></div></div>
+                        <div style="margin-top:14px;"><div style="font-weight:600; font-size:0.8rem; margin-bottom:8px;">教科を管理</div>
+                        <div class="subject-list" id="subjectList"></div>
+                        <div class="add-subject-form"><input type="text" id="newSubjectName" placeholder="新しい教科名" maxlength="20"><button class="btn btn-secondary" id="addSubjectBtn" style="width:auto;">追加</button></div></div>
                     </div>
-
-                    <div class="card">
-                        <div class="card-title">タイマー</div>
-                        <div class="timer-mode">
-                            <button class="mode-btn active" data-mode="countdown">カウントダウン</button>
-                            <button class="mode-btn" data-mode="stopwatch">ストップウォッチ</button>
-                            <button class="mode-btn" data-mode="pomodoro">ポモドーロ</button>
-                        </div>
+                    <div class="card"><div class="card-title">タイマー</div>
+                        <div class="timer-mode"><button class="mode-btn active" data-mode="countdown">カウントダウン</button><button class="mode-btn" data-mode="stopwatch">ストップウォッチ</button><button class="mode-btn" data-mode="pomodoro">ポモドーロ</button></div>
                         <div class="session-status" id="sessionStatusText">勉強時間を設定してスタート</div>
                         <div class="timer-display" id="timerDisplay">25:00</div>
-                        
-                        <div id="normalTimerSettings">
-                            <div class="preset-buttons">
-                                <button class="preset-btn" data-minutes="15">15分</button>
-                                <button class="preset-btn" data-minutes="25">25分</button>
-                                <button class="preset-btn" data-minutes="30">30分</button>
-                                <button class="preset-btn" data-minutes="45">45分</button>
-                                <button class="preset-btn" data-minutes="60">60分</button>
-                            </div>
-                            <div class="timer-input-group">
-                                <input type="number" id="customMinutes" value="25"><span>分</span>
-                                <button class="btn btn-secondary" id="setCustomTimeBtn">設定</button>
-                            </div>
-                        </div>
-                        
-                        <div id="pomodoroSettings" style="display:none">
-                            <div class="preset-buttons">
-                                <button class="preset-btn" data-pomodoro-focus="25" data-pomodoro-break="5">25/5分</button>
-                                <button class="preset-btn" data-pomodoro-focus="50" data-pomodoro-break="10">50/10分</button>
-                            </div>
-                            <div class="timer-input-group">
-                                <input type="number" id="customFocusMinutes" value="25" style="width:60px;"><span>分</span>
-                                <input type="number" id="customBreakMinutes" value="5" style="width:60px;"><span>分</span>
-                                <button class="btn btn-secondary" id="setPomodoroTimeBtn">設定</button>
-                            </div>
-                            <div class="pomodoro-status" id="pomodoroStatus" style="text-align:center; font-size:0.8rem;">集中タイム</div>
-                        </div>
-                        
-                        <div class="timer-buttons">
-                            <button class="btn btn-primary" id="startTimerBtn">スタート</button>
-                            <button class="btn btn-secondary" id="pauseTimerBtn">ポーズ</button>
-                            <button class="btn btn-secondary" id="resetTimerBtn">リセット</button>
-                        </div>
-                        
-                        <div class="inline-row">
-                            <select id="timerSubjectSelect"></select>
-                            <button class="btn btn-primary" id="logTimerBtn">記録</button>
-                        </div>
-                        
-                        <div class="concentration-toggle">
-                            <span>集中モード</span>
-                            <div class="toggle-switch active" id="concentrationToggle"></div>
-                        </div>
+                        <div id="normalTimerSettings"><div class="preset-buttons"><button class="preset-btn" data-minutes="15">15分</button><button class="preset-btn" data-minutes="25">25分</button><button class="preset-btn" data-minutes="30">30分</button><button class="preset-btn" data-minutes="45">45分</button><button class="preset-btn" data-minutes="60">60分</button></div>
+                        <div class="timer-input-group"><input type="number" id="customMinutes" value="25"><span>分</span><button class="btn btn-secondary" id="setCustomTimeBtn" style="width:auto;">設定</button></div></div>
+                        <div id="pomodoroSettings" style="display:none"><div class="preset-buttons"><button class="preset-btn" data-pomodoro-focus="25" data-pomodoro-break="5">25/5分</button><button class="preset-btn" data-pomodoro-focus="50" data-pomodoro-break="10">50/10分</button></div>
+                        <div class="timer-input-group"><input type="number" id="customFocusMinutes" value="25"><span>分</span><input type="number" id="customBreakMinutes" value="5"><span>分</span><button class="btn btn-secondary" id="setPomodoroTimeBtn" style="width:auto;">設定</button></div>
+                        <div class="pomodoro-status" id="pomodoroStatus" style="text-align:center; font-size:0.75rem;">集中タイム</div></div>
+                        <div class="timer-buttons"><button class="btn btn-primary" id="startTimerBtn">スタート</button><button class="btn btn-secondary" id="pauseTimerBtn">ポーズ</button><button class="btn btn-secondary" id="resetTimerBtn">リセット</button></div>
+                        <div class="inline-row"><select id="timerSubjectSelect"></select><button class="btn btn-primary" id="logTimerBtn" style="width:auto;">記録</button></div>
+                        <div class="concentration-toggle"><span>集中モード</span><div class="toggle-switch active" id="concentrationToggle"></div></div>
                     </div>
-
-                    <div class="card">
-                        <div class="card-title">参考書管理</div>
+                    <div class="card"><div class="card-title">参考書管理</div>
                         <div class="book-list" id="bookList"></div>
-                        <div class="add-book-form">
-                            <input type="text" id="newBookName" placeholder="参考書名" maxlength="30">
-                            <input type="number" id="newBookTotal" placeholder="総ページ数" value="200" style="width:100px;">
-                            <button class="btn btn-primary" id="addBookBtn">追加</button>
-                        </div>
+                        <div class="add-book-form"><input type="text" id="newBookName" placeholder="参考書名" maxlength="30"><input type="number" id="newBookTotal" placeholder="総ページ数" value="200" style="width:80px;"><button class="btn btn-primary" id="addBookBtn" style="width:auto;">追加</button></div>
                     </div>
                 </div>
             </div>
-
-            <div id="diary-tab" class="tab-content" style="display: none;">
-                <div class="card">
-                    <div class="card-title">日記帳</div>
-                    <div class="diary-editor">
-                        <input type="date" id="diaryDate">
-                        <textarea id="diaryNote" rows="3" placeholder="今日の振り返りを書こう..."></textarea>
-                        <div class="diary-buttons">
-                            <button class="btn btn-primary" id="saveDiaryBtn">保存</button>
-                            <button class="btn btn-secondary" id="deleteDiaryBtn">削除</button>
-                        </div>
-                    </div>
-                    <div class="diary-list">
-                        <div style="font-weight:600; font-size:0.85rem; margin:16px 0 10px;">過去の日記</div>
-                        <div id="diaryEntriesList"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="stats-tab" class="tab-content" style="display: none;">
-                <div class="card">
-                    <div class="card-title">統計ダッシュボード</div>
-                    <div class="stats-grid">
-                        <div>
-                            <div class="period-nav">
-                                <div><button class="period-btn active" data-stats-period="week">週間</button><button class="period-btn" data-stats-period="month">月間</button></div>
-                                <div><button id="statsPrevPeriodBtn" class="nav-btn">◀</button><span id="statsPeriodRange"></span><button id="statsNextPeriodBtn" class="nav-btn">▶</button></div>
-                            </div>
-                            <canvas id="statsDailyChart" style="height:250px;"></canvas>
-                        </div>
-                        <div><div style="font-weight:600; margin-bottom:12px;">科目別学習割合</div><canvas id="statsSubjectChart"></canvas><div id="subjectStatsNumbers" style="font-size:0.8rem; margin-top:12px;"></div></div>
-                        <div><div style="font-weight:600; margin-bottom:12px;">参考書の進捗推移</div><select id="bookProgressSelect" style="margin-bottom:12px;"></select><canvas id="bookProgressChart"></canvas></div>
-                        <div><div style="font-weight:600; margin-bottom:12px;">参考書 総進捗率</div><div id="bookOverallProgressList"></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="history-tab" class="tab-content" style="display: none;">
-                <div class="card">
-                    <div class="flex-between">
-                        <div class="card-title">学習履歴</div>
-                        <button id="clearAllHistoryBtn" class="btn btn-secondary">全削除</button>
-                    </div>
-                    <div class="history-list">
-                        <table style="width:100%;">
-                            <thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th>}</thead>
-                            <tbody id="historyTbody"></tbody>
-                        </table>
-                    </div>
-                    <div class="total-time" style="margin-top:16px; text-align:center; font-size:0.85rem;">
-                        総勉強時間: <span id="totalAllMinutes2">0</span> 分 → <span id="totalAllTime">0時間0分</span>
-                    </div>
-                </div>
-            </div>
+            <div id="diary-tab-pc" class="pc-tab-content" style="display:none;"><div class="card"><div class="card-title">日記帳</div><div class="diary-editor"><input type="date" id="diaryDate"><textarea id="diaryNote" rows="3" placeholder="今日の振り返りを書こう..."></textarea><div class="diary-buttons"><button class="btn btn-primary" id="saveDiaryBtn">保存</button><button class="btn btn-secondary" id="deleteDiaryBtn">削除</button></div></div><div class="diary-list"><div style="font-weight:600; font-size:0.8rem; margin-bottom:10px;">過去の日記</div><div id="diaryEntriesList"></div></div></div></div>
+            <div id="stats-tab-pc" class="pc-tab-content" style="display:none;"><div class="card"><div class="card-title">統計ダッシュボード</div><div class="stats-grid"><div><div style="display:flex; gap:8px; margin-bottom:10px;"><button class="period-btn active" data-stats-period="week">週間</button><button class="period-btn" data-stats-period="month">月間</button></div><canvas id="statsDailyChart" style="height:200px;"></canvas></div><div><div style="font-weight:600; margin-bottom:8px;">科目別学習割合</div><canvas id="statsSubjectChart" style="height:180px;"></canvas><div id="subjectStatsNumbers" style="font-size:0.7rem; margin-top:8px;"></div></div><div><div style="font-weight:600; margin-bottom:8px;">参考書の進捗推移</div><select id="bookProgressSelect" style="margin-bottom:8px;"></select><canvas id="bookProgressChart" style="height:180px;"></canvas></div><div><div style="font-weight:600; margin-bottom:8px;">参考書 総進捗率</div><div id="bookOverallProgressList"></div></div></div></div></div>
+            <div id="history-tab-pc" class="pc-tab-content" style="display:none;"><div class="card"><div class="flex-between"><div class="card-title">学習履歴</div><button id="clearAllHistoryBtn" class="btn btn-secondary" style="width:auto; padding:6px 14px;">全削除</button></div><div class="history-list"><table style="width:100%;"><thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th></tr></thead><tbody id="historyTbody"></tbody></table></div><div class="total-time" style="margin-top:12px; text-align:center; font-size:0.75rem;">総勉強時間: <span id="totalAllMinutes2">0</span> 分 → <span id="totalAllTime">0時間0分</span></div></div></div>
         </div>
     </div>
 
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <h3 style="font-size:1.2rem; margin-bottom:20px;">設定</h3>
-            <div class="settings-group"><label>文字サイズ</label><select id="textSizeSelect"><option value="10px">10px</option><option value="12px">12px</option><option value="14px" selected>14px</option><option value="16px">16px</option><option value="18px">18px</option></select></div>
-            <div class="settings-group"><label>ダークモード</label><input type="checkbox" id="darkModeCheckbox"></div>
-            <div class="settings-group"><label>通知音</label><input type="checkbox" id="alarmSoundCheckbox" checked></div>
-            <div class="settings-group"><label>データバックアップ</label><button id="exportDataBtn" class="btn btn-secondary">データ書き出し</button><button id="importDataBtn" class="btn btn-secondary" style="margin-top:10px;">データ読み込み</button><input type="file" id="fileInput" accept=".json" style="display:none;"></div>
-            <div class="settings-group"><label>全データ削除</label><button id="clearAllDataBtn" class="danger-btn">全ての学習記録・参考書・日記を削除</button></div>
-            <div class="settings-group"><label>設定リセット</label><button id="resetSettingsBtn" class="btn btn-secondary">すべての設定を初期値に戻す</button></div>
-            <button id="closeSettingsBtn" class="btn btn-primary" style="margin-top:20px;">閉じる</button>
-        </div>
-    </div>
-
-    <div id="editPastDataModal" class="modal">
-        <div class="modal-content">
-            <h3 id="editModalTitle" style="font-size:1.1rem;">過去のデータを編集</h3>
-            <div class="edit-field"><label>日付</label><input type="date" id="editDate" readonly disabled></div>
-            <div class="edit-field"><label>累計ページ数</label><input type="number" id="editCumulative" min="0" step="1"></div>
-            <div class="modal-buttons">
-                <button class="btn btn-secondary" id="cancelEditBtn">キャンセル</button>
-                <button class="btn btn-primary" id="saveEditBtn">保存</button>
+    <!-- スマホモード用コンテンツ -->
+    <div class="main-content mobile-only">
+        <div class="header">
+            <h1>StudyTrack+</h1>
+            <div class="today-total" id="todayTotalHeaderMobile">今日: 0分</div>
+            <div class="sync-buttons">
+                <button class="sync-btn" id="syncToCloudBtnMobile">↑</button>
+                <button class="sync-btn" id="syncFromCloudBtnMobile">↓</button>
+            </div>
+            <div class="header-icons">
+                <button class="icon-btn" id="hamburgerBtnMobile">⚙️</button>
+                <button class="icon-btn" id="darkModeToggleMobile">🌙</button>
             </div>
         </div>
+
+        <div class="stats-row" style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:16px;">
+            <div class="stat-card"><div class="stat-value" id="weeklyAvgTimeMobile">0分</div><div class="stat-label">今週の平均</div></div>
+            <div class="stat-card"><div class="stat-value" id="weeklyTotalMobile">0時間</div><div class="stat-label">今週の合計</div></div>
+            <div class="stat-card"><div class="stat-value" id="streakDaysMobile">0日</div><div class="stat-label">連続学習日数</div></div>
+            <div class="stat-card"><div class="stat-value" id="totalAllMinutesMobile">0</div><div class="stat-label">総勉強時間</div></div>
+        </div>
+
+        <div id="timer-tab-mobile" class="tab-content active">
+            <div class="card"><div class="card-title">手動記録</div>
+                <div class="form-group"><label>科目</label><select id="manualSubjectMobile"></select></div>
+                <div class="form-row"><div class="form-group"><label>時間(分)</label><input type="number" id="manualMinutesMobile" value="30" min="1"></div><div class="form-group"><label>日付</label><input type="date" id="manualDateMobile"></div></div>
+                <div class="form-group"><label>開始時刻</label><input type="time" id="manualStartTimeMobile"></div>
+                <button class="btn btn-primary" id="addManualRecordBtnMobile" style="width:100%;">記録を追加</button>
+                <div class="goal-card"><div class="flex-between"><span><strong>今日の目標</strong></span><span><input type="number" id="dailyGoalInputMobile" style="width:70px;" value="120"> 分</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progressFillMobile"></div></div>
+                <div class="flex-between"><span>今日: <span id="todayTotalMinMobile">0</span> 分</span><span>目標まで <span id="remainTargetMobile">0</span> 分</span></div></div>
+                <div style="margin-top:14px;"><div style="font-weight:600; font-size:0.8rem; margin-bottom:8px;">教科を管理</div>
+                <div class="subject-list" id="subjectListMobile"></div>
+                <div class="add-subject-form"><input type="text" id="newSubjectNameMobile" placeholder="新しい教科名" maxlength="20"><button class="btn btn-secondary" id="addSubjectBtnMobile" style="width:auto;">追加</button></div></div>
+            </div>
+            <div class="card"><div class="card-title">タイマー</div>
+                <div class="timer-mode"><button class="mode-btn active" data-mode="countdown">カウントダウン</button><button class="mode-btn" data-mode="stopwatch">ストップウォッチ</button><button class="mode-btn" data-mode="pomodoro">ポモドーロ</button></div>
+                <div class="session-status" id="sessionStatusTextMobile">勉強時間を設定してスタート</div>
+                <div class="timer-display" id="timerDisplayMobile">25:00</div>
+                <div id="normalTimerSettingsMobile"><div class="preset-buttons"><button class="preset-btn" data-minutes="15">15分</button><button class="preset-btn" data-minutes="25">25分</button><button class="preset-btn" data-minutes="30">30分</button><button class="preset-btn" data-minutes="45">45分</button><button class="preset-btn" data-minutes="60">60分</button></div>
+                <div class="timer-input-group"><input type="number" id="customMinutesMobile" value="25"><span>分</span><button class="btn btn-secondary" id="setCustomTimeBtnMobile" style="width:auto;">設定</button></div></div>
+                <div id="pomodoroSettingsMobile" style="display:none"><div class="preset-buttons"><button class="preset-btn" data-pomodoro-focus="25" data-pomodoro-break="5">25/5分</button><button class="preset-btn" data-pomodoro-focus="50" data-pomodoro-break="10">50/10分</button></div>
+                <div class="timer-input-group"><input type="number" id="customFocusMinutesMobile" value="25"><span>分</span><input type="number" id="customBreakMinutesMobile" value="5"><span>分</span><button class="btn btn-secondary" id="setPomodoroTimeBtnMobile" style="width:auto;">設定</button></div>
+                <div class="pomodoro-status" id="pomodoroStatusMobile" style="text-align:center; font-size:0.75rem;">集中タイム</div></div>
+                <div class="timer-buttons"><button class="btn btn-primary" id="startTimerBtnMobile">スタート</button><button class="btn btn-secondary" id="pauseTimerBtnMobile">ポーズ</button><button class="btn btn-secondary" id="resetTimerBtnMobile">リセット</button></div>
+                <div class="inline-row"><select id="timerSubjectSelectMobile"></select><button class="btn btn-primary" id="logTimerBtnMobile" style="width:auto;">記録</button></div>
+                <div class="concentration-toggle"><span>集中モード</span><div class="toggle-switch active" id="concentrationToggleMobile"></div></div>
+            </div>
+            <div class="card"><div class="card-title">参考書管理</div>
+                <div class="book-list" id="bookListMobile"></div>
+                <div class="add-book-form"><input type="text" id="newBookNameMobile" placeholder="参考書名" maxlength="30"><input type="number" id="newBookTotalMobile" placeholder="総ページ数" value="200" style="width:80px;"><button class="btn btn-primary" id="addBookBtnMobile" style="width:auto;">追加</button></div>
+            </div>
+        </div>
+        <div id="diary-tab-mobile" class="tab-content"><div class="card"><div class="card-title">日記帳</div><div class="diary-editor"><input type="date" id="diaryDateMobile"><textarea id="diaryNoteMobile" rows="3" placeholder="今日の振り返りを書こう..."></textarea><div class="diary-buttons"><button class="btn btn-primary" id="saveDiaryBtnMobile">保存</button><button class="btn btn-secondary" id="deleteDiaryBtnMobile">削除</button></div></div><div class="diary-list"><div style="font-weight:600; font-size:0.8rem; margin-bottom:10px;">過去の日記</div><div id="diaryEntriesListMobile"></div></div></div></div>
+        <div id="stats-tab-mobile" class="tab-content"><div class="card"><div class="card-title">統計ダッシュボード</div><div class="stats-grid"><div><div style="display:flex; gap:8px; margin-bottom:10px;"><button class="period-btn active" data-stats-period="week">週間</button><button class="period-btn" data-stats-period="month">月間</button></div><canvas id="statsDailyChartMobile" style="height:200px;"></canvas></div><div><div style="font-weight:600; margin-bottom:8px;">科目別学習割合</div><canvas id="statsSubjectChartMobile" style="height:180px;"></canvas><div id="subjectStatsNumbersMobile" style="font-size:0.7rem; margin-top:8px;"></div></div><div><div style="font-weight:600; margin-bottom:8px;">参考書の進捗推移</div><select id="bookProgressSelectMobile" style="margin-bottom:8px;"></select><canvas id="bookProgressChartMobile" style="height:180px;"></canvas></div><div><div style="font-weight:600; margin-bottom:8px;">参考書 総進捗率</div><div id="bookOverallProgressListMobile"></div></div></div></div></div>
+        <div id="history-tab-mobile" class="tab-content"><div class="card"><div class="flex-between"><div class="card-title">学習履歴</div><button id="clearAllHistoryBtnMobile" class="btn btn-secondary" style="width:auto; padding:6px 14px;">全削除</button></div><div class="history-list"><table style="width:100%;"><thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th></thead><tbody id="historyTbodyMobile"></tbody>}</table></div><div class="total-time" style="margin-top:12px; text-align:center; font-size:0.75rem;">総勉強時間: <span id="totalAllMinutes2Mobile">0</span> 分 → <span id="totalAllTimeMobile">0時間0分</span></div></div></div>
     </div>
+
+    <!-- 下部ナビゲーション（スマホ用） -->
+    <div class="bottom-nav mobile-only">
+        <button class="nav-item active" data-tab-mobile="timer-tab-mobile"><span class="nav-icon">⏱️</span><span>タイマー</span></button>
+        <button class="nav-item" data-tab-mobile="diary-tab-mobile"><span class="nav-icon">📓</span><span>日記</span></button>
+        <button class="nav-item" data-tab-mobile="stats-tab-mobile"><span class="nav-icon">📊</span><span>統計</span></button>
+        <button class="nav-item" data-tab-mobile="history-tab-mobile"><span class="nav-icon">📜</span><span>履歴</span></button>
+    </div>
+
+    <!-- 設定モーダル -->
+    <div id="settingsModal" class="modal"><div class="modal-content"><h3 style="font-size:1.1rem; margin-bottom:16px;">設定</h3>
+        <div class="settings-group"><label>文字サイズ</label><select id="textSizeSelect"><option value="10px">10px</option><option value="12px">12px</option><option value="14px" selected>14px</option><option value="16px">16px</option><option value="18px">18px</option></select></div>
+        <div class="settings-group"><label>ダークモード</label><input type="checkbox" id="darkModeCheckbox"></div>
+        <div class="settings-group"><label>通知音</label><input type="checkbox" id="alarmSoundCheckbox" checked></div>
+        <div class="settings-group"><label>データバックアップ</label><button id="exportDataBtn" class="btn btn-secondary">データ書き出し</button><button id="importDataBtn" class="btn btn-secondary" style="margin-top:8px;">データ読み込み</button><input type="file" id="fileInput" accept=".json" style="display:none;"></div>
+        <div class="settings-group"><label>全データ削除</label><button id="clearAllDataBtn" class="danger-btn">全ての学習記録・参考書・日記を削除</button></div>
+        <div class="settings-group"><label>設定リセット</label><button id="resetSettingsBtn" class="btn btn-secondary">すべての設定を初期値に戻す</button></div>
+        <button id="closeSettingsBtn" class="btn btn-primary" style="margin-top:16px;">閉じる</button>
+    </div></div>
+
+    <div id="editPastDataModal" class="modal"><div class="modal-content"><h3 id="editModalTitle" style="font-size:1rem;">過去のデータを編集</h3>
+        <div class="edit-field" style="margin-bottom:16px;"><label>日付</label><input type="date" id="editDate" readonly disabled></div>
+        <div class="edit-field" style="margin-bottom:16px;"><label>累計ページ数</label><input type="number" id="editCumulative" min="0" step="1"></div>
+        <div class="modal-buttons" style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn btn-secondary" id="cancelEditBtn">キャンセル</button><button class="btn btn-primary" id="saveEditBtn">保存</button></div>
+    </div></div>
+
+    <div id="userInfoArea" style="display:none;"></div>
+    <div id="googleLoginBtn" style="display:none;"></div>
 
     <script type="module">
+        // スマホ判定（ユーザーエージェント）
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // 端末に応じてレイアウト切り替え
+        function applyDeviceLayout() {
+            if (isMobileDevice()) {
+                document.body.classList.add('mobile-mode');
+                document.body.classList.remove('pc-mode');
+                // スマホ用の初期化は後で
+            } else {
+                document.body.classList.add('pc-mode');
+                document.body.classList.remove('mobile-mode');
+            }
+        }
+        applyDeviceLayout();
+
         const firebaseConfig = {
             apiKey: "AIzaSyC_NUKXsLJFdj5X6W2YbXWbwOkheuUhevA",
             authDomain: "studytrackplus.firebaseapp.com",
@@ -914,6 +776,7 @@
         const studyEndBtn = document.getElementById('studyEndBtn');
         
         let statsDailyChart, statsSubjectChart, bookProgressChart;
+        let statsDailyChartMobile, statsSubjectChartMobile, bookProgressChartMobile;
         let statsPeriod = "week", statsPeriodOffset = 0;
         let currentEditBookId = null, currentEditDate = null;
         if(!window.bookDisplayMonths) window.bookDisplayMonths = {};
@@ -953,7 +816,7 @@
         function saveBooks() { localStorage.setItem(STORAGE_KEYS.books, JSON.stringify(books)); }
         function saveCumulativeProgress() { localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(cumulativeProgress)); }
         
-        function addStudyRecord(subject, minutes, dateStr, startTime) {
+        function addStudyRecord(subject, minutes, dateStr, startTime, isMobile = false) {
             if(!subject || minutes <= 0) { alert("勉強時間は1分以上"); return false; }
             if(!dateStr) dateStr = getTodayLocalStr();
             if(!startTime) startTime = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
@@ -968,45 +831,80 @@
         function clearAllHistory() { if(confirm("全ての学習履歴を削除しますか？")) { sessions = []; saveAllData(); refreshAllUI(); syncToCloud(); } }
         
         function renderHistoryTable() {
-            const tbody = document.getElementById('historyTbody'); if(!tbody) return;
-            if(sessions.length === 0) { tbody.innerHTML = '<tr><td colspan="5">記録がありません</td></tr>'; return; }
-            const sorted = [...sessions].sort((a,b) => new Date(b.dateStr + "T" + b.startTime) - new Date(a.dateStr + "T" + a.startTime));
-            tbody.innerHTML = "";
-            for(let s of sorted) {
-                const row = tbody.insertRow();
-                row.insertCell(0).textContent = s.dateStr;
-                row.insertCell(1).textContent = s.startTime;
-                row.insertCell(2).textContent = s.subject;
-                row.insertCell(3).textContent = formatMinutesToHours(s.minutes);
-                const btn = document.createElement('button');
-                btn.textContent = '削除';
-                btn.className = 'delete-btn';
-                btn.onclick = () => deleteSessionById(s.id);
-                row.insertCell(4).appendChild(btn);
+            // PC用
+            const tbody = document.getElementById('historyTbody');
+            if(tbody) {
+                if(sessions.length === 0) { tbody.innerHTML = '<tr><td colspan="5">記録がありません</td></tr>'; }
+                else {
+                    const sorted = [...sessions].sort((a,b) => new Date(b.dateStr + "T" + b.startTime) - new Date(a.dateStr + "T" + a.startTime));
+                    tbody.innerHTML = "";
+                    for(let s of sorted) {
+                        const row = tbody.insertRow();
+                        row.insertCell(0).textContent = s.dateStr;
+                        row.insertCell(1).textContent = s.startTime;
+                        row.insertCell(2).textContent = s.subject;
+                        row.insertCell(3).textContent = formatMinutesToHours(s.minutes);
+                        const btn = document.createElement('button');
+                        btn.textContent = '削除';
+                        btn.className = 'delete-btn';
+                        btn.onclick = () => deleteSessionById(s.id);
+                        row.insertCell(4).appendChild(btn);
+                    }
+                }
+            }
+            // スマホ用
+            const tbodyMobile = document.getElementById('historyTbodyMobile');
+            if(tbodyMobile) {
+                if(sessions.length === 0) { tbodyMobile.innerHTML = '<tr><td colspan="5">記録がありません</td></td>'; }
+                else {
+                    const sorted = [...sessions].sort((a,b) => new Date(b.dateStr + "T" + b.startTime) - new Date(a.dateStr + "T" + a.startTime));
+                    tbodyMobile.innerHTML = "";
+                    for(let s of sorted) {
+                        const row = tbodyMobile.insertRow();
+                        row.insertCell(0).textContent = s.dateStr;
+                        row.insertCell(1).textContent = s.startTime;
+                        row.insertCell(2).textContent = s.subject;
+                        row.insertCell(3).textContent = formatMinutesToHours(s.minutes);
+                        const btn = document.createElement('button');
+                        btn.textContent = '削除';
+                        btn.className = 'delete-btn';
+                        btn.onclick = () => deleteSessionById(s.id);
+                        row.insertCell(4).appendChild(btn);
+                    }
+                }
             }
         }
         
         function updateSubjectSelects() {
+            // PC用
             const timerSel = document.getElementById('timerSubjectSelect');
             const manualSel = document.getElementById('manualSubject');
             if(timerSel) timerSel.innerHTML = customSubjects.map(s => `<option value="${s}">${s}</option>`).join('');
             if(manualSel) manualSel.innerHTML = customSubjects.map(s => `<option value="${s}">${s}</option>`).join('');
+            // スマホ用
+            const timerSelMobile = document.getElementById('timerSubjectSelectMobile');
+            const manualSelMobile = document.getElementById('manualSubjectMobile');
+            if(timerSelMobile) timerSelMobile.innerHTML = customSubjects.map(s => `<option value="${s}">${s}</option>`).join('');
+            if(manualSelMobile) manualSelMobile.innerHTML = customSubjects.map(s => `<option value="${s}">${s}</option>`).join('');
         }
         
         function renderSubjectTags() {
-            const list = document.getElementById('subjectList'); if(!list) return;
-            list.innerHTML = customSubjects.map(sub => `<span class="subject-tag"><span>${sub}</span><button class="remove-subject" data-subject="${sub}">×</button></span>`).join('');
+            const list = document.getElementById('subjectList');
+            if(list) list.innerHTML = customSubjects.map(sub => `<span class="subject-tag"><span>${sub}</span><button class="remove-subject" data-subject="${sub}" style="background:none;border:none;cursor:pointer;color:#e76f51;font-size:1rem;">×</button></span>`).join('');
+            const listMobile = document.getElementById('subjectListMobile');
+            if(listMobile) listMobile.innerHTML = customSubjects.map(sub => `<span class="subject-tag"><span>${sub}</span><button class="remove-subject" data-subject="${sub}" style="background:none;border:none;cursor:pointer;color:#e76f51;font-size:1rem;">×</button></span>`).join('');
             document.querySelectorAll('.remove-subject').forEach(btn => { btn.onclick = () => removeSubject(btn.dataset.subject); });
         }
         
         function addSubject() {
-            const newName = document.getElementById('newSubjectName').value.trim();
+            const newName = document.getElementById('newSubjectName').value.trim() || document.getElementById('newSubjectNameMobile')?.value.trim();
             if(!newName) { showToast("教科名を入力してください", true); return; }
             if(customSubjects.includes(newName)) { showToast("既に存在する教科です", true); return; }
             customSubjects.push(newName);
             subjectColorMap.set(newName, defaultColors[subjectColorMap.size % defaultColors.length]);
             saveAllData();
-            document.getElementById('newSubjectName').value = '';
+            if(document.getElementById('newSubjectName')) document.getElementById('newSubjectName').value = '';
+            if(document.getElementById('newSubjectNameMobile')) document.getElementById('newSubjectNameMobile').value = '';
             showToast(`教科「${newName}」を追加しました`);
             refreshAllUI();
             syncToCloud();
@@ -1028,52 +926,56 @@
         
         function saveDiaryToLocal() { localStorage.setItem(STORAGE_KEYS.diary, JSON.stringify(diaryNotes)); }
         function saveCurrentDiary() {
-            const dateStr = document.getElementById('diaryDate').value;
+            const dateStr = document.getElementById('diaryDate')?.value || document.getElementById('diaryDateMobile')?.value;
             if(!dateStr) { showToast("日付を選択してください", true); return; }
             if(dateStr !== getTodayLocalStr()) { showToast("過去の日記は編集できません", true); return; }
-            diaryNotes[dateStr] = document.getElementById('diaryNote').value;
+            const note = document.getElementById('diaryNote')?.value || document.getElementById('diaryNoteMobile')?.value;
+            diaryNotes[dateStr] = note;
             saveDiaryToLocal();
             renderDiaryList();
             showToast(`${dateStr} の日記を保存しました`);
             syncToCloud();
         }
         function deleteCurrentDiary() {
-            const dateStr = document.getElementById('diaryDate').value;
+            const dateStr = document.getElementById('diaryDate')?.value || document.getElementById('diaryDateMobile')?.value;
             if(!dateStr) return;
             if(dateStr !== getTodayLocalStr()) { showToast("過去の日記は削除できません", true); return; }
-            if(diaryNotes[dateStr]) { delete diaryNotes[dateStr]; saveDiaryToLocal(); document.getElementById('diaryNote').value = ''; renderDiaryList(); showToast(`${dateStr} の日記を削除しました`); syncToCloud(); }
+            if(diaryNotes[dateStr]) { delete diaryNotes[dateStr]; saveDiaryToLocal(); if(document.getElementById('diaryNote')) document.getElementById('diaryNote').value = ''; if(document.getElementById('diaryNoteMobile')) document.getElementById('diaryNoteMobile').value = ''; renderDiaryList(); showToast(`${dateStr} の日記を削除しました`); syncToCloud(); }
         }
         function renderDiaryList() {
-            const container = document.getElementById('diaryEntriesList'); if(!container) return;
+            const container = document.getElementById('diaryEntriesList');
+            const containerMobile = document.getElementById('diaryEntriesListMobile');
             const entries = Object.entries(diaryNotes).filter(([_,t]) => t && t.trim()).sort((a,b) => b[0].localeCompare(a[0]));
-            if(entries.length === 0) { container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:20px;">日記がまだありません。</div>'; return; }
-            container.innerHTML = entries.map(([date, text]) => `<div class="diary-entry" data-date="${date}"><div class="diary-entry-date">${date}</div><div class="diary-entry-text">${escapeHtml(text.substring(0,80))}${text.length>80?'...':''}</div></div>`).join('');
-            document.querySelectorAll('.diary-entry').forEach(el => { el.addEventListener('click', () => { const d = el.dataset.date; document.getElementById('diaryDate').value = d; loadDiaryForDate(d); }); });
+            const html = entries.length === 0 ? '<div style="text-align:center;color:#94a3b8;padding:16px;">日記がまだありません。</div>' : entries.map(([date, text]) => `<div class="diary-entry" data-date="${date}"><div style="font-weight:600; font-size:0.7rem; color:#2a9d8f;">${date}</div><div style="font-size:0.75rem;">${escapeHtml(text.substring(0,60))}${text.length>60?'...':''}</div></div>`).join('');
+            if(container) container.innerHTML = html;
+            if(containerMobile) containerMobile.innerHTML = html;
+            document.querySelectorAll('.diary-entry').forEach(el => { el.addEventListener('click', () => { const d = el.dataset.date; if(document.getElementById('diaryDate')) document.getElementById('diaryDate').value = d; if(document.getElementById('diaryDateMobile')) document.getElementById('diaryDateMobile').value = d; loadDiaryForDate(d); }); });
         }
         function loadDiaryForDate(dateStr) {
-            const ta = document.getElementById('diaryNote'); if(!ta) return;
-            ta.value = diaryNotes[dateStr] || '';
+            const ta = document.getElementById('diaryNote');
+            const taMobile = document.getElementById('diaryNoteMobile');
             const isToday = (dateStr === getTodayLocalStr());
-            ta.readOnly = !isToday;
-            document.getElementById('saveDiaryBtn').disabled = !isToday;
-            document.getElementById('deleteDiaryBtn').disabled = !isToday;
+            if(ta) { ta.value = diaryNotes[dateStr] || ''; ta.readOnly = !isToday; document.getElementById('saveDiaryBtn').disabled = !isToday; document.getElementById('deleteDiaryBtn').disabled = !isToday; }
+            if(taMobile) { taMobile.value = diaryNotes[dateStr] || ''; taMobile.readOnly = !isToday; if(document.getElementById('saveDiaryBtnMobile')) document.getElementById('saveDiaryBtnMobile').disabled = !isToday; if(document.getElementById('deleteDiaryBtnMobile')) document.getElementById('deleteDiaryBtnMobile').disabled = !isToday; }
         }
         
         function addBook() {
-            const name = document.getElementById('newBookName').value.trim();
-            const total = parseInt(document.getElementById('newBookTotal').value);
+            const name = document.getElementById('newBookName')?.value.trim() || document.getElementById('newBookNameMobile')?.value.trim();
+            const total = parseInt(document.getElementById('newBookTotal')?.value || document.getElementById('newBookTotalMobile')?.value);
             if(!name) { showToast("参考書名を入力してください", true); return; }
             if(isNaN(total) || total <= 0) { showToast("総ページ数を正しく入力してください", true); return; }
             books.push({ id: Date.now(), name, totalPages: total, dailyTarget: 0 });
             saveBooks();
             renderBooks();
-            document.getElementById('newBookName').value = '';
-            document.getElementById('newBookTotal').value = '200';
+            if(document.getElementById('newBookName')) document.getElementById('newBookName').value = '';
+            if(document.getElementById('newBookNameMobile')) document.getElementById('newBookNameMobile').value = '';
+            if(document.getElementById('newBookTotal')) document.getElementById('newBookTotal').value = '200';
+            if(document.getElementById('newBookTotalMobile')) document.getElementById('newBookTotalMobile').value = '200';
             showToast(`参考書「${name}」を追加しました`);
             syncToCloud();
         }
         
-        function renderCalendarForBook(bookId) {
+        function renderCalendarForBook(bookId, containerId) {
             const book = books.find(b => b.id === bookId);
             if(!book) return;
             if(!window.bookDisplayMonths[bookId]) {
@@ -1099,8 +1001,8 @@
                 const statusClass = isAchieved ? 'achieved' : '';
                 const progressText = todayProgress > 0 ? `${todayProgress}` : '-';
                 return `<div class="calendar-day ${statusClass}" data-book="${bookId}" data-date="${dateStr}">
-                    <span class="calendar-day-date">${dateStr.slice(5)}</span>
-                    <span class="calendar-day-info">累計:${cumulative} / ${progressText}</span>
+                    <span>${dateStr.slice(5)}</span>
+                    <span>累計:${cumulative} / ${progressText}</span>
                 </div>`;
             }).join('');
             document.querySelectorAll(`.calendar-day[data-book="${bookId}"]`).forEach(day => {
@@ -1147,8 +1049,14 @@
         }
         
         function renderBooks() {
-            const container = document.getElementById('bookList'); if(!container) return;
-            if(books.length === 0) { container.innerHTML = '<div style="text-align:center;padding:24px;color:#94a3b8;">参考書が登録されていません</div>'; return; }
+            const container = document.getElementById('bookList');
+            const containerMobile = document.getElementById('bookListMobile');
+            if(books.length === 0) {
+                const emptyHtml = '<div style="text-align:center;padding:20px;color:#94a3b8;">参考書が登録されていません</div>';
+                if(container) container.innerHTML = emptyHtml;
+                if(containerMobile) containerMobile.innerHTML = emptyHtml;
+                return;
+            }
             const today = getTodayLocalStr();
             const sortedBooks = [...books].sort((a, b) => {
                 const aCompleted = getCumulative(a.id, today) >= a.totalPages;
@@ -1159,7 +1067,7 @@
                 if(aDaily !== bDaily) return aDaily ? 1 : -1;
                 return a.id - b.id;
             });
-            container.innerHTML = sortedBooks.map(book => {
+            const html = sortedBooks.map(book => {
                 const total = book.totalPages;
                 const current = getCumulative(book.id, today);
                 const percent = total > 0 ? (current / total) * 100 : 0;
@@ -1169,31 +1077,33 @@
                     <div class="book-header" data-id="${book.id}">
                         <div class="book-title">${escapeHtml(book.name)}</div>
                         <div class="book-progress-bar"><div class="book-progress-fill" style="width: ${percent}%;"></div></div>
-                        <div class="book-summary">${current} / ${book.totalPages} (${percent.toFixed(0)}%)</div>
+                        <div class="book-summary">${current} / ${book.totalPages}</div>
                     </div>
                     <div class="book-detail" style="display:none;" data-detail="${book.id}">
-                        <div style="display:flex; gap:10px; align-items:center; margin-bottom:12px;">
-                            <span style="font-size:0.8rem;">1日目標:</span>
+                        <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px; flex-wrap:wrap;">
+                            <span style="font-size:0.75rem;">1日目標:</span>
                             <input type="number" class="daily-target-input" data-id="${book.id}" value="${book.dailyTarget || 0}" style="width:70px; padding:8px;">
-                            <button class="btn btn-secondary set-target-btn" data-id="${book.id}" style="padding:6px 14px;">設定</button>
+                            <button class="btn btn-secondary set-target-btn" data-id="${book.id}" style="width:auto; padding:8px 12px;">設定</button>
                         </div>
-                        <div style="display:flex; gap:10px; align-items:center; margin-bottom:12px;">
-                            <span style="font-size:0.8rem;">累計:</span>
+                        <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px; flex-wrap:wrap;">
+                            <span style="font-size:0.75rem;">累計:</span>
                             <input type="number" class="cumulative-input" data-id="${book.id}" value="${current}" style="width:80px; padding:8px;">
-                            <button class="btn btn-primary save-cumulative-btn" data-id="${book.id}" data-date="${today}" style="padding:6px 14px;">保存</button>
+                            <button class="btn btn-primary save-cumulative-btn" data-id="${book.id}" data-date="${today}" style="width:auto; padding:8px 12px;">保存</button>
                         </div>
                         <div class="calendar-control">
-                            <button class="prev-month-btn" data-id="${book.id}">◀</button>
+                            <button class="prev-month-btn" data-id="${book.id}" style="background:#e2e8f0; border:none; width:30px; height:30px; border-radius:30px;">◀</button>
                             <span class="calendar-month-label" data-id="${book.id}"></span>
-                            <button class="next-month-btn" data-id="${book.id}">▶</button>
+                            <button class="next-month-btn" data-id="${book.id}" style="background:#e2e8f0; border:none; width:30px; height:30px; border-radius:30px;">▶</button>
                         </div>
                         <div class="calendar-grid" data-calendar="${book.id}"></div>
                         <div style="margin-top:12px;">
-                            <button class="btn btn-secondary delete-book" data-id="${book.id}" style="padding:6px 14px;">削除</button>
+                            <button class="btn btn-secondary delete-book" data-id="${book.id}" style="width:auto; padding:8px 12px;">削除</button>
                         </div>
                     </div>
                 </div>`;
             }).join('');
+            if(container) container.innerHTML = html;
+            if(containerMobile) containerMobile.innerHTML = html;
             
             document.querySelectorAll('.book-header').forEach(header => {
                 header.addEventListener('click', () => {
@@ -1282,23 +1192,40 @@
         
         function updateStatsAndGoal() {
             const { todayTotal, grandTotal } = computeStats();
-            document.getElementById('todayTotalMin').textContent = todayTotal;
-            document.getElementById('totalAllMinutes').textContent = grandTotal;
-            document.getElementById('totalAllMinutes2').textContent = grandTotal;
-            document.getElementById('totalAllTime').textContent = formatMinutesToHours(grandTotal);
-            document.getElementById('todayTotalHeader').textContent = `今日: ${formatMinutesToHoursShort(todayTotal)}`;
-            const goal = parseInt(document.getElementById('dailyGoalInput').value) || 0;
-            document.getElementById('progressFill').style.width = `${goal > 0 ? Math.min(100, (todayTotal/goal)*100) : 0}%`;
-            document.getElementById('remainTarget').textContent = Math.max(0, goal - todayTotal);
+            // PC用
+            if(document.getElementById('todayTotalMin')) document.getElementById('todayTotalMin').textContent = todayTotal;
+            if(document.getElementById('totalAllMinutes')) document.getElementById('totalAllMinutes').textContent = grandTotal;
+            if(document.getElementById('totalAllMinutes2')) document.getElementById('totalAllMinutes2').textContent = grandTotal;
+            if(document.getElementById('totalAllTime')) document.getElementById('totalAllTime').textContent = formatMinutesToHours(grandTotal);
+            if(document.getElementById('todayTotalHeaderPC')) document.getElementById('todayTotalHeaderPC').textContent = `今日: ${formatMinutesToHoursShort(todayTotal)}`;
+            // スマホ用
+            if(document.getElementById('todayTotalMinMobile')) document.getElementById('todayTotalMinMobile').textContent = todayTotal;
+            if(document.getElementById('totalAllMinutesMobile')) document.getElementById('totalAllMinutesMobile').textContent = grandTotal;
+            if(document.getElementById('totalAllMinutes2Mobile')) document.getElementById('totalAllMinutes2Mobile').textContent = grandTotal;
+            if(document.getElementById('totalAllTimeMobile')) document.getElementById('totalAllTimeMobile').textContent = formatMinutesToHours(grandTotal);
+            if(document.getElementById('todayTotalHeaderMobile')) document.getElementById('todayTotalHeaderMobile').textContent = `今日: ${formatMinutesToHoursShort(todayTotal)}`;
+            
+            const goal = parseInt(document.getElementById('dailyGoalInput')?.value || document.getElementById('dailyGoalInputMobile')?.value || 120);
+            const percent = goal > 0 ? Math.min(100, (todayTotal/goal)*100) : 0;
+            if(document.getElementById('progressFill')) document.getElementById('progressFill').style.width = `${percent}%`;
+            if(document.getElementById('progressFillMobile')) document.getElementById('progressFillMobile').style.width = `${percent}%`;
+            if(document.getElementById('remainTarget')) document.getElementById('remainTarget').textContent = Math.max(0, goal - todayTotal);
+            if(document.getElementById('remainTargetMobile')) document.getElementById('remainTargetMobile').textContent = Math.max(0, goal - todayTotal);
+            
             const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay() + (weekStart.getDay()===0?-6:1));
             weekStart.setHours(0,0,0,0);
             let weeklyTotal = 0, weeklyDays = new Set();
             for(let s of sessions) if(parseLocalDate(s.dateStr) >= weekStart) { weeklyTotal += s.minutes; weeklyDays.add(s.dateStr); }
-            document.getElementById('weeklyAvgTime').textContent = formatMinutesToHoursShort(weeklyDays.size ? Math.round(weeklyTotal/weeklyDays.size) : 0);
-            document.getElementById('weeklyTotal').textContent = formatMinutesToHoursShort(weeklyTotal);
+            const weeklyAvg = weeklyDays.size ? Math.round(weeklyTotal/weeklyDays.size) : 0;
+            if(document.getElementById('weeklyAvgTime')) document.getElementById('weeklyAvgTime').textContent = formatMinutesToHoursShort(weeklyAvg);
+            if(document.getElementById('weeklyTotal')) document.getElementById('weeklyTotal').textContent = formatMinutesToHoursShort(weeklyTotal);
+            if(document.getElementById('weeklyAvgTimeMobile')) document.getElementById('weeklyAvgTimeMobile').textContent = formatMinutesToHoursShort(weeklyAvg);
+            if(document.getElementById('weeklyTotalMobile')) document.getElementById('weeklyTotalMobile').textContent = formatMinutesToHoursShort(weeklyTotal);
+            
             let streak = 0, checkDate = new Date();
             for(let i=0; i<365; i++) { if(sessions.some(s => s.dateStr === getLocalDateStr(checkDate))) streak++; else break; checkDate.setDate(checkDate.getDate()-1); }
-            document.getElementById('streakDays').textContent = streak + '日';
+            if(document.getElementById('streakDays')) document.getElementById('streakDays').textContent = streak + '日';
+            if(document.getElementById('streakDaysMobile')) document.getElementById('streakDaysMobile').textContent = streak + '日';
         }
         
         function getPeriodRange(period, offset) {
@@ -1323,38 +1250,73 @@
                 labels.push(dateStr.slice(5));
                 let total = 0;
                 sessions.forEach(s => { if(s.dateStr === dateStr) total += s.minutes / 60; });
-                data.push(total);
+                data.push(Math.min(10, total));
                 cur.setDate(cur.getDate() + 1);
             }
-            if(statsDailyChart) statsDailyChart.destroy();
+            // PC用
             const ctx = document.getElementById('statsDailyChart')?.getContext('2d');
-            if(ctx) statsDailyChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間(時間)', data, backgroundColor: '#2a9d8f' }] }, options: { scales: { y: { max: 10, title: { display: true, text: '時間' } } } } });
-            document.getElementById('statsPeriodRange').textContent = `${startDate.toLocaleDateString()} 〜 ${endDate.toLocaleDateString()}`;
+            if(ctx) {
+                if(statsDailyChart) statsDailyChart.destroy();
+                statsDailyChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間(時間)', data, backgroundColor: '#2a9d8f' }] }, options: { scales: { y: { max: 10, beginAtZero: true, title: { display: true, text: '時間' } } } } });
+            }
+            // スマホ用
+            const ctxMobile = document.getElementById('statsDailyChartMobile')?.getContext('2d');
+            if(ctxMobile) {
+                if(statsDailyChartMobile) statsDailyChartMobile.destroy();
+                statsDailyChartMobile = new Chart(ctxMobile, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間(時間)', data, backgroundColor: '#2a9d8f' }] }, options: { scales: { y: { max: 10, beginAtZero: true } } } });
+            }
         }
         
         function updateStatsSubjectChart() {
             const subjectMap = new Map();
             sessions.forEach(s => subjectMap.set(s.subject, (subjectMap.get(s.subject) || 0) + s.minutes/60));
-            if(statsSubjectChart) statsSubjectChart.destroy();
+            // PC用
             const ctx = document.getElementById('statsSubjectChart')?.getContext('2d');
-            if(ctx && subjectMap.size) statsSubjectChart = new Chart(ctx, { type: 'pie', data: { labels: Array.from(subjectMap.keys()), datasets: [{ data: Array.from(subjectMap.values()), backgroundColor: Array.from(subjectMap.keys()).map(s=>getColorForSubject(s)) }] } });
-            document.getElementById('subjectStatsNumbers').innerHTML = Array.from(subjectMap.entries()).map(([k,v]) => `<div style="margin:4px 0;">${k}: ${v.toFixed(1)}時間</div>`).join('');
+            if(ctx && subjectMap.size) {
+                if(statsSubjectChart) statsSubjectChart.destroy();
+                statsSubjectChart = new Chart(ctx, { type: 'pie', data: { labels: Array.from(subjectMap.keys()), datasets: [{ data: Array.from(subjectMap.values()), backgroundColor: Array.from(subjectMap.keys()).map(s=>getColorForSubject(s)) }] } });
+                document.getElementById('subjectStatsNumbers').innerHTML = Array.from(subjectMap.entries()).map(([k,v]) => `<div>${k}: ${v.toFixed(1)}時間</div>`).join('');
+            }
+            // スマホ用
+            const ctxMobile = document.getElementById('statsSubjectChartMobile')?.getContext('2d');
+            if(ctxMobile && subjectMap.size) {
+                if(statsSubjectChartMobile) statsSubjectChartMobile.destroy();
+                statsSubjectChartMobile = new Chart(ctxMobile, { type: 'pie', data: { labels: Array.from(subjectMap.keys()), datasets: [{ data: Array.from(subjectMap.values()), backgroundColor: Array.from(subjectMap.keys()).map(s=>getColorForSubject(s)) }] } });
+                document.getElementById('subjectStatsNumbersMobile').innerHTML = Array.from(subjectMap.entries()).map(([k,v]) => `<div>${k}: ${v.toFixed(1)}時間</div>`).join('');
+            }
         }
         
         function updateBookProgressChart() {
             const bookId = parseInt(document.getElementById('bookProgressSelect')?.value);
             const book = books.find(b => b.id === bookId);
-            if(!book) return;
-            const labels = [], data = [];
-            for(let i=29; i>=0; i--) { const d = new Date(); d.setDate(d.getDate() - i); const ds = getLocalDateStr(d); labels.push(ds.slice(5)); data.push(getCumulative(book.id, ds) - getPreviousCumulative(book.id, ds)); }
-            if(bookProgressChart) bookProgressChart.destroy();
-            const ctx = document.getElementById('bookProgressChart')?.getContext('2d');
-            if(ctx) bookProgressChart = new Chart(ctx, { type: 'line', data: { labels, datasets: [{ label: `${book.name} 進捗(ページ)`, data, borderColor: '#2a9d8f' }] } });
+            if(book) {
+                const labels = [], data = [];
+                for(let i=29; i>=0; i--) { const d = new Date(); d.setDate(d.getDate() - i); const ds = getLocalDateStr(d); labels.push(ds.slice(5)); data.push(getCumulative(book.id, ds) - getPreviousCumulative(book.id, ds)); }
+                const ctx = document.getElementById('bookProgressChart')?.getContext('2d');
+                if(ctx) {
+                    if(bookProgressChart) bookProgressChart.destroy();
+                    bookProgressChart = new Chart(ctx, { type: 'line', data: { labels, datasets: [{ label: `${book.name} 進捗(ページ)`, data, borderColor: '#2a9d8f' }] } });
+                }
+            }
+            // スマホ用
+            const bookIdMobile = parseInt(document.getElementById('bookProgressSelectMobile')?.value);
+            const bookMobile = books.find(b => b.id === bookIdMobile);
+            if(bookMobile) {
+                const labels = [], data = [];
+                for(let i=29; i>=0; i--) { const d = new Date(); d.setDate(d.getDate() - i); const ds = getLocalDateStr(d); labels.push(ds.slice(5)); data.push(getCumulative(bookMobile.id, ds) - getPreviousCumulative(bookMobile.id, ds)); }
+                const ctxMobile = document.getElementById('bookProgressChartMobile')?.getContext('2d');
+                if(ctxMobile) {
+                    if(bookProgressChartMobile) bookProgressChartMobile.destroy();
+                    bookProgressChartMobile = new Chart(ctxMobile, { type: 'line', data: { labels, datasets: [{ label: `${bookMobile.name} 進捗(ページ)`, data, borderColor: '#2a9d8f' }] } });
+                }
+            }
         }
         
         function updateBookOverallList() {
             const today = getTodayLocalStr();
-            document.getElementById('bookOverallProgressList').innerHTML = books.map(book => { const current = getCumulative(book.id, today); const percent = book.totalPages > 0 ? (current/book.totalPages)*100 : 0; return `<div style="margin-bottom:10px;"><div style="font-size:0.8rem;">${escapeHtml(book.name)}: ${current}/${book.totalPages} (${percent.toFixed(0)}%)</div><div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div></div>`; }).join('');
+            const html = books.map(book => { const current = getCumulative(book.id, today); const percent = book.totalPages > 0 ? (current/book.totalPages)*100 : 0; return `<div style="margin-bottom:8px;"><div style="font-size:0.75rem;">${escapeHtml(book.name)}: ${current}/${book.totalPages} (${percent.toFixed(0)}%)</div><div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div></div>`; }).join('');
+            if(document.getElementById('bookOverallProgressList')) document.getElementById('bookOverallProgressList').innerHTML = html;
+            if(document.getElementById('bookOverallProgressListMobile')) document.getElementById('bookOverallProgressListMobile').innerHTML = html;
         }
         
         function refreshAllUI() {
@@ -1362,6 +1324,8 @@
             updateSubjectSelects(); renderSubjectTags(); updateStatsDailyChart(); updateStatsSubjectChart(); updateBookOverallList();
             const bookSelect = document.getElementById('bookProgressSelect');
             if(bookSelect) { bookSelect.innerHTML = books.map(b => `<option value="${b.id}">${escapeHtml(b.name)}</option>`).join(''); bookSelect.onchange = updateBookProgressChart; if(books.length) updateBookProgressChart(); }
+            const bookSelectMobile = document.getElementById('bookProgressSelectMobile');
+            if(bookSelectMobile) { bookSelectMobile.innerHTML = books.map(b => `<option value="${b.id}">${escapeHtml(b.name)}</option>`).join(''); bookSelectMobile.onchange = updateBookProgressChart; }
         }
         
         function saveAllData() {
@@ -1370,7 +1334,7 @@
             localStorage.setItem(STORAGE_KEYS.diary, JSON.stringify(diaryNotes));
             localStorage.setItem(STORAGE_KEYS.books, JSON.stringify(books));
             localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(cumulativeProgress));
-            localStorage.setItem(STORAGE_KEYS.goal, document.getElementById('dailyGoalInput').value);
+            localStorage.setItem(STORAGE_KEYS.goal, document.getElementById('dailyGoalInput')?.value || document.getElementById('dailyGoalInputMobile')?.value || '120');
         }
         
         function loadAllData() {
@@ -1385,7 +1349,7 @@
             const savedProgress = localStorage.getItem(STORAGE_KEYS.progress);
             if(savedProgress) { try { cumulativeProgress = JSON.parse(savedProgress); } catch(e){} }
             const savedGoal = localStorage.getItem(STORAGE_KEYS.goal);
-            if(savedGoal) document.getElementById('dailyGoalInput').value = savedGoal;
+            if(savedGoal) { if(document.getElementById('dailyGoalInput')) document.getElementById('dailyGoalInput').value = savedGoal; if(document.getElementById('dailyGoalInputMobile')) document.getElementById('dailyGoalInputMobile').value = savedGoal; }
             if(!savedSessions) {
                 const today = getTodayLocalStr();
                 sessions = [{ id: Date.now()+1, dateStr: today, startTime: "10:30", subject: "数学", minutes: 60 }, { id: Date.now()+2, dateStr: today, startTime: "14:15", subject: "英語", minutes: 45 }];
@@ -1395,22 +1359,22 @@
             customSubjects.forEach((sub, idx) => subjectColorMap.set(sub, defaultColors[idx % defaultColors.length]));
         }
         
+        // タイマー関連（簡略化 - 主要機能のみ）
         function playShortAlarm() { if(!alarmEnabled) return; try { if(!audioContext) audioContext = new AudioContext(); const osc = audioContext.createOscillator(); const gain = audioContext.createGain(); osc.connect(gain); gain.connect(audioContext.destination); osc.frequency.value = 880; gain.gain.value = 0.3; osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.3); osc.stop(audioContext.currentTime + 0.3); } catch(e){} }
-        
         function getRemainingSeconds() {
             if(!isTimerRunning) return (timerMode === "countdown" || timerMode === "pomodoro") ? (timerPausedTime ?? targetSeconds) : (timerPausedTime ?? 0);
             const elapsed = (new Date() - timerStartTime) / 1000;
             return (timerMode === "countdown" || timerMode === "pomodoro") ? Math.max(0, targetSeconds - elapsed) : elapsed;
         }
-        
         function updateTimerDisplay() {
             const sec = Math.floor(getRemainingSeconds());
             const mins = Math.floor(sec / 60);
             const remainingSecs = sec % 60;
-            document.getElementById('timerDisplay').textContent = `${mins.toString().padStart(2,'0')}:${remainingSecs.toString().padStart(2,'0')}`;
-            if(studyOverlay && !studyOverlay.classList.contains('hidden')) document.getElementById('studyTimerDisplay').textContent = `${mins.toString().padStart(2,'0')}:${remainingSecs.toString().padStart(2,'0')}`;
+            const displayText = `${mins.toString().padStart(2,'0')}:${remainingSecs.toString().padStart(2,'0')}`;
+            if(document.getElementById('timerDisplay')) document.getElementById('timerDisplay').textContent = displayText;
+            if(document.getElementById('timerDisplayMobile')) document.getElementById('timerDisplayMobile').textContent = displayText;
+            if(studyOverlay && !studyOverlay.classList.contains('hidden')) document.getElementById('studyTimerDisplay').textContent = displayText;
         }
-        
         function startTimer() {
             if(isTimerRunning) return;
             const cur = getRemainingSeconds();
@@ -1430,108 +1394,124 @@
                     pauseTimer();
                     if(timerMode === "pomodoro") {
                         if(isPomodoroFocus) {
-                            addStudyRecord(document.getElementById('timerSubjectSelect').value, pomodoroFocusSeconds/60, getTodayLocalStr(), new Date().toLocaleTimeString());
+                            const subject = document.getElementById('timerSubjectSelect')?.value || document.getElementById('timerSubjectSelectMobile')?.value;
+                            addStudyRecord(subject, pomodoroFocusSeconds/60, getTodayLocalStr(), new Date().toLocaleTimeString());
                             playShortAlarm();
                             isPomodoroFocus = false;
                             targetSeconds = pomodoroBreakSeconds;
                             timerPausedTime = targetSeconds;
-                            document.getElementById('pomodoroStatus').innerHTML = '休憩タイム';
-                            document.getElementById('sessionStatusText').innerHTML = '休憩中';
+                            if(document.getElementById('pomodoroStatus')) document.getElementById('pomodoroStatus').innerHTML = '休憩タイム';
+                            if(document.getElementById('pomodoroStatusMobile')) document.getElementById('pomodoroStatusMobile').innerHTML = '休憩タイム';
+                            if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = '休憩中';
+                            if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = '休憩中';
                             startTimer();
                         } else {
                             pomodoroCycleCount++;
                             isPomodoroFocus = true;
                             targetSeconds = pomodoroFocusSeconds;
                             timerPausedTime = targetSeconds;
-                            document.getElementById('pomodoroStatus').innerHTML = '集中タイム';
-                            document.getElementById('sessionStatusText').innerHTML = '集中タイム';
+                            if(document.getElementById('pomodoroStatus')) document.getElementById('pomodoroStatus').innerHTML = '集中タイム';
+                            if(document.getElementById('pomodoroStatusMobile')) document.getElementById('pomodoroStatusMobile').innerHTML = '集中タイム';
+                            if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = '集中タイム';
+                            if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = '集中タイム';
                             startTimer();
                         }
                     } else {
-                        addStudyRecord(document.getElementById('timerSubjectSelect').value, targetSeconds/60, getTodayLocalStr(), new Date().toLocaleTimeString());
+                        const subject = document.getElementById('timerSubjectSelect')?.value || document.getElementById('timerSubjectSelectMobile')?.value;
+                        addStudyRecord(subject, targetSeconds/60, getTodayLocalStr(), new Date().toLocaleTimeString());
                         playShortAlarm();
                         resetTimer();
-                        document.getElementById('sessionStatusText').innerHTML = '勉強完了';
+                        if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = '勉強完了';
+                        if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = '勉強完了';
                     }
                     studyOverlay.classList.add('hidden');
                 }
             }, 100);
         }
-        
         function pauseTimer() { if(!isTimerRunning) return; timerPausedTime = getRemainingSeconds(); if(timerMode === "countdown" || timerMode === "pomodoro") targetSeconds = timerPausedTime; isTimerRunning = false; if(timerInterval) { clearInterval(timerInterval); timerInterval = null; } studyOverlay.classList.add('hidden'); }
-        
         function resetTimer() {
             pauseTimer();
-            if(timerMode === "countdown") { targetSeconds = 25*60; timerPausedTime = targetSeconds; }
-            else if(timerMode === "pomodoro") { isPomodoroFocus = true; pomodoroCycleCount = 0; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; document.getElementById('pomodoroStatus').innerHTML = '集中タイム'; document.getElementById('sessionStatusText').innerHTML = 'ポモドーロ準備完了'; }
-            else { timerPausedTime = 0; targetSeconds = 0; document.getElementById('sessionStatusText').innerHTML = timerMode === 'countdown' ? 'カウントダウン待機' : 'ストップウォッチ待機'; }
+            if(timerMode === "countdown") { targetSeconds = 25*60; timerPausedTime = targetSeconds; if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = 'カウントダウン待機'; if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = 'カウントダウン待機'; }
+            else if(timerMode === "pomodoro") { isPomodoroFocus = true; pomodoroCycleCount = 0; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; if(document.getElementById('pomodoroStatus')) document.getElementById('pomodoroStatus').innerHTML = '集中タイム'; if(document.getElementById('pomodoroStatusMobile')) document.getElementById('pomodoroStatusMobile').innerHTML = '集中タイム'; if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = 'ポモドーロ準備完了'; if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = 'ポモドーロ準備完了'; }
+            else { timerPausedTime = 0; targetSeconds = 0; if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = 'ストップウォッチ待機'; if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = 'ストップウォッチ待機'; }
             updateTimerDisplay(); autoLogTriggered = false; studyOverlay.classList.add('hidden');
         }
-        
         function manualStudyEnd() {
             if(!isTimerRunning) return;
             const elapsed = (timerMode === "countdown" || timerMode === "pomodoro") ? targetSeconds - getRemainingSeconds() : getRemainingSeconds();
             if(elapsed <= 0) { showToast("勉強時間が0分です", true); return; }
-            addStudyRecord(document.getElementById('timerSubjectSelect').value, elapsed/60, getTodayLocalStr(), new Date().toLocaleTimeString());
+            const subject = document.getElementById('timerSubjectSelect')?.value || document.getElementById('timerSubjectSelectMobile')?.value;
+            addStudyRecord(subject, elapsed/60, getTodayLocalStr(), new Date().toLocaleTimeString());
             resetTimer(); studyOverlay.classList.add('hidden'); showToast("記録しました");
         }
-        
-        function setCountdownTarget(minutes) { if(timerMode === "countdown") { targetSeconds = minutes*60; timerPausedTime = targetSeconds; updateTimerDisplay(); document.getElementById('sessionStatusText').innerHTML = `${minutes}分に設定`; } }
-        function setPomodoroTimes(focus, brk) { pomodoroFocusSeconds = focus*60; pomodoroBreakSeconds = brk*60; if(timerMode === "pomodoro") { isPomodoroFocus = true; pomodoroCycleCount = 0; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; updateTimerDisplay(); document.getElementById('pomodoroStatus').innerHTML = '集中タイム'; document.getElementById('sessionStatusText').innerHTML = 'ポモドーロ準備完了'; } }
-        
+        function setCountdownTarget(minutes) { if(timerMode === "countdown") { targetSeconds = minutes*60; timerPausedTime = targetSeconds; updateTimerDisplay(); if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = `${minutes}分に設定`; if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = `${minutes}分に設定`; } }
+        function setPomodoroTimes(focus, brk) { pomodoroFocusSeconds = focus*60; pomodoroBreakSeconds = brk*60; if(timerMode === "pomodoro") { isPomodoroFocus = true; pomodoroCycleCount = 0; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; updateTimerDisplay(); if(document.getElementById('pomodoroStatus')) document.getElementById('pomodoroStatus').innerHTML = '集中タイム'; if(document.getElementById('pomodoroStatusMobile')) document.getElementById('pomodoroStatusMobile').innerHTML = '集中タイム'; if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = 'ポモドーロ準備完了'; if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = 'ポモドーロ準備完了'; } }
         function switchMode(mode) {
             pauseTimer(); timerMode = mode;
-            document.getElementById('normalTimerSettings').style.display = mode === "pomodoro" ? 'none' : 'block';
-            document.getElementById('pomodoroSettings').style.display = mode === "pomodoro" ? 'block' : 'none';
-            if(mode === "countdown") { if(targetSeconds === 0) targetSeconds = 25*60; timerPausedTime = targetSeconds; document.getElementById('sessionStatusText').innerHTML = 'カウントダウン待機'; }
-            else if(mode === "stopwatch") { timerPausedTime = 0; targetSeconds = 0; document.getElementById('sessionStatusText').innerHTML = 'ストップウォッチ待機'; }
-            else { isPomodoroFocus = true; pomodoroCycleCount = 0; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; document.getElementById('sessionStatusText').innerHTML = 'ポモドーロ準備完了'; }
+            const normalSettings = document.getElementById('normalTimerSettings');
+            const pomodoroSettings = document.getElementById('pomodoroSettings');
+            const normalSettingsMobile = document.getElementById('normalTimerSettingsMobile');
+            const pomodoroSettingsMobile = document.getElementById('pomodoroSettingsMobile');
+            if(normalSettings) normalSettings.style.display = mode === "pomodoro" ? 'none' : 'block';
+            if(pomodoroSettings) pomodoroSettings.style.display = mode === "pomodoro" ? 'block' : 'none';
+            if(normalSettingsMobile) normalSettingsMobile.style.display = mode === "pomodoro" ? 'none' : 'block';
+            if(pomodoroSettingsMobile) pomodoroSettingsMobile.style.display = mode === "pomodoro" ? 'block' : 'none';
+            if(mode === "countdown") { if(targetSeconds === 0) targetSeconds = 25*60; timerPausedTime = targetSeconds; if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = 'カウントダウン待機'; if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = 'カウントダウン待機'; }
+            else if(mode === "stopwatch") { timerPausedTime = 0; targetSeconds = 0; if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = 'ストップウォッチ待機'; if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = 'ストップウォッチ待機'; }
+            else { isPomodoroFocus = true; pomodoroCycleCount = 0; targetSeconds = pomodoroFocusSeconds; timerPausedTime = targetSeconds; if(document.getElementById('sessionStatusText')) document.getElementById('sessionStatusText').innerHTML = 'ポモドーロ準備完了'; if(document.getElementById('sessionStatusTextMobile')) document.getElementById('sessionStatusTextMobile').innerHTML = 'ポモドーロ準備完了'; }
             updateTimerDisplay();
             document.querySelectorAll('.mode-btn').forEach(btn => { if(btn.dataset.mode === mode) btn.classList.add('active'); else btn.classList.remove('active'); });
         }
-        
         function logCurrentTimer() {
             if(timerMode === "pomodoro") { showToast("ポモドーロは自動記録されます", true); return; }
             const elapsed = timerMode === "countdown" ? targetSeconds - getRemainingSeconds() : getRemainingSeconds();
             if(elapsed <= 0) { showToast("タイマーをスタートしてください", true); return; }
-            addStudyRecord(document.getElementById('timerSubjectSelect').value, Math.max(1, Math.round(elapsed/60)), getTodayLocalStr(), new Date().toLocaleTimeString());
+            const subject = document.getElementById('timerSubjectSelect')?.value || document.getElementById('timerSubjectSelectMobile')?.value;
+            addStudyRecord(subject, Math.max(1, Math.round(elapsed/60)), getTodayLocalStr(), new Date().toLocaleTimeString());
             resetTimer(); showToast("記録しました");
         }
-        
         function handleManualAdd() {
-            const mins = parseInt(document.getElementById('manualMinutes').value);
+            const mins = parseInt(document.getElementById('manualMinutes')?.value || document.getElementById('manualMinutesMobile')?.value);
             if(isNaN(mins) || mins <= 0) { alert("1分以上を入力してください"); return; }
-            addStudyRecord(document.getElementById('manualSubject').value, mins, document.getElementById('manualDate').value, document.getElementById('manualStartTime').value);
-            document.getElementById('manualMinutes').value = "30";
+            const subject = document.getElementById('manualSubject')?.value || document.getElementById('manualSubjectMobile')?.value;
+            const date = document.getElementById('manualDate')?.value || document.getElementById('manualDateMobile')?.value;
+            const startTime = document.getElementById('manualStartTime')?.value || document.getElementById('manualStartTimeMobile')?.value;
+            addStudyRecord(subject, mins, date, startTime);
+            if(document.getElementById('manualMinutes')) document.getElementById('manualMinutes').value = "30";
+            if(document.getElementById('manualMinutesMobile')) document.getElementById('manualMinutesMobile').value = "30";
         }
         
+        // 設定関連
         let settings = { textSize: '14px', darkMode: false, alarmSound: true, concentrationMode: true };
         function loadSettings() { const stored = localStorage.getItem('app_settings'); if(stored) { try { settings = JSON.parse(stored); } catch(e){} } applySettings(); }
         function saveSettings() { localStorage.setItem('app_settings', JSON.stringify(settings)); }
         function applySettings() {
             document.body.classList.remove('text-10px','text-12px','text-14px','text-16px','text-18px');
             document.body.classList.add(`text-${settings.textSize}`);
-            document.getElementById('textSizeSelect').value = settings.textSize;
+            if(document.getElementById('textSizeSelect')) document.getElementById('textSizeSelect').value = settings.textSize;
             if(settings.darkMode) document.body.classList.add('dark-mode'); else document.body.classList.remove('dark-mode');
-            document.getElementById('darkModeCheckbox').checked = settings.darkMode;
-            document.getElementById('darkModeToggle').textContent = settings.darkMode ? '☀️' : '🌙';
+            if(document.getElementById('darkModeCheckbox')) document.getElementById('darkModeCheckbox').checked = settings.darkMode;
+            if(document.getElementById('darkModeToggle')) document.getElementById('darkModeToggle').textContent = settings.darkMode ? '☀️' : '🌙';
+            if(document.getElementById('darkModeToggleMobile')) document.getElementById('darkModeToggleMobile').textContent = settings.darkMode ? '☀️' : '🌙';
             alarmEnabled = settings.alarmSound;
-            document.getElementById('alarmSoundCheckbox').checked = settings.alarmSound;
+            if(document.getElementById('alarmSoundCheckbox')) document.getElementById('alarmSoundCheckbox').checked = settings.alarmSound;
             concentrationMode = settings.concentrationMode;
-            document.getElementById('concentrationToggle').classList.toggle('active', concentrationMode);
+            const toggle = document.getElementById('concentrationToggle');
+            const toggleMobile = document.getElementById('concentrationToggleMobile');
+            if(toggle) toggle.classList.toggle('active', concentrationMode);
+            if(toggleMobile) toggleMobile.classList.toggle('active', concentrationMode);
         }
         function setDarkMode(enabled) { settings.darkMode = enabled; saveSettings(); applySettings(); }
         function setAlarmSound(enabled) { settings.alarmSound = enabled; saveSettings(); applySettings(); }
         function setConcentrationMode(enabled) { settings.concentrationMode = enabled; concentrationMode = enabled; saveSettings(); applySettings(); if(!enabled) studyOverlay.classList.add('hidden'); }
         
         function exportData() {
-            const data = { sessions, customSubjects, diaryNotes, books, cumulativeProgress, goal: document.getElementById('dailyGoalInput').value };
+            const data = { sessions, customSubjects, diaryNotes, books, cumulativeProgress, goal: document.getElementById('dailyGoalInput')?.value || document.getElementById('dailyGoalInputMobile')?.value };
             const a = document.createElement('a');
             a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], {type: 'application/json'}));
             a.download = `studytrack_backup_${new Date().toISOString().slice(0,19)}.json`;
             a.click(); showToast("データを書き出しました");
         }
-        
         function importData(file) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -1542,14 +1522,13 @@
                     if(data.diaryNotes) diaryNotes = data.diaryNotes;
                     if(data.books) books = data.books;
                     if(data.cumulativeProgress) cumulativeProgress = data.cumulativeProgress;
-                    if(data.goal) document.getElementById('dailyGoalInput').value = data.goal;
+                    if(data.goal) { if(document.getElementById('dailyGoalInput')) document.getElementById('dailyGoalInput').value = data.goal; if(document.getElementById('dailyGoalInputMobile')) document.getElementById('dailyGoalInputMobile').value = data.goal; }
                     saveAllData(); refreshAllUI(); syncToCloud();
                     showToast("データを読み込みました");
                 } catch(err) { alert("ファイルの読み込みに失敗しました"); }
             };
             reader.readAsText(file);
         }
-        
         function clearAllData() {
             if(confirm("全てのデータを削除しますか？")) {
                 sessions = []; customSubjects = ["数学","英語","理科","社会","国語","プログラミング","その他"];
@@ -1558,7 +1537,6 @@
                 showToast("全てのデータを削除しました");
             }
         }
-        
         function resetSettings() {
             settings = { textSize: '14px', darkMode: false, alarmSound: true, concentrationMode: true };
             concentrationMode = true;
@@ -1566,20 +1544,20 @@
             showToast("設定をリセットしました");
         }
         
+        // Firebase同期（簡略化）
         async function syncToCloud() {
             if(!currentUser) { showToast("認証待機中...", true); return; }
             try {
                 isLocalUpdating = true;
                 await setDoc(doc(db, 'studyData', currentUser.uid), {
                     sessions, customSubjects, diaryNotes, books, cumulativeProgress,
-                    dailyGoal: document.getElementById('dailyGoalInput').value,
+                    dailyGoal: document.getElementById('dailyGoalInput')?.value || document.getElementById('dailyGoalInputMobile')?.value,
                     lastSync: new Date().toISOString()
                 });
                 showToast('クラウドに同期しました');
             } catch(e) { console.error(e); showToast('同期失敗: ' + e.message, true); }
             finally { isLocalUpdating = false; }
         }
-        
         async function syncFromCloud() {
             if(!currentUser) { showToast("認証待機中...", true); return; }
             try {
@@ -1588,13 +1566,12 @@
                     const data = docSnap.data();
                     sessions = data.sessions || []; customSubjects = data.customSubjects || ["数学","英語","理科","社会","国語","プログラミング","その他"];
                     diaryNotes = data.diaryNotes || {}; books = data.books || []; cumulativeProgress = data.cumulativeProgress || {};
-                    if(data.dailyGoal) document.getElementById('dailyGoalInput').value = data.dailyGoal;
+                    if(data.dailyGoal) { if(document.getElementById('dailyGoalInput')) document.getElementById('dailyGoalInput').value = data.dailyGoal; if(document.getElementById('dailyGoalInputMobile')) document.getElementById('dailyGoalInputMobile').value = data.dailyGoal; }
                     saveAllData(); refreshAllUI();
                     showToast('クラウドから復元しました');
                 } else showToast('クラウドにデータがありません', true);
             } catch(e) { console.error(e); showToast('復元失敗: ' + e.message, true); }
         }
-        
         function startRealtimeSync() {
             if(unsubscribe) unsubscribe();
             if(!currentUser) return;
@@ -1605,22 +1582,20 @@
                 }
             });
         }
-        
         function updateUserUI() {
-            const userInfoArea = document.getElementById('userInfoArea');
-            const googleBtn = document.getElementById('googleLoginBtn');
-            if(!userInfoArea) return;
             if(currentUser && !currentUser.isAnonymous) {
-                userInfoArea.style.display = 'flex';
-                userInfoArea.innerHTML = `<span>${currentUser.email ? currentUser.email.split('@')[0] : 'Google'}</span><button class="logout-btn" id="logoutBtn" style="background:none;border:none;cursor:pointer;font-size:1.1rem;">×</button>`;
-                document.getElementById('logoutBtn')?.addEventListener('click', () => { signOut(auth); location.reload(); });
-                if(googleBtn) googleBtn.style.display = 'none';
+                const userName = currentUser.email ? currentUser.email.split('@')[0] : 'Google';
+                if(document.getElementById('userInfoAreaPC')) {
+                    document.getElementById('userInfoAreaPC').style.display = 'flex';
+                    document.getElementById('userInfoAreaPC').innerHTML = `<span>${userName}</span><button id="logoutBtn" style="background:none;border:none;cursor:pointer;">×</button>`;
+                    document.getElementById('logoutBtn')?.addEventListener('click', () => { signOut(auth); location.reload(); });
+                }
+                if(document.getElementById('googleLoginBtnPC')) document.getElementById('googleLoginBtnPC').style.display = 'none';
             } else {
-                userInfoArea.style.display = 'none';
-                if(googleBtn) googleBtn.style.display = 'block';
+                if(document.getElementById('userInfoAreaPC')) document.getElementById('userInfoAreaPC').style.display = 'none';
+                if(document.getElementById('googleLoginBtnPC')) document.getElementById('googleLoginBtnPC').style.display = 'block';
             }
         }
-        
         async function upgradeToGoogle() {
             if(!currentUser) { showToast('認証待機中です...', true); return; }
             if(!currentUser.isAnonymous) { showToast('既に認証済みです'); return; }
@@ -1634,12 +1609,9 @@
                 setTimeout(() => location.reload(), 1500);
             } catch(error) {
                 console.error(error);
-                if(error.code === 'auth/popup-blocked') alert('ポップアップがブロックされました。ブラウザの設定を確認してください。');
-                else if(error.code === 'auth/account-exists-with-different-credential') alert('このGoogleアカウントは既に使用されています。');
-                else alert('同期に失敗しました: ' + error.message);
+                alert('同期に失敗しました: ' + error.message);
             }
         }
-        
         async function loadOrMigrateData() {
             if(!currentUser) return;
             const docSnap = await getDoc(doc(db, 'studyData', currentUser.uid));
@@ -1648,7 +1620,7 @@
                 if(data.lastSync > (localStorage.getItem('lastSync') || '')) {
                     sessions = data.sessions || []; customSubjects = data.customSubjects || ["数学","英語","理科","社会","国語","プログラミング","その他"];
                     diaryNotes = data.diaryNotes || {}; books = data.books || []; cumulativeProgress = data.cumulativeProgress || {};
-                    if(data.dailyGoal) document.getElementById('dailyGoalInput').value = data.dailyGoal;
+                    if(data.dailyGoal) { if(document.getElementById('dailyGoalInput')) document.getElementById('dailyGoalInput').value = data.dailyGoal; if(document.getElementById('dailyGoalInputMobile')) document.getElementById('dailyGoalInputMobile').value = data.dailyGoal; }
                     saveAllData(); refreshAllUI();
                     showToast('クラウドデータを復元しました');
                 }
@@ -1656,23 +1628,40 @@
             refreshAllUI();
         }
         
-        function initTabs() {
+        function initPCTabs() {
             document.querySelectorAll('.sidebar-nav-item').forEach(item => {
                 item.addEventListener('click', () => {
                     document.querySelectorAll('.sidebar-nav-item').forEach(nav => nav.classList.remove('active'));
                     item.classList.add('active');
-                    const tabId = item.dataset.tab;
-                    document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+                    const tabId = item.dataset.tabPc;
+                    document.querySelectorAll('.pc-tab-content').forEach(tab => tab.style.display = 'none');
                     document.getElementById(tabId).style.display = 'block';
-                    if(tabId === 'stats-tab') { updateStatsDailyChart(); updateStatsSubjectChart(); updateBookOverallList(); if(books.length) updateBookProgressChart(); }
+                    if(tabId === 'stats-tab-pc') { setTimeout(() => { updateStatsDailyChart(); updateStatsSubjectChart(); updateBookOverallList(); if(books.length) updateBookProgressChart(); }, 100); }
+                });
+            });
+        }
+        
+        function initMobileTabs() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+                    const tabId = item.dataset.tabMobile;
+                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+                    if(tabId === 'stats-tab-mobile') { setTimeout(() => { updateStatsDailyChart(); updateStatsSubjectChart(); updateBookOverallList(); if(books.length) updateBookProgressChart(); }, 100); }
                 });
             });
         }
         
         function updateDateTime() {
             const now = new Date();
-            if(!document.getElementById('manualStartTime')._userChanged) document.getElementById('manualStartTime').value = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-            if(!document.getElementById('manualDate')._userChanged) document.getElementById('manualDate').value = getTodayLocalStr();
+            const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            if(document.getElementById('manualStartTime') && !document.getElementById('manualStartTime')._userChanged) document.getElementById('manualStartTime').value = timeStr;
+            if(document.getElementById('manualStartTimeMobile') && !document.getElementById('manualStartTimeMobile')._userChanged) document.getElementById('manualStartTimeMobile').value = timeStr;
+            const todayStr = getTodayLocalStr();
+            if(document.getElementById('manualDate') && !document.getElementById('manualDate')._userChanged) document.getElementById('manualDate').value = todayStr;
+            if(document.getElementById('manualDateMobile') && !document.getElementById('manualDateMobile')._userChanged) document.getElementById('manualDateMobile').value = todayStr;
         }
         
         onAuthStateChanged(auth, async (user) => {
@@ -1686,45 +1675,72 @@
         
         function init() {
             loadSettings(); loadAllData(); refreshAllUI();
-            document.getElementById('diaryDate').value = getTodayLocalStr(); loadDiaryForDate(getTodayLocalStr());
+            const todayStr = getTodayLocalStr();
+            if(document.getElementById('diaryDate')) document.getElementById('diaryDate').value = todayStr;
+            if(document.getElementById('diaryDateMobile')) document.getElementById('diaryDateMobile').value = todayStr;
+            loadDiaryForDate(todayStr);
             updateDateTime(); setInterval(updateDateTime, 1000);
-            initTabs();
+            initPCTabs();
+            initMobileTabs();
             
-            document.getElementById('startTimerBtn').onclick = startTimer;
-            document.getElementById('pauseTimerBtn').onclick = pauseTimer;
-            document.getElementById('resetTimerBtn').onclick = resetTimer;
-            document.getElementById('logTimerBtn').onclick = logCurrentTimer;
-            document.getElementById('addManualRecordBtn').onclick = handleManualAdd;
-            document.getElementById('clearAllHistoryBtn').onclick = clearAllHistory;
-            document.getElementById('dailyGoalInput').onchange = () => { saveAllData(); updateStatsAndGoal(); syncToCloud(); };
+            // イベントリスナー（PC用）
+            if(document.getElementById('startTimerBtn')) document.getElementById('startTimerBtn').onclick = startTimer;
+            if(document.getElementById('pauseTimerBtn')) document.getElementById('pauseTimerBtn').onclick = pauseTimer;
+            if(document.getElementById('resetTimerBtn')) document.getElementById('resetTimerBtn').onclick = resetTimer;
+            if(document.getElementById('logTimerBtn')) document.getElementById('logTimerBtn').onclick = logCurrentTimer;
+            if(document.getElementById('addManualRecordBtn')) document.getElementById('addManualRecordBtn').onclick = handleManualAdd;
+            if(document.getElementById('clearAllHistoryBtn')) document.getElementById('clearAllHistoryBtn').onclick = clearAllHistory;
+            if(document.getElementById('dailyGoalInput')) document.getElementById('dailyGoalInput').onchange = () => { saveAllData(); updateStatsAndGoal(); syncToCloud(); };
+            if(document.getElementById('setCustomTimeBtn')) document.getElementById('setCustomTimeBtn').onclick = () => { const m = parseInt(document.getElementById('customMinutes')?.value); if(m>0) setCountdownTarget(m); };
+            if(document.getElementById('setPomodoroTimeBtn')) document.getElementById('setPomodoroTimeBtn').onclick = () => { const f=parseInt(document.getElementById('customFocusMinutes')?.value), b=parseInt(document.getElementById('customBreakMinutes')?.value); if(f>0&&b>0) setPomodoroTimes(f,b); };
+            
+            // イベントリスナー（スマホ用）
+            if(document.getElementById('startTimerBtnMobile')) document.getElementById('startTimerBtnMobile').onclick = startTimer;
+            if(document.getElementById('pauseTimerBtnMobile')) document.getElementById('pauseTimerBtnMobile').onclick = pauseTimer;
+            if(document.getElementById('resetTimerBtnMobile')) document.getElementById('resetTimerBtnMobile').onclick = resetTimer;
+            if(document.getElementById('logTimerBtnMobile')) document.getElementById('logTimerBtnMobile').onclick = logCurrentTimer;
+            if(document.getElementById('addManualRecordBtnMobile')) document.getElementById('addManualRecordBtnMobile').onclick = handleManualAdd;
+            if(document.getElementById('clearAllHistoryBtnMobile')) document.getElementById('clearAllHistoryBtnMobile').onclick = clearAllHistory;
+            if(document.getElementById('dailyGoalInputMobile')) document.getElementById('dailyGoalInputMobile').onchange = () => { saveAllData(); updateStatsAndGoal(); syncToCloud(); };
+            if(document.getElementById('setCustomTimeBtnMobile')) document.getElementById('setCustomTimeBtnMobile').onclick = () => { const m = parseInt(document.getElementById('customMinutesMobile')?.value); if(m>0) setCountdownTarget(m); };
+            if(document.getElementById('setPomodoroTimeBtnMobile')) document.getElementById('setPomodoroTimeBtnMobile').onclick = () => { const f=parseInt(document.getElementById('customFocusMinutesMobile')?.value), b=parseInt(document.getElementById('customBreakMinutesMobile')?.value); if(f>0&&b>0) setPomodoroTimes(f,b); };
+            
             document.querySelectorAll('.preset-btn').forEach(btn => { btn.onclick = () => btn.dataset.minutes ? setCountdownTarget(parseInt(btn.dataset.minutes)) : setPomodoroTimes(parseInt(btn.dataset.pomodoroFocus), parseInt(btn.dataset.pomodoroBreak)); });
-            document.getElementById('setCustomTimeBtn').onclick = () => { const m = parseInt(document.getElementById('customMinutes').value); if(m>0) setCountdownTarget(m); };
-            document.getElementById('setPomodoroTimeBtn').onclick = () => { const f=parseInt(document.getElementById('customFocusMinutes').value), b=parseInt(document.getElementById('customBreakMinutes').value); if(f>0&&b>0) setPomodoroTimes(f,b); };
             document.querySelectorAll('.mode-btn').forEach(btn => { btn.onclick = () => switchMode(btn.dataset.mode); });
-            document.getElementById('darkModeToggle').onclick = () => setDarkMode(!settings.darkMode);
-            document.getElementById('addSubjectBtn').onclick = addSubject;
-            document.getElementById('saveDiaryBtn').onclick = saveCurrentDiary;
-            document.getElementById('deleteDiaryBtn').onclick = deleteCurrentDiary;
-            document.getElementById('addBookBtn').onclick = addBook;
-            studyEndBtn.onclick = manualStudyEnd;
-            document.getElementById('concentrationToggle').onclick = () => setConcentrationMode(!concentrationMode);
             
-            document.getElementById('hamburgerBtn').onclick = () => document.getElementById('settingsModal').style.display = 'flex';
-            document.getElementById('closeSettingsBtn').onclick = () => document.getElementById('settingsModal').style.display = 'none';
-            document.getElementById('textSizeSelect').onchange = (e) => { settings.textSize = e.target.value; saveSettings(); applySettings(); };
-            document.getElementById('darkModeCheckbox').onchange = (e) => setDarkMode(e.target.checked);
-            document.getElementById('alarmSoundCheckbox').onchange = (e) => setAlarmSound(e.target.checked);
-            document.getElementById('resetSettingsBtn').onclick = resetSettings;
-            document.getElementById('clearAllDataBtn').onclick = clearAllData;
-            document.getElementById('exportDataBtn').onclick = exportData;
-            document.getElementById('importDataBtn').onclick = () => document.getElementById('fileInput').click();
-            document.getElementById('fileInput').onchange = (e) => { if(e.target.files.length) importData(e.target.files[0]); e.target.value = ''; };
-            document.getElementById('syncToCloudBtn').onclick = syncToCloud;
-            document.getElementById('syncFromCloudBtn').onclick = syncFromCloud;
-            document.getElementById('googleLoginBtn').onclick = upgradeToGoogle;
+            if(document.getElementById('darkModeToggle')) document.getElementById('darkModeToggle').onclick = () => setDarkMode(!settings.darkMode);
+            if(document.getElementById('darkModeToggleMobile')) document.getElementById('darkModeToggleMobile').onclick = () => setDarkMode(!settings.darkMode);
+            if(document.getElementById('addSubjectBtn')) document.getElementById('addSubjectBtn').onclick = addSubject;
+            if(document.getElementById('addSubjectBtnMobile')) document.getElementById('addSubjectBtnMobile').onclick = addSubject;
+            if(document.getElementById('saveDiaryBtn')) document.getElementById('saveDiaryBtn').onclick = saveCurrentDiary;
+            if(document.getElementById('saveDiaryBtnMobile')) document.getElementById('saveDiaryBtnMobile').onclick = saveCurrentDiary;
+            if(document.getElementById('deleteDiaryBtn')) document.getElementById('deleteDiaryBtn').onclick = deleteCurrentDiary;
+            if(document.getElementById('deleteDiaryBtnMobile')) document.getElementById('deleteDiaryBtnMobile').onclick = deleteCurrentDiary;
+            if(document.getElementById('addBookBtn')) document.getElementById('addBookBtn').onclick = addBook;
+            if(document.getElementById('addBookBtnMobile')) document.getElementById('addBookBtnMobile').onclick = addBook;
+            if(studyEndBtn) studyEndBtn.onclick = manualStudyEnd;
+            if(document.getElementById('concentrationToggle')) document.getElementById('concentrationToggle').onclick = () => setConcentrationMode(!concentrationMode);
+            if(document.getElementById('concentrationToggleMobile')) document.getElementById('concentrationToggleMobile').onclick = () => setConcentrationMode(!concentrationMode);
             
-            document.getElementById('cancelEditBtn').onclick = closeEditModal;
-            document.getElementById('saveEditBtn').onclick = saveEditedData;
+            if(document.getElementById('hamburgerBtn')) document.getElementById('hamburgerBtn').onclick = () => document.getElementById('settingsModal').style.display = 'flex';
+            if(document.getElementById('hamburgerBtnMobile')) document.getElementById('hamburgerBtnMobile').onclick = () => document.getElementById('settingsModal').style.display = 'flex';
+            if(document.getElementById('closeSettingsBtn')) document.getElementById('closeSettingsBtn').onclick = () => document.getElementById('settingsModal').style.display = 'none';
+            if(document.getElementById('textSizeSelect')) document.getElementById('textSizeSelect').onchange = (e) => { settings.textSize = e.target.value; saveSettings(); applySettings(); };
+            if(document.getElementById('darkModeCheckbox')) document.getElementById('darkModeCheckbox').onchange = (e) => setDarkMode(e.target.checked);
+            if(document.getElementById('alarmSoundCheckbox')) document.getElementById('alarmSoundCheckbox').onchange = (e) => setAlarmSound(e.target.checked);
+            if(document.getElementById('resetSettingsBtn')) document.getElementById('resetSettingsBtn').onclick = resetSettings;
+            if(document.getElementById('clearAllDataBtn')) document.getElementById('clearAllDataBtn').onclick = clearAllData;
+            if(document.getElementById('exportDataBtn')) document.getElementById('exportDataBtn').onclick = exportData;
+            if(document.getElementById('importDataBtn')) document.getElementById('importDataBtn').onclick = () => document.getElementById('fileInput').click();
+            if(document.getElementById('fileInput')) document.getElementById('fileInput').onchange = (e) => { if(e.target.files.length) importData(e.target.files[0]); e.target.value = ''; };
+            if(document.getElementById('syncToCloudBtn')) document.getElementById('syncToCloudBtn').onclick = syncToCloud;
+            if(document.getElementById('syncFromCloudBtn')) document.getElementById('syncFromCloudBtn').onclick = syncFromCloud;
+            if(document.getElementById('syncToCloudBtnMobile')) document.getElementById('syncToCloudBtnMobile').onclick = syncToCloud;
+            if(document.getElementById('syncFromCloudBtnMobile')) document.getElementById('syncFromCloudBtnMobile').onclick = syncFromCloud;
+            if(document.getElementById('googleLoginBtnPC')) document.getElementById('googleLoginBtnPC').onclick = upgradeToGoogle;
+            
+            if(document.getElementById('cancelEditBtn')) document.getElementById('cancelEditBtn').onclick = closeEditModal;
+            if(document.getElementById('saveEditBtn')) document.getElementById('saveEditBtn').onclick = saveEditedData;
             
             document.querySelectorAll('[data-stats-period]').forEach(btn => {
                 btn.onclick = () => {
@@ -1735,8 +1751,8 @@
                     updateStatsDailyChart();
                 };
             });
-            document.getElementById('statsPrevPeriodBtn').onclick = () => { statsPeriodOffset--; updateStatsDailyChart(); };
-            document.getElementById('statsNextPeriodBtn').onclick = () => { statsPeriodOffset++; updateStatsDailyChart(); };
+            if(document.getElementById('statsPrevPeriodBtn')) document.getElementById('statsPrevPeriodBtn').onclick = () => { statsPeriodOffset--; updateStatsDailyChart(); };
+            if(document.getElementById('statsNextPeriodBtn')) document.getElementById('statsNextPeriodBtn').onclick = () => { statsPeriodOffset++; updateStatsDailyChart(); };
             
             window.onclick = (e) => {
                 if(e.target === document.getElementById('settingsModal')) document.getElementById('settingsModal').style.display = 'none';
