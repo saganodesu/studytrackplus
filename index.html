@@ -14,9 +14,8 @@
             color: #1e293b;
             font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
             transition: all 0.3s ease;
-            font-size: 16px; /* 基本フォントサイズを16pxに */
+            font-size: 16px;
         }
-        /* 文字サイズオプションは倍率ベースに */
         body.text-10px { font-size: 10px; }
         body.text-12px { font-size: 12px; }
         body.text-14px { font-size: 14px; }
@@ -40,8 +39,9 @@
         body.dark-mode .book-item { background: #0f172a; }
         body.dark-mode .stat-card-small { background: #1e293b; }
         body.dark-mode .diary-entry { background: #0f172a; }
+        body.dark-mode .calendar-day { background: #1e293b; }
+        body.dark-mode .calendar-day:hover { background: #334155; }
         
-        /* レイアウト */
         .app-container {
             display: flex;
             min-height: 100vh;
@@ -49,9 +49,8 @@
             margin: 0 auto;
         }
         
-        /* サイドバー - 文字サイズ拡大に合わせて少し大きく */
         .sidebar {
-            width: 300px;
+            width: 280px;
             background: white;
             border-radius: 28px;
             margin: 20px 0 20px 20px;
@@ -70,7 +69,7 @@
             border-bottom: 1px solid #e2e8f0;
         }
         .logo-area h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #2a9d8f;
             margin-bottom: 12px;
         }
@@ -78,7 +77,7 @@
             background: #2a9d8f20;
             padding: 8px 16px;
             border-radius: 60px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             display: inline-block;
         }
         
@@ -91,13 +90,13 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 14px 18px;
+            padding: 12px 16px;
             border-radius: 18px;
             cursor: pointer;
             transition: all 0.2s;
             color: #64748b;
             font-weight: 500;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         .sidebar-nav-item:hover {
             background: #f1f5f9;
@@ -106,9 +105,6 @@
             background: #2a9d8f20;
             color: #2a9d8f;
         }
-        .sidebar-nav-item .nav-icon {
-            font-size: 1.4rem;
-        }
         
         .sidebar-section {
             margin-top: auto;
@@ -116,20 +112,18 @@
             border-top: 1px solid #e2e8f0;
         }
         .sidebar-section-title {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #94a3b8;
             margin-bottom: 12px;
             font-weight: 600;
         }
         
-        /* メインエリア */
         .main-area {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
         }
         
-        /* ヘッダー（右上同期ボタン） */
         .main-header {
             display: flex;
             justify-content: flex-end;
@@ -149,7 +143,7 @@
             border: none;
             padding: 10px 20px;
             border-radius: 60px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             color: #2a9d8f;
             font-weight: 600;
@@ -162,7 +156,7 @@
             border-radius: 60px;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         .user-info {
             display: flex;
@@ -171,20 +165,19 @@
             background: #2a9d8f20;
             padding: 8px 16px;
             border-radius: 60px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .icon-btn {
             background: rgba(255,255,255,0.9);
             border: none;
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
-        /* サマリーカード */
         .stats-dashboard-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -199,16 +192,15 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
         .stat-card-small .stat-value {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #2a9d8f;
         }
         .stat-card-small .stat-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #64748b;
         }
         
-        /* 3カラム（横一列） */
         .three-column-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -219,27 +211,26 @@
         .card {
             background: white;
             border-radius: 24px;
-            padding: 24px;
+            padding: 22px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.06);
             border: 1px solid rgba(0,0,0,0.05);
         }
         .card-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             border-left: 4px solid #2a9d8f;
             padding-left: 14px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             color: #1e3b4a;
         }
         
-        /* タイマー */
         .timer-display {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: 800;
             font-family: monospace;
             background: linear-gradient(135deg, #1a2a3a, #0f1a24);
             color: #f5b042;
-            padding: 18px;
+            padding: 16px;
             border-radius: 60px;
             margin: 16px 0;
             text-align: center;
@@ -253,14 +244,14 @@
             border-radius: 60px;
         }
         .mode-btn {
-            padding: 10px 16px;
+            padding: 8px 12px;
             border: none;
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
             background: transparent;
             color: #64748b;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             flex: 1;
         }
         .mode-btn.active { background: #2a9d8f; color: white; }
@@ -276,28 +267,27 @@
             font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         .btn-primary { background: #2a9d8f; color: white; }
         .btn-secondary { background: #e2e8f0; color: #334155; }
         
-        /* フォーム */
         .form-group {
             margin-bottom: 14px;
         }
         .form-group label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #64748b;
             display: block;
             margin-bottom: 6px;
         }
         input, select, textarea {
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 60px;
             border: 1px solid #cbd5e1;
             background: white;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             width: 100%;
         }
         .form-row {
@@ -308,24 +298,54 @@
             flex: 1;
         }
         
-        /* 参考書リスト */
         .book-list {
-            max-height: 320px;
+            max-height: 350px;
             overflow-y: auto;
         }
+        /* 参考書の状態による色分け */
         .book-item {
             background: #f8fafc;
             border-radius: 16px;
-            margin-bottom: 12px;
-            padding: 12px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        /* 完全達成（100%）- グレー */
+        .book-item.fully-completed {
+            background: #cbd5e1;
+            opacity: 0.85;
+        }
+        body.dark-mode .book-item.fully-completed {
+            background: #334155;
+        }
+        /* 今日の目標達成 - グリーン */
+        .book-item.daily-achieved {
+            background: #d1fae5;
+        }
+        body.dark-mode .book-item.daily-achieved {
+            background: #064e3b;
+        }
+        /* 閉じていてもわかるようにヘッダーも色付け */
+        .book-item.fully-completed .book-header {
+            background: #cbd5e1;
+        }
+        .book-item.daily-achieved .book-header {
+            background: #d1fae5;
+        }
+        body.dark-mode .book-item.fully-completed .book-header {
+            background: #334155;
+        }
+        body.dark-mode .book-item.daily-achieved .book-header {
+            background: #064e3b;
         }
         .book-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            padding: 12px;
         }
-        .book-title { font-weight: 600; font-size: 0.95rem; }
+        .book-title { font-weight: 600; font-size: 0.9rem; }
         .book-progress-bar {
             flex: 1;
             margin: 0 12px;
@@ -339,10 +359,10 @@
             background: #2a9d8f;
             border-radius: 3px;
         }
-        .book-summary { font-size: 0.85rem; color: #2a9d8f; }
+        .book-summary { font-size: 0.8rem; color: #2a9d8f; }
         .book-detail {
-            margin-top: 12px;
-            padding-top: 12px;
+            margin-top: 8px;
+            padding: 12px;
             border-top: 1px solid #e2e8f0;
         }
         .add-book-form {
@@ -350,18 +370,65 @@
             gap: 10px;
             margin-top: 14px;
         }
-        .add-book-form input { flex: 1; font-size: 0.9rem; padding: 10px 14px; }
+        .add-book-form input { flex: 1; font-size: 0.85rem; padding: 10px 14px; }
         .add-book-form button { padding: 10px 16px; }
+        
+        /* カレンダー */
+        .calendar-control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0 10px 0;
+        }
+        .calendar-month-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2a9d8f;
+        }
+        .calendar-grid {
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        .calendar-day {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: #ffffff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .calendar-day:hover {
+            background: #e2e8f0;
+            transform: translateX(2px);
+        }
+        .calendar-day.achieved {
+            background: #d1fae5;
+            border-left: 3px solid #2a9d8f;
+        }
+        .calendar-day-date {
+            font-weight: 500;
+        }
+        .calendar-day-info {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
         
         .goal-card {
             background: #f1f5f9;
             border-radius: 18px;
-            padding: 16px;
+            padding: 14px;
             margin-top: 18px;
         }
         .progress-bar { background: #cbd5e1; border-radius: 20px; height: 8px; margin: 12px 0; overflow: hidden; }
         .progress-fill { background: #2a9d8f; width: 0%; height: 100%; transition: width 0.3s ease; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
         
         .subject-list {
             display: flex;
@@ -371,9 +438,9 @@
         }
         .subject-tag {
             background: #e2e8f0;
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 60px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -383,7 +450,7 @@
             gap: 8px;
             margin-top: 10px;
         }
-        .add-subject-form input { flex: 1; font-size: 0.85rem; padding: 10px 14px; }
+        .add-subject-form input { flex: 1; font-size: 0.8rem; padding: 8px 12px; }
         
         .preset-buttons {
             display: flex;
@@ -394,9 +461,9 @@
         .preset-btn {
             background: #e2e8f0;
             border: none;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 60px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
         }
         .timer-input-group {
@@ -405,7 +472,7 @@
             justify-content: center;
             margin: 12px 0;
         }
-        .timer-input-group input { width: 80px; padding: 10px; }
+        .timer-input-group input { width: 70px; padding: 8px; }
         .concentration-toggle {
             display: flex;
             align-items: center;
@@ -413,29 +480,29 @@
             margin-top: 16px;
             padding-top: 16px;
             border-top: 1px solid #e2e8f0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .toggle-switch {
             position: relative;
-            width: 52px;
-            height: 26px;
+            width: 50px;
+            height: 24px;
             background: #cbd5e1;
-            border-radius: 26px;
+            border-radius: 24px;
             cursor: pointer;
         }
         .toggle-switch.active { background: #2a9d8f; }
         .toggle-switch::after {
             content: '';
             position: absolute;
-            top: 3px;
-            left: 3px;
+            top: 2px;
+            left: 2px;
             width: 20px;
             height: 20px;
             background: white;
             border-radius: 50%;
             transition: all 0.3s ease;
         }
-        .toggle-switch.active::after { left: 29px; }
+        .toggle-switch.active::after { left: 28px; }
         
         .inline-row {
             display: flex;
@@ -446,19 +513,18 @@
         .inline-row button { flex: 1; }
         
         .session-status {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-align: center;
             margin: 10px 0;
             color: #2a9d8f;
         }
         
-        /* 日記タブ */
         .diary-editor textarea {
             width: 100%;
             border-radius: 20px;
             resize: vertical;
-            min-height: 120px;
-            font-size: 0.95rem;
+            min-height: 100px;
+            font-size: 0.9rem;
         }
         .diary-buttons {
             display: flex;
@@ -466,7 +532,7 @@
             margin-top: 14px;
         }
         .diary-list {
-            max-height: 350px;
+            max-height: 320px;
             overflow-y: auto;
             margin-top: 18px;
         }
@@ -480,24 +546,22 @@
         }
         .diary-entry-date {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #2a9d8f;
             margin-bottom: 6px;
         }
         .diary-entry-text {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         
-        /* 履歴テーブル */
         .history-list {
-            max-height: 400px;
+            max-height: 380px;
             overflow-y: auto;
         }
-        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         th, td { text-align: left; padding: 10px 6px; border-bottom: 1px solid #e2e8f0; }
-        .delete-btn { background: none; border: none; font-size: 1.1rem; color: #e76f51; cursor: pointer; }
+        .delete-btn { background: none; border: none; font-size: 1rem; color: #e76f51; cursor: pointer; }
         
-        /* モーダルなど */
         .study-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0a0f1a; z-index: 10000; display: flex;
@@ -505,26 +569,26 @@
         }
         .study-overlay.hidden { display: none; }
         .study-overlay .study-timer {
-            font-size: 6rem; font-weight: 800; font-family: monospace;
+            font-size: 5rem; font-weight: 800; font-family: monospace;
             color: #f5b042;
         }
         .study-end-btn {
             background: #e76f51; color: white; border: none;
-            padding: 16px 40px; border-radius: 60px; font-size: 1.3rem; cursor: pointer;
+            padding: 14px 36px; border-radius: 60px; font-size: 1.2rem; cursor: pointer;
         }
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 10001; justify-content: center; align-items: center;
         }
         .modal-content {
-            background: white; border-radius: 28px; max-width: 800px; width: 90%;
+            background: white; border-radius: 28px; max-width: 750px; width: 90%;
             max-height: 85vh; overflow-y: auto; padding: 28px;
         }
         body.dark-mode .modal-content { background: #1e293b; }
         .toast {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             background: #1e293b; color: white; padding: 12px 24px; border-radius: 60px;
-            font-size: 0.9rem; z-index: 10002; animation: fadeInOut 2s ease;
+            font-size: 0.85rem; z-index: 10002; animation: fadeInOut 2s ease;
         }
         @keyframes fadeInOut {
             0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
@@ -543,26 +607,31 @@
         
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
         @media (max-width: 800px) { .stats-grid { grid-template-columns: 1fr; } }
+        .period-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .period-btn { padding: 6px 14px; font-size: 0.75rem; background: #e2e8f0; border: none; border-radius: 40px; cursor: pointer; }
+        .period-btn.active { background: #2a9d8f; color: white; }
+        .nav-btn { background: #e2e8f0; border: none; width: 30px; height: 30px; border-radius: 30px; cursor: pointer; }
         
-        .danger-btn { background: #e76f51; color: white; border: none; padding: 12px; border-radius: 60px; width: 100%; cursor: pointer; font-size: 0.95rem; }
+        .danger-btn { background: #e76f51; color: white; border: none; padding: 12px; border-radius: 60px; width: 100%; cursor: pointer; font-size: 0.9rem; }
         .settings-group { margin-bottom: 20px; }
-        .settings-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; }
-        .settings-group select, .settings-group input[type="checkbox"] { width: auto; }
+        .settings-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
         
         .edit-field { margin-bottom: 20px; }
-        .edit-field label { font-size: 0.9rem; margin-bottom: 6px; display: block; }
+        .edit-field label { font-size: 0.85rem; margin-bottom: 6px; display: block; }
         .modal-buttons { display: flex; gap: 16px; justify-content: flex-end; margin-top: 24px; }
+        
+        .nav-icon { font-size: 1.2rem; }
+        .remove-subject { background: none; border: none; cursor: pointer; color: #e76f51; font-size: 1rem; }
     </style>
 </head>
 <body>
     <div id="studyOverlay" class="study-overlay hidden">
-        <div class="study-label" style="font-size:1.5rem;">勉強中</div>
+        <div class="study-label" style="font-size:1.3rem;">勉強中</div>
         <div class="study-timer" id="studyTimerDisplay">00:00:00</div>
         <button class="study-end-btn" id="studyEndBtn">勉強終了</button>
     </div>
 
     <div class="app-container">
-        <!-- サイドバー -->
         <div class="sidebar">
             <div class="logo-area">
                 <h1>StudyTrack+</h1>
@@ -597,19 +666,16 @@
             </div>
         </div>
 
-        <!-- メインエリア -->
         <div class="main-area">
-            <!-- 右上同期ボタン -->
             <div class="main-header">
                 <div class="sync-group">
                     <div id="userInfoArea" class="user-info" style="display: none;"></div>
-                    <button class="sync-btn" id="syncToCloudBtn">⬆️ アップロード</button>
-                    <button class="sync-btn" id="syncFromCloudBtn">⬇️ ダウンロード</button>
-                    <button class="google-btn" id="googleLoginBtn" style="display:none;">🔐 Googleで同期</button>
+                    <button class="sync-btn" id="syncToCloudBtn">アップロード</button>
+                    <button class="sync-btn" id="syncFromCloudBtn">ダウンロード</button>
+                    <button class="google-btn" id="googleLoginBtn" style="display:none;">Googleで同期</button>
                 </div>
             </div>
 
-            <!-- 統計サマリー -->
             <div class="stats-dashboard-row">
                 <div class="stat-card-small"><div class="stat-value" id="weeklyAvgTime">0分</div><div class="stat-label">今週の平均</div></div>
                 <div class="stat-card-small"><div class="stat-value" id="weeklyTotal">0時間</div><div class="stat-label">今週の合計</div></div>
@@ -617,12 +683,10 @@
                 <div class="stat-card-small"><div class="stat-value" id="totalAllMinutes">0</div><div class="stat-label">総勉強時間(分)</div></div>
             </div>
 
-            <!-- タイマータブ（3カラム横一列） -->
             <div id="timer-tab" class="tab-content" style="display: block;">
                 <div class="three-column-grid">
-                    <!-- 左: 手動記録 -->
                     <div class="card">
-                        <div class="card-title">📝 手動記録</div>
+                        <div class="card-title">手動記録</div>
                         <div class="form-group">
                             <label>科目</label>
                             <select id="manualSubject"></select>
@@ -635,7 +699,7 @@
                             <label>開始時刻</label>
                             <input type="time" id="manualStartTime">
                         </div>
-                        <button class="btn btn-primary" id="addManualRecordBtn" style="width:100%;">+ 記録を追加</button>
+                        <button class="btn btn-primary" id="addManualRecordBtn" style="width:100%;">記録を追加</button>
                         
                         <div class="goal-card">
                             <div class="flex-between"><span><strong>今日の目標</strong></span><span><input type="number" id="dailyGoalInput" style="width:80px;" value="120"> 分</span></div>
@@ -644,7 +708,7 @@
                         </div>
                         
                         <div style="margin-top: 16px;">
-                            <div style="font-weight:600; font-size:0.9rem; margin-bottom:10px;">📚 教科を管理</div>
+                            <div style="font-weight:600; font-size:0.85rem; margin-bottom:10px;">教科を管理</div>
                             <div class="subject-list" id="subjectList"></div>
                             <div class="add-subject-form">
                                 <input type="text" id="newSubjectName" placeholder="新しい教科名" maxlength="20">
@@ -653,9 +717,8 @@
                         </div>
                     </div>
 
-                    <!-- 中: タイマー -->
                     <div class="card">
-                        <div class="card-title">⏱️ タイマー</div>
+                        <div class="card-title">タイマー</div>
                         <div class="timer-mode">
                             <button class="mode-btn active" data-mode="countdown">カウントダウン</button>
                             <button class="mode-btn" data-mode="stopwatch">ストップウォッチ</button>
@@ -684,11 +747,11 @@
                                 <button class="preset-btn" data-pomodoro-focus="50" data-pomodoro-break="10">50/10分</button>
                             </div>
                             <div class="timer-input-group">
-                                <input type="number" id="customFocusMinutes" value="25" style="width:70px;"><span>分</span>
-                                <input type="number" id="customBreakMinutes" value="5" style="width:70px;"><span>分</span>
+                                <input type="number" id="customFocusMinutes" value="25" style="width:60px;"><span>分</span>
+                                <input type="number" id="customBreakMinutes" value="5" style="width:60px;"><span>分</span>
                                 <button class="btn btn-secondary" id="setPomodoroTimeBtn">設定</button>
                             </div>
-                            <div class="pomodoro-status" id="pomodoroStatus" style="text-align:center; font-size:0.85rem;">集中タイム</div>
+                            <div class="pomodoro-status" id="pomodoroStatus" style="text-align:center; font-size:0.8rem;">集中タイム</div>
                         </div>
                         
                         <div class="timer-buttons">
@@ -708,9 +771,8 @@
                         </div>
                     </div>
 
-                    <!-- 右: 参考書管理 -->
                     <div class="card">
-                        <div class="card-title">📖 参考書管理</div>
+                        <div class="card-title">参考書管理</div>
                         <div class="book-list" id="bookList"></div>
                         <div class="add-book-form">
                             <input type="text" id="newBookName" placeholder="参考書名" maxlength="30">
@@ -721,10 +783,9 @@
                 </div>
             </div>
 
-            <!-- 日記タブ -->
             <div id="diary-tab" class="tab-content" style="display: none;">
                 <div class="card">
-                    <div class="card-title">📔 日記帳</div>
+                    <div class="card-title">日記帳</div>
                     <div class="diary-editor">
                         <input type="date" id="diaryDate">
                         <textarea id="diaryNote" rows="3" placeholder="今日の振り返りを書こう..."></textarea>
@@ -734,39 +795,43 @@
                         </div>
                     </div>
                     <div class="diary-list">
-                        <div style="font-weight:600; font-size:0.9rem; margin:16px 0 10px;">📜 過去の日記</div>
+                        <div style="font-weight:600; font-size:0.85rem; margin:16px 0 10px;">過去の日記</div>
                         <div id="diaryEntriesList"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 統計タブ -->
             <div id="stats-tab" class="tab-content" style="display: none;">
                 <div class="card">
-                    <div class="card-title">📊 統計ダッシュボード</div>
+                    <div class="card-title">統計ダッシュボード</div>
                     <div class="stats-grid">
-                        <div><div style="font-weight:600; margin-bottom:12px;">日別勉強時間</div><canvas id="statsDailyChart"></canvas></div>
-                        <div><div style="font-weight:600; margin-bottom:12px;">科目別学習割合</div><canvas id="statsSubjectChart"></canvas><div id="subjectStatsNumbers" style="font-size:0.85rem; margin-top:12px;"></div></div>
+                        <div>
+                            <div class="period-nav">
+                                <div><button class="period-btn active" data-stats-period="week">週間</button><button class="period-btn" data-stats-period="month">月間</button></div>
+                                <div><button id="statsPrevPeriodBtn" class="nav-btn">◀</button><span id="statsPeriodRange"></span><button id="statsNextPeriodBtn" class="nav-btn">▶</button></div>
+                            </div>
+                            <canvas id="statsDailyChart" style="height:250px;"></canvas>
+                        </div>
+                        <div><div style="font-weight:600; margin-bottom:12px;">科目別学習割合</div><canvas id="statsSubjectChart"></canvas><div id="subjectStatsNumbers" style="font-size:0.8rem; margin-top:12px;"></div></div>
                         <div><div style="font-weight:600; margin-bottom:12px;">参考書の進捗推移</div><select id="bookProgressSelect" style="margin-bottom:12px;"></select><canvas id="bookProgressChart"></canvas></div>
                         <div><div style="font-weight:600; margin-bottom:12px;">参考書 総進捗率</div><div id="bookOverallProgressList"></div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 学習履歴タブ -->
             <div id="history-tab" class="tab-content" style="display: none;">
                 <div class="card">
                     <div class="flex-between">
-                        <div class="card-title">📋 学習履歴</div>
+                        <div class="card-title">学習履歴</div>
                         <button id="clearAllHistoryBtn" class="btn btn-secondary">全削除</button>
                     </div>
                     <div class="history-list">
                         <table style="width:100%;">
-                            <thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th></tr></thead>
+                            <thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th>}</thead>
                             <tbody id="historyTbody"></tbody>
                         </table>
                     </div>
-                    <div class="total-time" style="margin-top:16px; text-align:center; font-size:0.9rem;">
+                    <div class="total-time" style="margin-top:16px; text-align:center; font-size:0.85rem;">
                         総勉強時間: <span id="totalAllMinutes2">0</span> 分 → <span id="totalAllTime">0時間0分</span>
                     </div>
                 </div>
@@ -774,10 +839,9 @@
         </div>
     </div>
 
-    <!-- 設定モーダル -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <h3 style="font-size:1.3rem; margin-bottom:20px;">設定</h3>
+            <h3 style="font-size:1.2rem; margin-bottom:20px;">設定</h3>
             <div class="settings-group"><label>文字サイズ</label><select id="textSizeSelect"><option value="10px">10px</option><option value="12px">12px</option><option value="14px" selected>14px</option><option value="16px">16px</option><option value="18px">18px</option></select></div>
             <div class="settings-group"><label>ダークモード</label><input type="checkbox" id="darkModeCheckbox"></div>
             <div class="settings-group"><label>通知音</label><input type="checkbox" id="alarmSoundCheckbox" checked></div>
@@ -790,7 +854,7 @@
 
     <div id="editPastDataModal" class="modal">
         <div class="modal-content">
-            <h3 id="editModalTitle" style="font-size:1.2rem;">過去のデータを編集</h3>
+            <h3 id="editModalTitle" style="font-size:1.1rem;">過去のデータを編集</h3>
             <div class="edit-field"><label>日付</label><input type="date" id="editDate" readonly disabled></div>
             <div class="edit-field"><label>累計ページ数</label><input type="number" id="editCumulative" min="0" step="1"></div>
             <div class="modal-buttons">
@@ -801,7 +865,6 @@
     </div>
 
     <script type="module">
-        // ==================== Firebase設定 ====================
         const firebaseConfig = {
             apiKey: "AIzaSyC_NUKXsLJFdj5X6W2YbXWbwOkheuUhevA",
             authDomain: "studytrackplus.firebaseapp.com",
@@ -826,7 +889,6 @@
         let unsubscribe = null;
         let isLocalUpdating = false;
         
-        // データ保存キー
         const STORAGE_KEYS = {
             sessions: "study_sessions_v3",
             subjects: "custom_subjects_v3",
@@ -836,7 +898,6 @@
             goal: "daily_goal_v3"
         };
         
-        // グローバル変数
         let sessions = [];
         let customSubjects = ["数学", "英語", "理科", "社会", "国語", "プログラミング", "その他"];
         let diaryNotes = {};
@@ -845,7 +906,6 @@
         let subjectColorMap = new Map();
         const defaultColors = ['#2a9d8f', '#e9c46a', '#f4a261', '#e76f51', '#6c9ebf', '#9c89b8', '#6d6875', '#4c9aff', '#ff6b6b'];
         
-        // タイマー関連
         let timerStartTime = null, timerPausedTime = null, timerInterval = null, isTimerRunning = false;
         let timerMode = "countdown", targetSeconds = 25 * 60, autoLogTriggered = false, alarmEnabled = true;
         let audioContext = null, pomodoroFocusSeconds = 25 * 60, pomodoroBreakSeconds = 5 * 60;
@@ -853,8 +913,10 @@
         const studyOverlay = document.getElementById('studyOverlay');
         const studyEndBtn = document.getElementById('studyEndBtn');
         
-        // グラフ関連
         let statsDailyChart, statsSubjectChart, bookProgressChart;
+        let statsPeriod = "week", statsPeriodOffset = 0;
+        let currentEditBookId = null, currentEditDate = null;
+        if(!window.bookDisplayMonths) window.bookDisplayMonths = {};
         
         function getLocalDateStr(date) { return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
         function getTodayLocalStr() { return getLocalDateStr(new Date()); }
@@ -865,7 +927,6 @@
         function getColorForSubject(subject) { if(!subjectColorMap.has(subject)) subjectColorMap.set(subject, defaultColors[subjectColorMap.size % defaultColors.length]); return subjectColorMap.get(subject); }
         function showToast(msg, isErr = false) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; if(isErr) t.style.background = '#e76f51'; document.body.appendChild(t); setTimeout(() => t.remove(), 2500); }
         
-        // 参考書ヘルパー
         function getCumulative(bookId, dateStr) {
             const prog = cumulativeProgress[bookId] || {};
             if(prog[dateStr] !== undefined) return prog[dateStr];
@@ -876,6 +937,18 @@
             const prog = cumulativeProgress[bookId] || {};
             const pastDates = Object.keys(prog).filter(d => d < dateStr).sort();
             return pastDates.length ? prog[pastDates[pastDates.length-1]] : 0;
+        }
+        function getYesterdayStr() { const d = new Date(); d.setDate(d.getDate()-1); return getLocalDateStr(d); }
+        function getTodayTargetPages(book) {
+            const yesterdayCum = getCumulative(book.id, getYesterdayStr());
+            const dailyTarget = book.dailyTarget || 0;
+            if(dailyTarget === 0) return 0;
+            return yesterdayCum + dailyTarget;
+        }
+        function isTodayTargetAchieved(book) {
+            const todayCum = getCumulative(book.id, getTodayLocalStr());
+            const target = getTodayTargetPages(book);
+            return target > 0 && todayCum >= target;
         }
         function saveBooks() { localStorage.setItem(STORAGE_KEYS.books, JSON.stringify(books)); }
         function saveCumulativeProgress() { localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(cumulativeProgress)); }
@@ -922,7 +995,7 @@
         
         function renderSubjectTags() {
             const list = document.getElementById('subjectList'); if(!list) return;
-            list.innerHTML = customSubjects.map(sub => `<span class="subject-tag"><span>${sub}</span><button class="remove-subject" data-subject="${sub}" style="background:none;border:none;cursor:pointer;color:#e76f51;font-size:1.1rem;">×</button></span>`).join('');
+            list.innerHTML = customSubjects.map(sub => `<span class="subject-tag"><span>${sub}</span><button class="remove-subject" data-subject="${sub}">×</button></span>`).join('');
             document.querySelectorAll('.remove-subject').forEach(btn => { btn.onclick = () => removeSubject(btn.dataset.subject); });
         }
         
@@ -953,7 +1026,6 @@
             }
         }
         
-        // 日記関連
         function saveDiaryToLocal() { localStorage.setItem(STORAGE_KEYS.diary, JSON.stringify(diaryNotes)); }
         function saveCurrentDiary() {
             const dateStr = document.getElementById('diaryDate').value;
@@ -987,7 +1059,6 @@
             document.getElementById('deleteDiaryBtn').disabled = !isToday;
         }
         
-        // 参考書管理
         function addBook() {
             const name = document.getElementById('newBookName').value.trim();
             const total = parseInt(document.getElementById('newBookTotal').value);
@@ -1002,30 +1073,121 @@
             syncToCloud();
         }
         
+        function renderCalendarForBook(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if(!book) return;
+            if(!window.bookDisplayMonths[bookId]) {
+                window.bookDisplayMonths[bookId] = { year: new Date().getFullYear(), month: new Date().getMonth() };
+            }
+            const { year, month } = window.bookDisplayMonths[bookId];
+            const days = [];
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            for(let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
+                days.push(getLocalDateStr(d));
+            }
+            const container = document.querySelector(`.calendar-grid[data-calendar="${bookId}"]`);
+            const labelSpan = document.querySelector(`.calendar-month-label[data-id="${bookId}"]`);
+            if(labelSpan) labelSpan.textContent = `${year}年 ${month+1}月`;
+            if(!container) return;
+            container.innerHTML = days.map(dateStr => {
+                const cumulative = getCumulative(bookId, dateStr);
+                const prevCum = getPreviousCumulative(bookId, dateStr);
+                const todayProgress = cumulative - prevCum;
+                const target = book.dailyTarget || 0;
+                const isAchieved = target > 0 && todayProgress >= target;
+                const statusClass = isAchieved ? 'achieved' : '';
+                const progressText = todayProgress > 0 ? `${todayProgress}` : '-';
+                return `<div class="calendar-day ${statusClass}" data-book="${bookId}" data-date="${dateStr}">
+                    <span class="calendar-day-date">${dateStr.slice(5)}</span>
+                    <span class="calendar-day-info">累計:${cumulative} / ${progressText}</span>
+                </div>`;
+            }).join('');
+            document.querySelectorAll(`.calendar-day[data-book="${bookId}"]`).forEach(day => {
+                day.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const dateStr = day.dataset.date;
+                    openEditModal(bookId, dateStr);
+                });
+            });
+        }
+        
+        function openEditModal(bookId, dateStr) {
+            currentEditBookId = bookId;
+            currentEditDate = dateStr;
+            const book = books.find(b => b.id === bookId);
+            if(!book) return;
+            const currentCum = getCumulative(bookId, dateStr);
+            document.getElementById('editModalTitle').innerHTML = `${escapeHtml(book.name)} - ${dateStr} のデータ編集`;
+            document.getElementById('editDate').value = dateStr;
+            document.getElementById('editCumulative').value = currentCum;
+            document.getElementById('editPastDataModal').style.display = 'flex';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editPastDataModal').style.display = 'none';
+            currentEditBookId = null;
+            currentEditDate = null;
+        }
+        
+        function saveEditedData() {
+            if(currentEditBookId === null || currentEditDate === null) return;
+            const newCumulative = parseInt(document.getElementById('editCumulative').value);
+            if(isNaN(newCumulative) || newCumulative < 0) {
+                showToast("正しい数値を入力してください", true);
+                return;
+            }
+            if(!cumulativeProgress[currentEditBookId]) cumulativeProgress[currentEditBookId] = {};
+            cumulativeProgress[currentEditBookId][currentEditDate] = newCumulative;
+            saveCumulativeProgress();
+            closeEditModal();
+            renderBooks();
+            syncToCloud();
+            showToast(`${currentEditDate} の累計ページ数を更新しました`);
+        }
+        
         function renderBooks() {
             const container = document.getElementById('bookList'); if(!container) return;
             if(books.length === 0) { container.innerHTML = '<div style="text-align:center;padding:24px;color:#94a3b8;">参考書が登録されていません</div>'; return; }
             const today = getTodayLocalStr();
-            container.innerHTML = books.map(book => {
+            const sortedBooks = [...books].sort((a, b) => {
+                const aCompleted = getCumulative(a.id, today) >= a.totalPages;
+                const bCompleted = getCumulative(b.id, today) >= b.totalPages;
+                const aDaily = !aCompleted && isTodayTargetAchieved(a);
+                const bDaily = !bCompleted && isTodayTargetAchieved(b);
+                if(aCompleted !== bCompleted) return aCompleted ? 1 : -1;
+                if(aDaily !== bDaily) return aDaily ? 1 : -1;
+                return a.id - b.id;
+            });
+            container.innerHTML = sortedBooks.map(book => {
+                const total = book.totalPages;
                 const current = getCumulative(book.id, today);
-                const percent = book.totalPages > 0 ? (current / book.totalPages) * 100 : 0;
-                return `<div class="book-item" data-id="${book.id}">
+                const percent = total > 0 ? (current / total) * 100 : 0;
+                const fullyCompleted = current >= total;
+                const dailyAchieved = !fullyCompleted && isTodayTargetAchieved(book);
+                return `<div class="book-item ${fullyCompleted ? 'fully-completed' : (dailyAchieved ? 'daily-achieved' : '')}" data-id="${book.id}">
                     <div class="book-header" data-id="${book.id}">
                         <div class="book-title">${escapeHtml(book.name)}</div>
                         <div class="book-progress-bar"><div class="book-progress-fill" style="width: ${percent}%;"></div></div>
-                        <div class="book-summary">${current} / ${book.totalPages}</div>
+                        <div class="book-summary">${current} / ${book.totalPages} (${percent.toFixed(0)}%)</div>
                     </div>
-                    <div class="book-detail" style="display:none;">
-                        <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
-                            <span style="font-size:0.85rem;">1日目標:</span>
+                    <div class="book-detail" style="display:none;" data-detail="${book.id}">
+                        <div style="display:flex; gap:10px; align-items:center; margin-bottom:12px;">
+                            <span style="font-size:0.8rem;">1日目標:</span>
                             <input type="number" class="daily-target-input" data-id="${book.id}" value="${book.dailyTarget || 0}" style="width:70px; padding:8px;">
                             <button class="btn btn-secondary set-target-btn" data-id="${book.id}" style="padding:6px 14px;">設定</button>
                         </div>
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <span style="font-size:0.85rem;">累計:</span>
+                        <div style="display:flex; gap:10px; align-items:center; margin-bottom:12px;">
+                            <span style="font-size:0.8rem;">累計:</span>
                             <input type="number" class="cumulative-input" data-id="${book.id}" value="${current}" style="width:80px; padding:8px;">
                             <button class="btn btn-primary save-cumulative-btn" data-id="${book.id}" data-date="${today}" style="padding:6px 14px;">保存</button>
                         </div>
+                        <div class="calendar-control">
+                            <button class="prev-month-btn" data-id="${book.id}">◀</button>
+                            <span class="calendar-month-label" data-id="${book.id}"></span>
+                            <button class="next-month-btn" data-id="${book.id}">▶</button>
+                        </div>
+                        <div class="calendar-grid" data-calendar="${book.id}"></div>
                         <div style="margin-top:12px;">
                             <button class="btn btn-secondary delete-book" data-id="${book.id}" style="padding:6px 14px;">削除</button>
                         </div>
@@ -1035,8 +1197,13 @@
             
             document.querySelectorAll('.book-header').forEach(header => {
                 header.addEventListener('click', () => {
-                    const detail = header.parentElement.querySelector('.book-detail');
-                    if(detail) detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+                    const id = parseInt(header.dataset.id);
+                    const detail = document.querySelector(`.book-detail[data-detail="${id}"]`);
+                    if(detail) {
+                        const isVisible = detail.style.display !== 'none';
+                        detail.style.display = isVisible ? 'none' : 'block';
+                        if(!isVisible) renderCalendarForBook(id);
+                    }
                 });
             });
             
@@ -1079,6 +1246,31 @@
                     }
                 });
             });
+            
+            document.querySelectorAll('.prev-month-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    if(!window.bookDisplayMonths[id]) window.bookDisplayMonths[id] = { year: new Date().getFullYear(), month: new Date().getMonth() };
+                    let { year, month } = window.bookDisplayMonths[id];
+                    month--;
+                    if(month < 0) { month = 11; year--; }
+                    window.bookDisplayMonths[id] = { year, month };
+                    renderCalendarForBook(id);
+                });
+            });
+            document.querySelectorAll('.next-month-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    if(!window.bookDisplayMonths[id]) window.bookDisplayMonths[id] = { year: new Date().getFullYear(), month: new Date().getMonth() };
+                    let { year, month } = window.bookDisplayMonths[id];
+                    month++;
+                    if(month > 11) { month = 0; year++; }
+                    window.bookDisplayMonths[id] = { year, month };
+                    renderCalendarForBook(id);
+                });
+            });
         }
         
         function computeStats() {
@@ -1109,13 +1301,35 @@
             document.getElementById('streakDays').textContent = streak + '日';
         }
         
-        function updateStatsDailyChart() {
+        function getPeriodRange(period, offset) {
             const today = new Date();
+            if(period === "week") {
+                const refDate = new Date(today); refDate.setDate(today.getDate() + offset * 7);
+                const monday = new Date(refDate); monday.setDate(refDate.getDate() - refDate.getDay() + (refDate.getDay()===0?-6:1));
+                monday.setHours(0,0,0,0);
+                return { startDate: new Date(monday), endDate: new Date(monday.getTime() + 6*24*60*60*1000) };
+            } else {
+                const refMonth = new Date(today.getFullYear(), today.getMonth() + offset, 1);
+                return { startDate: new Date(refMonth), endDate: new Date(refMonth.getFullYear(), refMonth.getMonth() + 1, 0) };
+            }
+        }
+        
+        function updateStatsDailyChart() {
+            const { startDate, endDate } = getPeriodRange(statsPeriod, statsPeriodOffset);
             const labels = [], data = [];
-            for(let i=6; i>=0; i--) { const d = new Date(); d.setDate(today.getDate() - i); labels.push(getLocalDateStr(d).slice(5)); let total=0; sessions.forEach(s=>{if(s.dateStr===getLocalDateStr(d)) total+=s.minutes/60;}); data.push(total); }
+            let cur = new Date(startDate);
+            while(cur <= endDate) {
+                const dateStr = getLocalDateStr(cur);
+                labels.push(dateStr.slice(5));
+                let total = 0;
+                sessions.forEach(s => { if(s.dateStr === dateStr) total += s.minutes / 60; });
+                data.push(total);
+                cur.setDate(cur.getDate() + 1);
+            }
             if(statsDailyChart) statsDailyChart.destroy();
             const ctx = document.getElementById('statsDailyChart')?.getContext('2d');
-            if(ctx) statsDailyChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間(時間)', data, backgroundColor: '#2a9d8f' }] } });
+            if(ctx) statsDailyChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: '勉強時間(時間)', data, backgroundColor: '#2a9d8f' }] }, options: { scales: { y: { max: 10, title: { display: true, text: '時間' } } } } });
+            document.getElementById('statsPeriodRange').textContent = `${startDate.toLocaleDateString()} 〜 ${endDate.toLocaleDateString()}`;
         }
         
         function updateStatsSubjectChart() {
@@ -1140,7 +1354,7 @@
         
         function updateBookOverallList() {
             const today = getTodayLocalStr();
-            document.getElementById('bookOverallProgressList').innerHTML = books.map(book => { const current = getCumulative(book.id, today); const percent = book.totalPages > 0 ? (current/book.totalPages)*100 : 0; return `<div style="margin-bottom:10px;"><div style="font-size:0.85rem;">${escapeHtml(book.name)}: ${current}/${book.totalPages} (${percent.toFixed(0)}%)</div><div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div></div>`; }).join('');
+            document.getElementById('bookOverallProgressList').innerHTML = books.map(book => { const current = getCumulative(book.id, today); const percent = book.totalPages > 0 ? (current/book.totalPages)*100 : 0; return `<div style="margin-bottom:10px;"><div style="font-size:0.8rem;">${escapeHtml(book.name)}: ${current}/${book.totalPages} (${percent.toFixed(0)}%)</div><div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div></div>`; }).join('');
         }
         
         function refreshAllUI() {
@@ -1181,7 +1395,6 @@
             customSubjects.forEach((sub, idx) => subjectColorMap.set(sub, defaultColors[idx % defaultColors.length]));
         }
         
-        // タイマー関連
         function playShortAlarm() { if(!alarmEnabled) return; try { if(!audioContext) audioContext = new AudioContext(); const osc = audioContext.createOscillator(); const gain = audioContext.createGain(); osc.connect(gain); gain.connect(audioContext.destination); osc.frequency.value = 880; gain.gain.value = 0.3; osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.3); osc.stop(audioContext.currentTime + 0.3); } catch(e){} }
         
         function getRemainingSeconds() {
@@ -1292,7 +1505,6 @@
             document.getElementById('manualMinutes').value = "30";
         }
         
-        // 設定関連
         let settings = { textSize: '14px', darkMode: false, alarmSound: true, concentrationMode: true };
         function loadSettings() { const stored = localStorage.getItem('app_settings'); if(stored) { try { settings = JSON.parse(stored); } catch(e){} } applySettings(); }
         function saveSettings() { localStorage.setItem('app_settings', JSON.stringify(settings)); }
@@ -1354,7 +1566,6 @@
             showToast("設定をリセットしました");
         }
         
-        // Firebase同期
         async function syncToCloud() {
             if(!currentUser) { showToast("認証待機中...", true); return; }
             try {
@@ -1401,7 +1612,7 @@
             if(!userInfoArea) return;
             if(currentUser && !currentUser.isAnonymous) {
                 userInfoArea.style.display = 'flex';
-                userInfoArea.innerHTML = `<span>${currentUser.email ? currentUser.email.split('@')[0] : 'Google'}</span><button class="logout-btn" id="logoutBtn" style="background:none;border:none;cursor:pointer;font-size:1.2rem;">×</button>`;
+                userInfoArea.innerHTML = `<span>${currentUser.email ? currentUser.email.split('@')[0] : 'Google'}</span><button class="logout-btn" id="logoutBtn" style="background:none;border:none;cursor:pointer;font-size:1.1rem;">×</button>`;
                 document.getElementById('logoutBtn')?.addEventListener('click', () => { signOut(auth); location.reload(); });
                 if(googleBtn) googleBtn.style.display = 'none';
             } else {
@@ -1445,7 +1656,6 @@
             refreshAllUI();
         }
         
-        // タブ切り替え
         function initTabs() {
             document.querySelectorAll('.sidebar-nav-item').forEach(item => {
                 item.addEventListener('click', () => {
@@ -1459,14 +1669,12 @@
             });
         }
         
-        // 日付更新
         function updateDateTime() {
             const now = new Date();
             if(!document.getElementById('manualStartTime')._userChanged) document.getElementById('manualStartTime').value = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
             if(!document.getElementById('manualDate')._userChanged) document.getElementById('manualDate').value = getTodayLocalStr();
         }
         
-        // 認証監視
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             if(user) {
@@ -1476,7 +1684,6 @@
             } else signInAnonymously(auth);
         });
         
-        // 初期化
         function init() {
             loadSettings(); loadAllData(); refreshAllUI();
             document.getElementById('diaryDate').value = getTodayLocalStr(); loadDiaryForDate(getTodayLocalStr());
@@ -1516,12 +1723,24 @@
             document.getElementById('syncFromCloudBtn').onclick = syncFromCloud;
             document.getElementById('googleLoginBtn').onclick = upgradeToGoogle;
             
-            document.getElementById('cancelEditBtn').onclick = () => document.getElementById('editPastDataModal').style.display = 'none';
-            document.getElementById('saveEditBtn').onclick = () => { alert("編集機能は簡略版です"); document.getElementById('editPastDataModal').style.display = 'none'; };
+            document.getElementById('cancelEditBtn').onclick = closeEditModal;
+            document.getElementById('saveEditBtn').onclick = saveEditedData;
+            
+            document.querySelectorAll('[data-stats-period]').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('[data-stats-period]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    statsPeriod = btn.dataset.statsPeriod;
+                    statsPeriodOffset = 0;
+                    updateStatsDailyChart();
+                };
+            });
+            document.getElementById('statsPrevPeriodBtn').onclick = () => { statsPeriodOffset--; updateStatsDailyChart(); };
+            document.getElementById('statsNextPeriodBtn').onclick = () => { statsPeriodOffset++; updateStatsDailyChart(); };
             
             window.onclick = (e) => {
                 if(e.target === document.getElementById('settingsModal')) document.getElementById('settingsModal').style.display = 'none';
-                if(e.target === document.getElementById('editPastDataModal')) document.getElementById('editPastDataModal').style.display = 'none';
+                if(e.target === document.getElementById('editPastDataModal')) closeEditModal();
             };
             switchMode("countdown");
         }
