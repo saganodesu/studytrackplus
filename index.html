@@ -18,11 +18,12 @@
             transition: all 0.3s ease;
             font-size: 16px;
         }
-        body.text-10px { font-size: 10px; }
-        body.text-12px { font-size: 12px; }
-        body.text-14px { font-size: 14px; }
-        body.text-16px { font-size: 16px; }
-        body.text-18px { font-size: 18px; }
+       body.text-10px { font-size: 10px; }
+body.text-12px { font-size: 12px; }
+body.text-14px { font-size: 14px; }
+body.text-16px { font-size: 16px; }
+body.text-18px { font-size: 18px; }
+body.text-21px { font-size: 21px; }
         
         /* ダークモード */
         body.dark-mode {
@@ -875,7 +876,15 @@ input, select {
 
     <!-- 設定モーダル -->
     <div id="settingsModal" class="modal"><div class="modal-content"><h3 style="font-size:1.1rem; margin-bottom:16px;">設定</h3>
-        <div class="settings-group"><label>文字サイズ</label><select id="textSizeSelect"><option value="10px">10px</option><option value="12px">12px</option><option value="14px" selected>14px</option><option value="16px">16px</option><option value="18px">18px</option></select></div>
+        <div class="settings-group"><label>文字サイズ</label>
+<select id="textSizeSelect">
+    <option value="10px">10px</option>
+    <option value="12px">12px</option>
+    <option value="14px">14px</option>
+    <option value="16px">16px</option>
+    <option value="18px">18px</option>
+    <option value="21px" selected>21px</option>
+</select>
         <div class="settings-group"><label>ダークモード</label><input type="checkbox" id="darkModeCheckbox"></div>
         <div class="settings-group"><label>通知音</label><input type="checkbox" id="alarmSoundCheckbox" checked></div>
         <div class="settings-group"><label>データバックアップ</label><button id="exportDataBtn" class="btn btn-secondary">データ書き出し</button><button id="importDataBtn" class="btn btn-secondary" style="margin-top:8px;">データ読み込み</button><input type="file" id="fileInput" accept=".json" style="display:none;"></div>
@@ -1665,7 +1674,7 @@ input, select {
             if(document.getElementById('manualMinutesMobile')) document.getElementById('manualMinutesMobile').value = "30";
         }
         
-        let settings = { textSize: '14px', darkMode: false, alarmSound: true, concentrationMode: true };
+        let settings = { textSize: '21px', darkMode: false, alarmSound: true, concentrationMode: true };
         function loadSettings() { const stored = localStorage.getItem('app_settings'); if(stored) { try { settings = JSON.parse(stored); } catch(e){} } applySettings(); }
         function saveSettings() { localStorage.setItem('app_settings', JSON.stringify(settings)); }
         function applySettings() {
