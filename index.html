@@ -682,6 +682,70 @@ input, select {
 .add-subject-form button {
     padding: 4px 8px;
 }
+        /* PCモードの3カラム全体の高さ調整 */
+body.pc-mode .three-column-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    align-items: stretch;  /* 全てのカードの高さを揃える */
+}
+
+body.pc-mode .three-column-grid .card {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 200px);  /* ヘッダーとサマリーを除いた高さ */
+    overflow: hidden;  /* カード自体ははみ出させない */
+}
+
+/* 各カードの中身をスクロール可能に */
+body.pc-mode .three-column-grid .card .card-title {
+    flex-shrink: 0;  /* タイトルは固定 */
+}
+
+body.pc-mode .manual-record-scroll,
+body.pc-mode .timer-scroll,
+body.pc-mode .book-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* スクロールバーのデザイン */
+body.pc-mode .manual-record-scroll::-webkit-scrollbar,
+body.pc-mode .timer-scroll::-webkit-scrollbar,
+body.pc-mode .book-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+body.pc-mode .manual-record-scroll::-webkit-scrollbar-track,
+body.pc-mode .timer-scroll::-webkit-scrollbar-track,
+body.pc-mode .book-scroll::-webkit-scrollbar-track {
+    background: #e2e8f0;
+    border-radius: 3px;
+}
+
+body.pc-mode .manual-record-scroll::-webkit-scrollbar-thumb,
+body.pc-mode .timer-scroll::-webkit-scrollbar-thumb,
+body.pc-mode .book-scroll::-webkit-scrollbar-thumb {
+    background: #2a9d8f;
+    border-radius: 3px;
+}
+
+/* 参考書リスト自体の高さ制限を解除 */
+.book-list {
+    overflow: visible;  /* 親要素でスクロールするので解除 */
+    max-height: none;
+}
+
+/* 全カード内の余白を調整 */
+body.pc-mode .three-column-grid .card {
+    padding-bottom: 12px;
+}
+
+/* ボタンの位置調整 */
+body.pc-mode .three-column-grid .card .btn-primary {
+    margin-top: 8px;
+}
     </style>
 </head>
 <body>
