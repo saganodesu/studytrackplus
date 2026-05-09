@@ -810,6 +810,7 @@ body.pc-mode .three-column-grid .card .btn-primary {
             <div id="timer-tab-pc" class="pc-tab-content" style="display:block;">
                 <div class="three-column-grid">
                     <div class="card"><div class="card-title">手動記録</div>
+                        <div class="manual-record-scroll">
                         <div class="form-group"><label>科目</label><select id="manualSubject"></select></div>
                         <div class="form-row"><div class="form-group"><label>時間(分)</label><input type="number" id="manualMinutes" value="30" min="1"></div><div class="form-group"><label>日付</label><input type="date" id="manualDate"></div></div>
                         <div class="form-group"><label>開始時刻</label><input type="time" id="manualStartTime"></div>
@@ -820,8 +821,10 @@ body.pc-mode .three-column-grid .card .btn-primary {
                         <div style="margin-top:14px;"><div style="font-weight:600; font-size:0.8rem; margin-bottom:8px;">教科を管理</div>
                         <div class="subject-list" id="subjectList"></div>
                         <div class="add-subject-form"><input type="text" id="newSubjectName" placeholder="新しい教科名" maxlength="20"><button class="btn btn-secondary" id="addSubjectBtn" style="width:auto;">追加</button></div></div>
+                        </div>
                     </div>
                     <div class="card"><div class="card-title">タイマー</div>
+                        <div class="timer-scroll">
                         <div class="timer-mode"><button class="mode-btn active" data-mode="countdown">カウントダウン</button><button class="mode-btn" data-mode="stopwatch">ストップウォッチ</button><button class="mode-btn" data-mode="pomodoro">ポモドーロ</button></div>
                         <div class="session-status" id="sessionStatusText">勉強時間を設定してスタート</div>
                         <div class="timer-display" id="timerDisplay">25:00</div>
@@ -833,10 +836,13 @@ body.pc-mode .three-column-grid .card .btn-primary {
                         <div class="timer-buttons"><button class="btn btn-primary" id="startTimerBtn">スタート</button><button class="btn btn-secondary" id="pauseTimerBtn">ポーズ</button><button class="btn btn-secondary" id="resetTimerBtn">リセット</button></div>
                         <div class="inline-row"><select id="timerSubjectSelect"></select><button class="btn btn-primary" id="logTimerBtn" style="width:auto;">記録</button></div>
                         <div class="concentration-toggle"><span>集中モード</span><div class="toggle-switch active" id="concentrationToggle"></div></div>
+                        </div>
                     </div>
                     <div class="card"><div class="card-title">参考書管理</div>
+                        <div class="book-scroll">
                         <div class="book-list" id="bookList"></div>
                         <div class="add-book-form"><input type="text" id="newBookName" placeholder="参考書名" maxlength="30"><input type="number" id="newBookTotal" placeholder="総ページ数" value="200" style="width:80px;"><button class="btn btn-primary" id="addBookBtn" style="width:auto;">追加</button></div>
+                        </div>
                     </div>
                 </div>
             </div>
