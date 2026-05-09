@@ -539,6 +539,148 @@
             body.pc-mode .three-column-grid { gap: 16px; }
             body.pc-mode .stats-dashboard-row { gap: 12px; }
         }
+        /* 1画面に収まる調整 */
+body.pc-mode .main-area {
+    padding: 16px;
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+body.pc-mode .stats-dashboard-row {
+    margin-bottom: 12px;
+    gap: 12px;
+}
+
+body.pc-mode .stats-dashboard-row .stat-card-small {
+    padding: 8px;
+}
+
+body.pc-mode .stats-dashboard-row .stat-value {
+    font-size: 1.2rem;
+}
+
+body.pc-mode .three-column-grid {
+    gap: 12px;
+    margin-bottom: 0;
+}
+
+body.pc-mode .three-column-grid .card {
+    padding: 12px;
+}
+
+body.pc-mode .card-title {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+/* 手動記録カード内 */
+.form-group {
+    margin-bottom: 6px;
+}
+.form-group label {
+    font-size: 0.7rem;
+    margin-bottom: 2px;
+}
+input, select {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+}
+.btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+}
+
+/* タイマーカード内 */
+.timer-display {
+    font-size: 1.8rem;
+    padding: 8px;
+    margin: 8px 0;
+}
+.timer-mode .mode-btn {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+}
+.preset-buttons {
+    margin: 6px 0;
+}
+.preset-btn {
+    padding: 4px 8px;
+    font-size: 0.65rem;
+}
+.timer-input-group {
+    margin: 6px 0;
+}
+.timer-input-group input {
+    width: 50px;
+    padding: 4px;
+}
+.timer-buttons {
+    margin: 8px 0;
+}
+.inline-row {
+    margin: 8px 0;
+}
+.concentration-toggle {
+    margin-top: 8px;
+    padding-top: 8px;
+}
+
+/* 参考書カード内 */
+.book-list {
+    max-height: 200px;
+}
+.book-header {
+    padding: 6px;
+}
+.book-title {
+    font-size: 0.75rem;
+}
+.book-summary {
+    font-size: 0.65rem;
+}
+.add-book-form {
+    margin-top: 8px;
+}
+.add-book-form input {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+}
+.add-book-form button {
+    padding: 4px 10px;
+}
+
+/* 目標カード */
+.goal-card {
+    padding: 8px;
+    margin-top: 8px;
+}
+.goal-card input {
+    width: 60px;
+    padding: 4px;
+}
+.progress-bar {
+    margin: 6px 0;
+}
+.flex-between {
+    font-size: 0.7rem;
+}
+
+/* 教科管理 */
+.subject-list {
+    max-height: 80px;
+    margin: 6px 0;
+}
+.subject-tag {
+    padding: 2px 6px;
+    font-size: 0.65rem;
+}
+.add-subject-form input {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+}
+.add-subject-form button {
+    padding: 4px 8px;
+}
     </style>
 </head>
 <body>
