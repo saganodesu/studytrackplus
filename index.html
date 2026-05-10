@@ -161,13 +161,15 @@
             padding-top: 16px;
             border-top: 1px solid #e2e8f0;
         }
-body.pc-mode .main-area {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;               /* ビューポート高さ固定 */
-    overflow: hidden;            /* メインエリア全体のスクロール禁止 */
-}
-        
+
+        body.pc-mode .main-area {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
 
         /* サマリー行 */
         body.pc-mode .stats-dashboard-row {
@@ -195,23 +197,26 @@ body.pc-mode .main-area {
             color: #64748b;
         }
 
-       /* 3カラムグリッドは残りのスペースを**正確に**使う */
-body.pc-mode .three-column-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr;     /* 高さを均等に分割（これが重要） */
-    gap: 16px;
-    flex: 1;                     /* 残り高さをすべて使う */
-    min-height: 0;               /* flexアイテムが縮むのを許可 */
-}
+        /* 3カラム - 画面いっぱいに伸ばす */
+        body.pc-mode .three-column-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            flex: 1;
+            min-height: 0;
+        }
 
-       body.pc-mode .three-column-grid .card {
-    min-height: 0;
-    height: 100%;                /* グリッドの割り当て高さを完全に使う */
-    max-height: 100%;            /* 中身が多くてもこれ以上伸びない */
-    display: flex;
-    flex-direction: column;
-}
+        body.pc-mode .three-column-grid .card {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            height: 100%;
+        }
 
         body.pc-mode .card-title {
             font-size: 1rem;
@@ -222,12 +227,12 @@ body.pc-mode .three-column-grid {
             flex-shrink: 0;
         }
 
-       /* スクロールエリアがカード内で flex:1 を正しく受け取る */
-body.pc-mode .scroll-area {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-}
+        /* スクロールエリア */
+        body.pc-mode .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
 
         body.pc-mode .scroll-area::-webkit-scrollbar {
             width: 5px;
@@ -845,7 +850,7 @@ body.pc-mode .scroll-area {
             display: none;
         }
         body.pc-mode .mobile-only { 
-            display: none; 
+            display: none;
         }
         body.mobile-mode .main-content {
             padding: 12px 12px 70px 12px;
