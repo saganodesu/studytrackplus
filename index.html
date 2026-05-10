@@ -943,18 +943,21 @@
                 gap: 8px;
             }
         }
-        /* ✅ ここに追加 */
-        #timer-tab-pc {
-            display: flex ;
-            flex-direction: column;
-            flex: 1;
-            min-height: 0;
-        }
+.pc-tab-content {
+    display: none;
+}
+.pc-tab-content.active {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
 
-        #timer-tab-pc .three-column-grid {
-            flex: 1;
-            min-height: 0;
-        }
+/* タイマータブの3カラム専用 */
+#timer-tab-pc .three-column-grid {
+    flex: 1;
+    min-height: 0;
+}
 
     </style>
 </head>
@@ -998,7 +1001,7 @@
                 <div class="stat-card-small"><div class="stat-value" id="totalAllMinutes">0</div><div class="stat-label">総勉強時間</div></div>
             </div>
 
-            <div id="timer-tab-pc" class="pc-tab-content">
+            <div id="timer-tab-pc" class="pc-tab-content active">
                 <div class="three-column-grid">
                     <!-- 手動記録 -->
                     <div class="card">
@@ -1072,11 +1075,11 @@
                 </div>
             </div>
 
-            <div id="diary-tab-pc" class="pc-tab-content" style="display:none;">
+            <div id="diary-tab-pc" class="pc-tab-content" >
                 <div class="card"><div class="card-title">日記帳</div><div class="scroll-area"><div class="diary-editor"><input type="date" id="diaryDate"><textarea id="diaryNote" rows="3" placeholder="今日の振り返りを書こう..."></textarea><div class="diary-buttons"><button class="btn btn-primary" id="saveDiaryBtn">保存</button><button class="btn btn-secondary" id="deleteDiaryBtn">削除</button></div></div><div class="diary-list"><div style="font-weight:600; font-size:0.75rem; margin-bottom:8px;">過去の日記</div><div id="diaryEntriesList"></div></div></div></div>
             </div>
 
-            <div id="stats-tab-pc" class="pc-tab-content" style="display:none;">
+            <div id="stats-tab-pc" class="pc-tab-content">
                 <div class="card" style="height:100%;"><div class="card-title">統計ダッシュボード</div><div class="scroll-area" style="height:100%;">
                     <div class="stats-two-col">
                         <div class="stats-bar-col">
@@ -1095,11 +1098,11 @@
                 </div></div>
             </div>
 
-            <div id="history-tab-pc" class="pc-tab-content" style="display:none;">
+            <div id="history-tab-pc" class="pc-tab-content" >
                 <div class="card"><div class="flex-between"><div class="card-title">学習履歴</div><button id="clearAllHistoryBtn" class="btn btn-secondary" style="width:auto; padding:5px 12px;">全削除</button></div><div class="history-list"><table style="width:100%;"><thead><tr><th>日付</th><th>時刻</th><th>科目</th><th>時間</th><th></th></tr></thead><tbody id="historyTbody"></tbody></table></div><div class="total-time" style="margin-top:12px; text-align:center; font-size:0.7rem;">総勉強時間: <span id="totalAllMinutes2">0</span> 分 → <span id="totalAllTime">0時間0分</span></div></div>
             </div>
 
-            <div id="books-tab-pc" class="pc-tab-content" style="display:none;">
+            <div id="books-tab-pc" class="pc-tab-content" >
                 <div class="card" style="height:100%;"><div class="card-title">参考書 進捗グラフ</div><div class="scroll-area" style="height:100%;"><div class="books-progress-grid" id="booksProgressGrid"></div></div></div>
             </div>
         </div>
@@ -2371,10 +2374,9 @@
                         'active'));
                     item.classList.add('active');
                     const tabId = item.dataset.tabPc;
-                    document.querySelectorAll('.pc-tab-content').forEach(tab => tab.style.display =
-                        'none');
-                    const target = document.getElementById(tabId);
-                    if (target) target.style.display = 'block';
+                   document.querySelectorAll('.pc-tab-content').forEach(tab => tab.classList.remove('active'));
+　　　　　　　　　　　const target = document.getElementById(tabId);
+　　　　　　　　　　　if (target) target.classList.add('active');
                     if (tabId === 'stats-tab-pc') { setTimeout(() => { updateStatsDailyChart();
                             updateStatsSubjectChart(); }, 100); }
                     if (tabId === 'books-tab-pc') { setTimeout(() => renderBooksProgressGrid(), 100); }
