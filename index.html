@@ -78,25 +78,16 @@
             background: #1e293b;
             border-color: #334155;
         }
-
-        body.text-10px {
-            font-size: 10px;
-        }
-        body.text-12px {
-            font-size: 12px;
-        }
-        body.text-14px {
-            font-size: 14px;
-        }
-        body.text-16px {
-            font-size: 16px;
-        }
-        body.text-18px {
-            font-size: 18px;
-        }
-        body.text-21px {
-            font-size: 21px;
-        }
+html.text-10px { font-size: 10px; }
+html.text-12px { font-size: 12px; }
+html.text-14px { font-size: 14px; }
+html.text-16px { font-size: 16px; }
+html.text-18px { font-size: 18px; }
+html.text-21px { font-size: 21px; }
+html.text-24px { font-size: 24px; }
+html.text-28px { font-size: 28px; }
+html.text-32px { font-size: 32px; }
+html.text-40px { font-size: 40px; }
 
         /* ==================== PCモード ==================== */
         body.pc-mode .app-container {
@@ -2184,9 +2175,10 @@ for (let d = new Date(startObj); d <= endObj; d.setDate(d.getDate() + 1)) {
         function saveSettings() { localStorage.setItem('app_settings', JSON.stringify(settings)); }
 
         function applySettings() {
-            document.body.classList.remove('text-10px', 'text-12px', 'text-14px', 'text-16px', 'text-18px', 'text-21px');
-            document.body.classList.add(`text-${settings.textSize}`);
-            const sizeSelect = document.getElementById('textSizeSelect');
+            const html = document.documentElement;
+            html.classList.remove('text-10px', 'text-12px', 'text-14px', 'text-16px', 'text-18px', 'text-21px', 'text-24px', 'text-28px', 'text-32px', 'text-40px');
+            html.classList.add(`text-${settings.textSize}`);
+　　　　　　 const sizeSelect = document.getElementById('textSizeSelect');
             if (sizeSelect) sizeSelect.value = settings.textSize;
             if (settings.darkMode) document.body.classList.add('dark-mode');
             else document.body.classList.remove('dark-mode');
