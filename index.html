@@ -245,16 +245,16 @@ body.pc-mode .timer-display {
     line-height: 1.2;         /* 文字の行間を調整 */
 }
 /* PC版 日記タブ：過去の日記リストを広げる */
-body.pc-mode #diary-tab-pc .diary-list {
-    max-height: none;          /* 高さ制限を解除 */
-    flex: 1;                  /* カード内で余ったスペースを全部使う */
-}
-
 body.pc-mode #diary-tab-pc .scroll-area {
     display: flex;
     flex-direction: column;
     flex: 1;
     min-height: 0;
+    overflow-y: auto;            /* ← これがスクロールを復活させる */
+}
+
+body.pc-mode #diary-tab-pc .diary-list {
+    max-height: none;            /* 高さ制限解除 */
 }
         /* フォーム */
         .form-group {
