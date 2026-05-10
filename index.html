@@ -1152,7 +1152,14 @@ body.pc-mode #timer-tab-pc .three-column-grid {
 
     <!-- モーダル -->
     <div id="settingsModal" class="modal"><div class="modal-content"><h3 style="font-size:1.1rem; margin-bottom:16px;">設定</h3>
-        <div class="settings-group"><label>文字サイズ</label><select id="textSizeSelect"><option value="10px">10px</option><option value="12px">12px</option><option value="14px">14px</option><option value="16px">16px</option><option value="18px">18px</option><option value="21px" selected>21px</option></select></div>
+        <div class="settings-group"><label>文字サイズ</label><select id="textSizeSelect">
+    <option value="21px">21px</option>
+    <option value="24px">24px</option>
+    <option value="28px">28px</option>
+    <option value="32px">32px</option>
+    <option value="40px">40px</option>
+</select>
+            
         <div class="settings-group"><label>ダークモード</label><input type="checkbox" id="darkModeCheckbox"></div>
         <div class="settings-group"><label>通知音</label><input type="checkbox" id="alarmSoundCheckbox" checked></div>
         <div class="settings-group"><label>データバックアップ</label><button id="exportDataBtn" class="btn btn-secondary">データ書き出し</button><button id="importDataBtn" class="btn btn-secondary" style="margin-top:8px;">データ読み込み</button><input type="file" id="fileInput" accept=".json" style="display:none;"></div>
