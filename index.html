@@ -1878,15 +1878,17 @@
                 const ctx = canvas.getContext('2d');
                 if (bookChartInstances[book.id]) bookChartInstances[book.id].destroy();
 
-                const labels = [];
-                const data = [];
-                for (let i = 29; i >= 0; i--) {
-                    const d = new Date();
-                    d.setDate(d.getDate() - i);
-                    const ds = getLocalDateStr(d);
-                    labels.push(ds.slice(5));
-                    data.push(getCumulative(book.id, ds));
-                }
+const { start, end } = getBookDateRange(book.id);
+const labels = [];
+const data = [];
+const startObj = parseLocalDate(start);
+const endObj = parseLocalDate(end);
+
+for (let d = new Date(startObj); d <= endObj; d.setDate(d.getDate() + 1)) {
+    const ds = getLocalDateStr(d);
+    labels.push(ds.slice(5));          // "MM-DD" 形式
+    data.push(getCumulative(book.id, ds));
+}
 
                 bookChartInstances[book.id] = new Chart(ctx, {
                     type: 'line',
@@ -2420,6 +2422,28 @@
             } else signInAnonymously(auth);
         });
 
+        function getBookDateRange(bookId) {
+    const prog = cumulativeProgress[bookId] || {};
+    const dates = Object.keys(prog).sort();
+    if (dates.length === 0) {
+        // まだ記録がなければ今日だけ
+        return { start: getTodayLocalStr(), end: getTodayLocalStr() };
+    }
+    const startDate = dates[0];
+    const book = books.find(b => b.id === bookId);
+    if (!book) return { start: startDate, end: getTodayLocalStr() };
+
+    let endDate = getTodayLocalStr();
+    let cumulative = 0;
+    for (let date of dates) {
+        cumulative = prog[date];
+        if (cumulative >= book.totalPages) {
+            endDate = date;
+            break;
+        }
+    }
+    return { start: startDate, end: endDate };
+}
         function init() {
             loadSettings();
             loadAllData();
