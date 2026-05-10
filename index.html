@@ -943,22 +943,20 @@
                 gap: 8px;
             }
         }
-.pc-tab-content {
+/* PCモード限定でタブ表示を制御 */
+body.pc-mode .pc-tab-content {
     display: none;
 }
-.pc-tab-content.active {
+body.pc-mode .pc-tab-content.active {
     display: flex;
     flex-direction: column;
     flex: 1;
     min-height: 0;
 }
-
-/* タイマータブの3カラム専用 */
-#timer-tab-pc .three-column-grid {
+body.pc-mode #timer-tab-pc .three-column-grid {
     flex: 1;
     min-height: 0;
 }
-
     </style>
 </head>
 <body>
