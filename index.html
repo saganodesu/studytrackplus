@@ -163,13 +163,13 @@
         }
 
         body.pc-mode .main-area {
-            flex: 1;
-            padding: 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* ← 追加（または overflow-y: auto を削除） */
+}
 
         /* サマリー行 */
         body.pc-mode .stats-dashboard-row {
@@ -943,6 +943,19 @@
                 gap: 8px;
             }
         }
+        /* ✅ ここに追加 */
+        #timer-tab-pc {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+        }
+
+        #timer-tab-pc .three-column-grid {
+            flex: 1;
+            min-height: 0;
+        }
+
     </style>
 </head>
 <body>
