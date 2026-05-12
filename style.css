@@ -88,7 +88,7 @@ body.pc-mode .app-container {
 }
 
 body.pc-mode .sidebar {
-    width: 260px;
+    width: 280px; /* 少し広げる */
     background: white;
     border-radius: 24px;
     margin: 16px 0 16px 16px;
@@ -97,8 +97,10 @@ body.pc-mode .sidebar {
     border: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     flex-shrink: 0;
+    overflow-y: auto;   /* サイドバー内スクロール */
+    max-height: calc(100vh - 32px); /* 画面高さに合わせて調整 */
 }
 
 body.pc-mode .logo-area {
@@ -149,7 +151,7 @@ body.pc-mode .main-area {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow: hidden; /* ← 追加（または overflow-y: auto を削除） */
+    overflow: hidden;
 }
 
 /* サマリー行 */
@@ -178,7 +180,7 @@ body.pc-mode .stat-label {
     color: #64748b;
 }
 
-/* 3カラム - 画面いっぱいに伸ばす */
+/* 3カラム（タイマー以外のタブ用） */
 body.pc-mode .three-column-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -197,6 +199,11 @@ body.pc-mode .three-column-grid .card {
     border: 1px solid rgba(0, 0, 0, 0.05);
     overflow: hidden;
     height: 100%;
+}
+
+/* タイマータブは1カラム */
+body.pc-mode #timer-tab-pc .three-column-grid {
+    grid-template-columns: 1fr;
 }
 
 body.pc-mode .card-title {
@@ -229,23 +236,22 @@ body.pc-mode .scroll-area::-webkit-scrollbar-thumb {
 
 /* PCモード限定：タイマー表示を大きく */
 body.pc-mode .timer-display {
-    font-size: 6rem;        /* 文字を大きく */
-    padding: 60px 10px;       /* 上下の余白を増やす */
-    border-radius: 60px;      /* 角丸を少し大きく */
-    line-height: 1.2;         /* 文字の行間を調整 */
+    font-size: 6rem;
+    padding: 60px 10px;
+    border-radius: 60px;
+    line-height: 1.2;
 }
-/* PC版 日記タブ：過去の日記リストを広げる */
 body.pc-mode #diary-tab-pc .scroll-area {
     display: flex;
     flex-direction: column;
     flex: 1;
     min-height: 0;
-    overflow-y: auto;            /* ← これがスクロールを復活させる */
+    overflow-y: auto;
+}
+body.pc-mode #diary-tab-pc .diary-list {
+    max-height: none;
 }
 
-body.pc-mode #diary-tab-pc .diary-list {
-    max-height: none;            /* 高さ制限解除 */
-}
 /* フォーム */
 .form-group {
     margin-bottom: 10px;
@@ -739,22 +745,10 @@ body.dark-mode .modal-content {
     animation: fadeInOut 2s ease;
 }
 @keyframes fadeInOut {
-    0% {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-    }
-    15% {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
-    85% {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-    }
+    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
 }
 
 .danger-btn {
@@ -839,7 +833,7 @@ body.dark-mode .modal-content {
     margin: 6px 0;
 }
 
-/* スマホモード */
+/* スマホモード（変更なし） */
 body.mobile-mode .app-container {
     display: none;
 }
@@ -895,7 +889,6 @@ body.mobile-mode .tab-content {
 body.mobile-mode .tab-content.active {
     display: block;
 }
-
 body.mobile-mode .stats-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -943,7 +936,8 @@ body.mobile-mode .stats-grid canvas {
         gap: 8px;
     }
 }
-/* PCモード限定でタブ表示を制御 */
+
+/* PCモードタブ表示制御 */
 body.pc-mode .pc-tab-content {
     display: none;
 }
@@ -956,4 +950,23 @@ body.pc-mode .pc-tab-content.active {
 body.pc-mode #timer-tab-pc .three-column-grid {
     flex: 1;
     min-height: 0;
+}
+
+/* サイドバー内セクション用 */
+.sidebar-section-content {
+    margin-top: 4px;
+}
+.sidebar-section-content .card {
+    background: #f8fafc;
+    border: none;
+    box-shadow: none;
+    padding: 12px;
+    border-radius: 16px;
+}
+.sidebar-section-content .card-title {
+    font-size: 0.9rem;
+}
+.sidebar-section-content .scroll-area {
+    max-height: 300px;
+    overflow-y: auto;
 }
