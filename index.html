@@ -50,22 +50,7 @@
 
             <div id="timer-tab-pc" class="pc-tab-content active">
                 <div class="three-column-grid">
-                    <!-- 手動記録 -->
-                    <div class="card">
-                        <div class="card-title">手動記録</div>
-                        <div class="scroll-area">
-                            <div class="form-group"><label>科目</label><select id="manualSubject"></select></div>
-                            <div class="form-row"><div class="form-group"><label>時間(分)</label><input type="number" id="manualMinutes" value="30" min="1"></div><div class="form-group"><label>日付</label><input type="date" id="manualDate"></div></div>
-                            <div class="form-group"><label>開始時刻</label><input type="time" id="manualStartTime"></div>
-                            <button class="btn btn-primary" id="addManualRecordBtn" style="width:100%;">記録を追加</button>
-                            <div class="goal-card">
-                                <div class="flex-between"><span><strong>今日の目標</strong></span><span><input type="number" id="dailyGoalInput" style="width:70px;" value="120"> 分</span></div>
-                                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-                                <div class="flex-between"><span>今日: <span id="todayTotalMin">0</span> 分</span><span>目標まで <span id="remainTarget">0</span> 分</span></div>
-                            </div>
-                        </div>
-                    </div>
-
+                  
                     <!-- タイマー -->
                     <div class="card">
                         <div class="card-title">タイマー</div>
@@ -107,20 +92,7 @@
                         </div>
                     </div>
 
-                    <!-- 参考書管理 -->
-                    <div class="card">
-                        <div class="card-title">参考書管理</div>
-                        <div class="scroll-area">
-                            <div class="book-list" id="bookList"></div>
-                            <div class="add-book-form">
-                                <input type="text" id="newBookName" placeholder="参考書名" maxlength="30">
-                                <input type="number" id="newBookTotal" placeholder="総ページ数" value="200" style="width:80px;">
-                                <button class="btn btn-primary" id="addBookBtn" style="width:auto;">追加</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
 
             <div id="diary-tab-pc" class="pc-tab-content" >
                 <div class="card"><div class="card-title">日記帳</div><div class="scroll-area"><div class="diary-editor"><input type="date" id="diaryDate"><textarea id="diaryNote" rows="3" placeholder="今日の振り返りを書こう..."></textarea><div class="diary-buttons"><button class="btn btn-primary" id="saveDiaryBtn">保存</button><button class="btn btn-secondary" id="deleteDiaryBtn">削除</button></div></div><div class="diary-list"><div style="font-weight:600; font-size:0.75rem; margin-bottom:8px;">過去の日記</div><div id="diaryEntriesList"></div></div></div></div>
