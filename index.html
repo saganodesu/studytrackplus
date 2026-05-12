@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, shrink-to-fit=no, viewport-fit=cover">
     <title>StudyTrack+</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -28,6 +27,43 @@
                 <div class="sidebar-nav-item" data-tab-pc="stats-tab-pc">📊 統計</div>
                 <div class="sidebar-nav-item" data-tab-pc="history-tab-pc">📜 学習履歴</div>
                 <div class="sidebar-nav-item" data-tab-pc="books-tab-pc">📚 参考書記録</div>
+
+                <!-- サイドバー内セクション開閉用 -->
+                <div class="sidebar-nav-item" data-sidebar-section="manual-record-section">📝 手動記録</div>
+                <div class="sidebar-nav-item" data-sidebar-section="book-management-section">📚 参考書管理</div>
+            </div>
+
+            <!-- 手動記録セクション -->
+            <div id="manual-record-section" class="sidebar-section-content" style="display: none;">
+                <div class="card">
+                    <div class="card-title">手動記録</div>
+                    <div class="scroll-area">
+                        <div class="form-group"><label>科目</label><select id="manualSubject"></select></div>
+                        <div class="form-row"><div class="form-group"><label>時間(分)</label><input type="number" id="manualMinutes" value="30" min="1"></div><div class="form-group"><label>日付</label><input type="date" id="manualDate"></div></div>
+                        <div class="form-group"><label>開始時刻</label><input type="time" id="manualStartTime"></div>
+                        <button class="btn btn-primary" id="addManualRecordBtn" style="width:100%;">記録を追加</button>
+                        <div class="goal-card">
+                            <div class="flex-between"><span><strong>今日の目標</strong></span><span><input type="number" id="dailyGoalInput" style="width:70px;" value="120"> 分</span></div>
+                            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                            <div class="flex-between"><span>今日: <span id="todayTotalMin">0</span> 分</span><span>目標まで <span id="remainTarget">0</span> 分</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 参考書管理セクション -->
+            <div id="book-management-section" class="sidebar-section-content" style="display: none;">
+                <div class="card">
+                    <div class="card-title">参考書管理</div>
+                    <div class="scroll-area">
+                        <div class="book-list" id="bookList"></div>
+                        <div class="add-book-form">
+                            <input type="text" id="newBookName" placeholder="参考書名" maxlength="30">
+                            <input type="number" id="newBookTotal" placeholder="総ページ数" value="200" style="width:80px;">
+                            <button class="btn btn-primary" id="addBookBtn" style="width:auto;">追加</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -50,8 +86,7 @@
 
             <div id="timer-tab-pc" class="pc-tab-content active">
                 <div class="three-column-grid">
-                  
-                    <!-- タイマー -->
+                    <!-- タイマーだけを残す -->
                     <div class="card">
                         <div class="card-title">タイマー</div>
                         <div class="scroll-area">
@@ -91,8 +126,8 @@
                             </div>
                         </div>
                     </div>
-
-            
+                </div>
+            </div>
 
             <div id="diary-tab-pc" class="pc-tab-content" >
                 <div class="card"><div class="card-title">日記帳</div><div class="scroll-area"><div class="diary-editor"><input type="date" id="diaryDate"><textarea id="diaryNote" rows="3" placeholder="今日の振り返りを書こう..."></textarea><div class="diary-buttons"><button class="btn btn-primary" id="saveDiaryBtn">保存</button><button class="btn btn-secondary" id="deleteDiaryBtn">削除</button></div></div><div class="diary-list"><div style="font-weight:600; font-size:0.75rem; margin-bottom:8px;">過去の日記</div><div id="diaryEntriesList"></div></div></div></div>
@@ -127,8 +162,9 @@
         </div>
     </div>
 
-    <!-- スマホモード -->
+    <!-- スマホモード（変更なし） -->
     <div class="main-content mobile-only">
+        <!-- スマホ版の内容は元のまま -->
         <div class="header">
             <h1 style="font-size:1.3rem;">StudyTrack+</h1>
             <div class="today-total" id="todayTotalHeaderMobile">今日: 0分</div>
@@ -164,7 +200,7 @@
         <button class="nav-item" data-tab-mobile="history-tab-mobile"><span class="nav-icon">📜</span><span>履歴</span></button>
     </div>
 
-    <!-- モーダル -->
+    <!-- モーダル類は変更なし -->
     <div id="settingsModal" class="modal"><div class="modal-content"><h3 style="font-size:1.1rem; margin-bottom:16px;">設定</h3>
         <div class="settings-group"><label>文字サイズ</label><select id="textSizeSelect">
     <option value="21px">21px</option>
@@ -187,6 +223,7 @@
         <div class="edit-field" style="margin-bottom:16px;"><label>累計ページ数</label><input type="number" id="editCumulative" min="0" step="1"></div>
         <div class="modal-buttons" style="display:flex; gap:12px; justify-content:flex-end;"><button class="btn btn-secondary" id="cancelEditBtn">キャンセル</button><button class="btn btn-primary" id="saveEditBtn">保存</button></div>
     </div></div>
+
     <script type="module" src="script.js"></script>
 </body>
 </html>
